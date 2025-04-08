@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"/home/kitanohideaki/Documents/git/HayashiNishimura/build/cmake_install.cmake"
+		"/home/kitanohideaki/CLionProjects/MasoRPG/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }
