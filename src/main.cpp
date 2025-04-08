@@ -2,6 +2,8 @@
 #include <SDL_ttf.h>
 #include <iostream>
 
+//
+
 void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, std::string Text, float x, float y)
 {
     // テキストの色を指定
