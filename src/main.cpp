@@ -1,10 +1,50 @@
 #include <SDL2/SDL.h>
+#include <SDL_ttf.h>
 #include <iostream>
+
+void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, std::string Text, float x, float y)
+{
+    // テキストの色を指定
+    SDL_Color color = {static_cast<Uint8>(R), static_cast<Uint8>(G), static_cast<Uint8>(B)};
+    
+    // テキストをサーフェスに変換
+    SDL_Surface* surface = TTF_RenderUTF8_Blended(font, Text.c_str(), color);
+    if (!surface) {
+        std::cerr << "テキストのレンダリングに失敗しました: " << TTF_GetError() << std::endl;
+        return;
+    }
+
+    // サーフェスからテクスチャを作成
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface); // サーフェスは不要になったので解放
+
+    if (!texture) {
+        std::cerr << "テクスチャの作成に失敗しました: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    // テクスチャの描画位置とサイズを設定
+    SDL_Rect dstRect = {static_cast<int>(x), static_cast<int>(y), surface->w, surface->h};
+
+    // テクスチャをレンダラーに描画
+    SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+
+    // テクスチャを解放
+    SDL_DestroyTexture(texture);
+}
+
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;
+    }
+
+    // SDL_ttfの初期化
+    if (TTF_Init() == -1) {
+      std::cerr << "TTF_Init Error: " << TTF_GetError() << std::endl;
+      SDL_Quit();
+      return 1;
     }
 
     // ウィンドウサイズ
@@ -39,6 +79,9 @@ int main() {
         return 1;
     }
 
+    // フォント読み込み（.ttfファイルが必要）
+    TTF_Font* noJapaneseFont = TTF_OpenFont("fonts/8-bit-no-ja/8bitOperatorPlus8-Bold.ttf", 24);
+
     // メインループフラグとイベント構造体
     bool running = true;
     SDL_Event event;
@@ -58,8 +101,10 @@ int main() {
         }
 
         // 背景色設定＆クリア（青）
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
         SDL_RenderClear(renderer);
+
+        drawText(renderer, 255.0f, 0.0f, 0.0f, noJapaneseFont, "MasoRPG", 50.0f, 50.0f);
 
         // 描画反映
         SDL_RenderPresent(renderer);

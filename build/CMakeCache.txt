@@ -148,7 +148,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=MySDLProject
+CMAKE_PROJECT_NAME:STATIC=HayashiNisimura
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -216,6 +216,15 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
+HayashiNisimura_BINARY_DIR:STATIC=/home/kitanohideaki/Documents/git/HayashiNishimura/build
+
+//Value Computed by CMake
+HayashiNisimura_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+HayashiNisimura_SOURCE_DIR:STATIC=/home/kitanohideaki/Documents/git/HayashiNishimura
+
+//Value Computed by CMake
 MySDLProject_BINARY_DIR:STATIC=/home/kitanohideaki/Documents/git/HayashiNishimura/build
 
 //Value Computed by CMake
@@ -226,6 +235,9 @@ MySDLProject_SOURCE_DIR:STATIC=/home/kitanohideaki/Documents/git/HayashiNishimur
 
 //The directory containing a CMake configuration file for SDL2.
 SDL2_DIR:PATH=/usr/lib/cmake/SDL2
+
+//The directory containing a CMake configuration file for SDL2_ttf.
+SDL2_ttf_DIR:PATH=/usr/lib/cmake/SDL2_ttf
 
 
 ########################

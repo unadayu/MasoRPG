@@ -49,6 +49,7 @@ CMakeFiles/main.dir/src/main.cpp.o: /home/kitanohideaki/Documents/git/HayashiNis
   /usr/include/SDL2/SDL_thread.h \
   /usr/include/SDL2/SDL_timer.h \
   /usr/include/SDL2/SDL_touch.h \
+  /usr/include/SDL2/SDL_ttf.h \
   /usr/include/SDL2/SDL_version.h \
   /usr/include/SDL2/SDL_video.h \
   /usr/include/SDL2/begin_code.h \
@@ -411,21 +412,43 @@ main: /usr/lib/Scrt1.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/libgcc.a \
   /usr/lib/ld-linux-x86-64.so.2 \
   /usr/lib/libSDL2-2.0.so.0.3200.54 \
-  /usr/lib/libSDL2main.a \
+  /usr/lib/libSDL2_ttf.so \
+  /usr/lib/libbrotlicommon.so.1 \
+  /usr/lib/libbrotlidec.so.1 \
+  /usr/lib/libbz2.so.1.0 \
   /usr/lib/libc.so.6 \
   /usr/lib/libc_nonshared.a \
+  /usr/lib/libfreetype.so.6 \
+  /usr/lib/libglib-2.0.so.0 \
+  /usr/lib/libgraphite2.so.3 \
+  /usr/lib/libharfbuzz.so.0 \
   /usr/lib/libm.so.6 \
   /usr/lib/libmvec.so.1 \
+  /usr/lib/libpcre2-8.so.0 \
+  /usr/lib/libpng16.so.16 \
+  /usr/lib/libz.so.1 \
   CMakeFiles/main.dir/src/main.cpp.o
 
 
 CMakeFiles/main.dir/src/main.cpp.o:
 
+/usr/lib/libpng16.so.16:
+
+/usr/lib/libpcre2-8.so.0:
+
 /usr/lib/libmvec.so.1:
+
+/usr/lib/libharfbuzz.so.0:
+
+/usr/lib/libglib-2.0.so.0:
+
+/usr/lib/libfreetype.so.6:
 
 /usr/lib/libc_nonshared.a:
 
 /usr/lib/libc.so.6:
+
+/usr/lib/libSDL2_ttf.so:
 
 /usr/lib/libSDL2-2.0.so.0.3200.54:
 
@@ -615,15 +638,9 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/limits.h:
 
-/usr/include/inttypes.h:
-
 /usr/include/gnu/stubs-64.h:
 
 /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/os_defines.h:
-
-/usr/include/bits/types/struct_itimerspec.h:
-
-/usr/include/bits/struct_rwlock.h:
 
 /usr/include/bits/types/mbstate_t.h:
 
@@ -653,8 +670,6 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/bits/thread-shared-types.h:
 
-/usr/include/bits/types/struct_timeval.h:
-
 /usr/include/bits/stdio_lim.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/prfchiintrin.h:
@@ -677,6 +692,10 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/bits/mathcalls-narrow.h:
 
+/usr/include/bits/struct_rwlock.h:
+
+/usr/include/bits/types/struct_itimerspec.h:
+
 /usr/include/bits/mathcalls-helper-functions.h:
 
 /usr/include/features-time64.h:
@@ -694,6 +713,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512ifmavlintrin.h:
 
 /usr/include/SDL2/SDL_blendmode.h:
+
+/usr/lib/libgraphite2.so.3:
 
 /usr/include/bits/libm-simd-decl-stubs.h:
 
@@ -765,6 +786,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h:
 
+/usr/include/asm-generic/errno-base.h:
+
 /usr/include/bits/types.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512dqintrin.h:
@@ -776,6 +799,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/c++/14.2.1/bits/alloc_traits.h:
 
 /usr/include/bits/types/struct_FILE.h:
+
+/usr/lib/libbrotlidec.so.1:
 
 /usr/include/c++/14.2.1/initializer_list:
 
@@ -800,8 +825,6 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/SDL2/SDL_gamecontroller.h:
 
 /home/kitanohideaki/Documents/git/HayashiNishimura/src/main.cpp:
-
-/usr/include/asm-generic/errno-base.h:
 
 /usr/include/bits/floatn-common.h:
 
@@ -893,6 +916,12 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/bits/types/struct_sched_param.h:
 
+/usr/include/inttypes.h:
+
+/usr/include/SDL2/SDL_ttf.h:
+
+/usr/include/c++/14.2.1/tr1/beta_function.tcc:
+
 /usr/include/bits/types/__sigset_t.h:
 
 /usr/include/SDL2/SDL_filesystem.h:
@@ -930,6 +959,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/SDL2/SDL_shape.h:
 
 /usr/include/SDL2/SDL_rwops.h:
+
+/usr/lib/libbrotlicommon.so.1:
 
 /usr/include/wchar.h:
 
@@ -973,6 +1004,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/cwchar:
 
+/usr/lib/libz.so.1:
+
 /usr/include/SDL2/begin_code.h:
 
 /usr/include/bits/uintn-identity.h:
@@ -988,6 +1021,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/sm3intrin.h:
 
 /usr/include/alloca.h:
+
+/usr/include/bits/types/struct_timeval.h:
 
 /usr/include/bits/types/struct_tm.h:
 
@@ -1041,6 +1076,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/bits/requires_hosted.h:
 
+/usr/lib/libbz2.so.1.0:
+
 /usr/include/c++/14.2.1/bits/allocator.h:
 
 /usr/include/c++/14.2.1/bits/basic_ios.tcc:
@@ -1058,8 +1095,6 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/SDL2/SDL_thread.h:
 
 /usr/include/c++/14.2.1/bits/exception_defines.h:
-
-/usr/lib/libSDL2main.a:
 
 /usr/include/c++/14.2.1/bits/exception_ptr.h:
 
@@ -1222,8 +1257,6 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/c++/14.2.1/bits/utility.h:
 
 /usr/include/c++/14.2.1/stdlib.h:
-
-/usr/include/c++/14.2.1/tr1/beta_function.tcc:
 
 /usr/include/bits/pthread_stack_min-dynamic.h:
 
