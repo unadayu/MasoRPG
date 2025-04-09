@@ -425,6 +425,15 @@ int main() {
           if (roomNumber == 19)
           if (roomNumber == 20)
           if (roomNumber == 21)
+          {
+            //右
+            if (playerRect.x == -15)
+            {
+                roomNumber = 1;
+                playerRect.x = 755;
+                playerRect.y = player.y;
+            }
+          }
 
           SDL_Rect cameraRect = { 100, 100, playerRect.w, playerRect.h };  // 描画するオブジェクトの初期位置とサイズ
           cameraRect.x = playerRect.x;
