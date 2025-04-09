@@ -244,12 +244,14 @@ int main() {
 
           if (roomNumber == 1)
           {
+            //右
             if (playerRect.x == 755)
             {
               roomNumber = 2;
               playerRect.x = 0;
             }
-            if (playerRect.y == 450) roomNumber == 4;
+            //下
+            if (playerRect.y == 450)
             {
               roomNumber = 4;
               playerRect.x = 0;
@@ -257,17 +259,20 @@ int main() {
           }
           if (roomNumber == 2)
           {
+            //左
             if (playerRect.x == -15)
             {
                 roomNumber = 1;
                 playerRect.x = 755;
             }
+            //右
             if (playerRect.x == 755)
             {
               roomNumber = 3;
               playerRect.x = 0;
             }
-            if (playerRect.y == 450) roomNumber == 4;
+            //下
+            if (playerRect.y == 450)
             {
               roomNumber = 5;
               playerRect.x = 0;
@@ -275,12 +280,14 @@ int main() {
           }
           if (roomNumber == 3)
           {
+            //右
             if (playerRect.x == -15)
             {
                 roomNumber = 2;
                 playerRect.x = 755;
             }
-            if (playerRect.y == 450) roomNumber == 4;
+            //下
+            if (playerRect.y == 450)
             {
               roomNumber = 6;
               playerRect.x = 0;
@@ -288,80 +295,122 @@ int main() {
           }
           if (roomNumber == 4)
           {
+            //右
             if (playerRect.x == 755)
             {
               roomNumber = 5;
               playerRect.x = 0;
             }
-            if (playerRect.y == 450) roomNumber == 4;
+            //下
+            if (playerRect.y == 450)
             {
               roomNumber = 7;
               playerRect.x = 0;
             }
+            //上
+            if (playerRect.y == -10)
+            {
+                roomNumber = 1;
+                playerRect.y = 450;
+            }
           }
           if (roomNumber == 5)
           {
+            //左
             if (playerRect.x == -15)
             {
                 roomNumber = 4;
                 playerRect.x = 755;
             }
+            //右
             if (playerRect.x == 755)
             {
               roomNumber = 6;
               playerRect.x = 0;
             }
-            if (playerRect.y == 450) roomNumber == 4;
+            //下
+            if (playerRect.y == 450)
             {
               roomNumber = 8;
               playerRect.x = 0;
             }
+            //上
+            if (playerRect.y == -10)
+            {
+                roomNumber = 2;
+                playerRect.y = 450;
+            }
           }
           if (roomNumber == 6)
           {
+            //右
             if (playerRect.x == -15)
             {
                 roomNumber = 5;
                 playerRect.x = 755;
             }
-            if (playerRect.x == -15)
-            {
-                roomNumber = 5;
-                playerRect.x = 755;
-            }
-            if (playerRect.y == 450) roomNumber == 4;
+            //下
+            if (playerRect.y == 450)
             {
               roomNumber = 9;
               playerRect.x = 0;
             }
+            //上
+            if (playerRect.y == -10)
+            {
+                roomNumber = 3;
+                playerRect.y = 450;
+            }
           }
           if (roomNumber == 7)
           {
+            //左
             if (playerRect.x == 755)
             {
               roomNumber = 8;
               playerRect.x = 0;
             }
+            //上
+            if (playerRect.y == -10)
+            {
+                roomNumber = 4;
+                playerRect.y = 450;
+            }
           }
           if (roomNumber == 8)
           {
+            //右
             if (playerRect.x == -15)
             {
                 roomNumber = 7;
                 playerRect.x = 755;
             }
+            //左
             if (playerRect.x == 755)
             {
               roomNumber = 9;
               playerRect.x = 0;
             }
+            //上
+            if (playerRect.y == -10)
+            {
+                roomNumber = 5;
+                playerRect.y = 450;
+            }
           }
           if (roomNumber == 9)
           {
+            //右
             if (playerRect.x == -15)
             {
                 roomNumber = 8;
                 playerRect.x = 755;
+            }
+            //上
+            if (playerRect.y == -10)
+            {
+                roomNumber = 6;
+                playerRect.y = 450;
             }
           }
           if (roomNumber == 10)
