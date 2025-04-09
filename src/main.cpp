@@ -26,18 +26,23 @@ void initCamera(Camera &camera, int width, int height) {
     camera.zoom = 1.0f;
 }
 
-void applyCamera(Camera &camera, SDL_Rect &destRect) {
-    destRect.x -= camera.x;
-    destRect.y -= camera.y;
-    destRect.w *= camera.zoom;
-    destRect.h *= camera.zoom;
+void applyCamera(Camera &camera, SDL_Rect &destRect, SDL_Rect &rect) {
+    camera.x = rect.x;
+    camera.y = rect.y;
+    camera.zoom = rect.w * 2;
+    camera.zoom = rect.h * 2;
+
+    //destRect.x -= camera.x;
+    //destRect.y -= camera.y;
+    //destRect.w *= camera.zoom;
+    //destRect.h *= camera.zoom;
 }
 
-void playerRender(SDL_Renderer* renderer, SDL_Texture* texture, Camera &camera) {
+void playerRender(SDL_Renderer* renderer, SDL_Texture* texture, Camera &camera, SDL_Rect &rect) {
     SDL_Rect destRect = { 100, 100, 50, 50 }; // 描画するオブジェクトの位置とサイズ
 
     // カメラを適用
-    applyCamera(camera, destRect);
+    applyCamera(camera, destRect, rect);
 
     // 画像を描画
     SDL_RenderCopy(renderer, texture, NULL, &destRect);
@@ -141,7 +146,9 @@ int main() {
 
     bool title = true;
 
-    Rectangle player = {10, 10, 0, 0,};
+    int roomNumber = 1;
+
+    Rectangle player = {10, 225, 50, 50};
 
     SDL_Rect playerRect;
     playerRect.x = player.x;  // 描画する位置のX座標
@@ -216,18 +223,170 @@ int main() {
         }
         else 
         {
-            zoomCamera(camera, 1.1f);
-          SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+          if (isKeyPressed(event, SDLK_UP)) playerRect.y -= 5;
+          if (isKeyPressed(event, SDLK_DOWN)) playerRect.y += 5;
+          if (isKeyPressed(event, SDLK_LEFT)) playerRect.x -= 5;
+          if (isKeyPressed(event, SDLK_RIGHT)) playerRect.x += 5;
+
+          if (playerRect.x <= -15) playerRect.x = -15;
+          if (playerRect.y <= -10) playerRect.y = -10;
+          if (playerRect.x >= 755) playerRect.x = 755;
+          if (playerRect.y >= 450) playerRect.y = 450;
+
+          zoomCamera(camera, 0.1f);
+          //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
           SDL_RenderClear(renderer);
 
-          SDL_Rect cameraRect = { 100, 100, 200, 200 };  // 描画するオブジェクトの初期位置とサイズ
-          applyCamera(camera, cameraRect);  // カメラを適用して調整
-          cameraRect.x = player.x;
-          cameraRect.y = player.y;
+          //
+          //roomNumberとは？
+          //playerの住んでいる場所をこと
+          //roomNumberの指定は、 Image/map.xcfを見て
 
-          SDL_QueryTexture(woodLightTexture, NULL, NULL, &playerRect.w, &playerRect.h);
+          if (roomNumber == 1)
+          {
+            if (playerRect.x == 755)
+            {
+              roomNumber = 2;
+              playerRect.x = 0;
+            }
+            if (playerRect.y == 450) roomNumber == 4;
+            {
+              roomNumber = 4;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 2)
+          {
+            if (playerRect.x == -15)
+            {
+                roomNumber = 1;
+                playerRect.x = 755;
+            }
+            if (playerRect.x == 755)
+            {
+              roomNumber = 3;
+              playerRect.x = 0;
+            }
+            if (playerRect.y == 450) roomNumber == 4;
+            {
+              roomNumber = 5;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 3)
+          {
+            if (playerRect.x == -15)
+            {
+                roomNumber = 2;
+                playerRect.x = 755;
+            }
+            if (playerRect.y == 450) roomNumber == 4;
+            {
+              roomNumber = 6;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 4)
+          {
+            if (playerRect.x == 755)
+            {
+              roomNumber = 5;
+              playerRect.x = 0;
+            }
+            if (playerRect.y == 450) roomNumber == 4;
+            {
+              roomNumber = 7;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 5)
+          {
+            if (playerRect.x == -15)
+            {
+                roomNumber = 4;
+                playerRect.x = 755;
+            }
+            if (playerRect.x == 755)
+            {
+              roomNumber = 6;
+              playerRect.x = 0;
+            }
+            if (playerRect.y == 450) roomNumber == 4;
+            {
+              roomNumber = 8;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 6)
+          {
+            if (playerRect.x == -15)
+            {
+                roomNumber = 5;
+                playerRect.x = 755;
+            }
+            if (playerRect.x == -15)
+            {
+                roomNumber = 5;
+                playerRect.x = 755;
+            }
+            if (playerRect.y == 450) roomNumber == 4;
+            {
+              roomNumber = 9;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 7)
+          {
+            if (playerRect.x == 755)
+            {
+              roomNumber = 8;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 8)
+          {
+            if (playerRect.x == -15)
+            {
+                roomNumber = 7;
+                playerRect.x = 755;
+            }
+            if (playerRect.x == 755)
+            {
+              roomNumber = 9;
+              playerRect.x = 0;
+            }
+          }
+          if (roomNumber == 9)
+          {
+            if (playerRect.x == -15)
+            {
+                roomNumber = 8;
+                playerRect.x = 755;
+            }
+          }
+          if (roomNumber == 10)
+          if (roomNumber == 11)
+          if (roomNumber == 12)
+          if (roomNumber == 13)
+          if (roomNumber == 14)
+          if (roomNumber == 15)
+          if (roomNumber == 16)
+          if (roomNumber == 17)
+          if (roomNumber == 18)
+          if (roomNumber == 19)
+          if (roomNumber == 20)
+          if (roomNumber == 21)
+
+          SDL_Rect cameraRect = { 100, 100, playerRect.w, playerRect.h };  // 描画するオブジェクトの初期位置とサイズ
+          cameraRect.x = playerRect.x;
+          cameraRect.y = playerRect.y;
+          cameraRect.w = playerRect.w;
+          cameraRect.h = playerRect.h;
+          //applyCamera(camera, cameraRect, playerRect);
+
+          //SDL_QueryTexture(woodLightTexture, NULL, NULL, &playerRect.w, &playerRect.h);
           SDL_RenderCopy(renderer, woodLightTexture, nullptr, &playerRect);
-          std::cout << "X : " << player.x << "\nY : " << player.y << "\n" << std::endl;
+          std::cout << "player" << "X : " << playerRect.x << "\nY : " << playerRect.y << "\ncamera X : " << cameraRect.x << "\nY : " << cameraRect.y << "\n" << std::endl;
         //   drawText(renderer, 255.0f, 255.0f, 255.0f, japaneseFont, player.x, player.x - 10, player.y - 10);
           SDL_RenderPresent(renderer);
           SDL_Delay(16);
