@@ -21,6 +21,7 @@ CMakeFiles/main.dir/src/main.cpp.o: /home/kitanohideaki/CLionProjects/MasoRPG/sr
   /usr/include/SDL2/SDL_haptic.h \
   /usr/include/SDL2/SDL_hidapi.h \
   /usr/include/SDL2/SDL_hints.h \
+  /usr/include/SDL2/SDL_image.h \
   /usr/include/SDL2/SDL_joystick.h \
   /usr/include/SDL2/SDL_keyboard.h \
   /usr/include/SDL2/SDL_keycode.h \
@@ -402,6 +403,9 @@ CMakeFiles/main.dir/src/main.cpp.o: /home/kitanohideaki/CLionProjects/MasoRPG/sr
 main: /usr/lib/Scrt1.o \
   /usr/lib/crti.o \
   /usr/lib/crtn.o \
+  /usr/lib/libSDL2.so \
+  /usr/lib/libSDL2_image.so \
+  /usr/lib/libSDL2_ttf.so \
   /usr/lib/libc.so \
   /usr/lib/libgcc_s.so \
   /usr/lib/libgcc_s.so.1 \
@@ -411,32 +415,58 @@ main: /usr/lib/Scrt1.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/crtendS.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/libgcc.a \
   /usr/lib/ld-linux-x86-64.so.2 \
-  /usr/lib/libSDL2-2.0.so.0.3200.54 \
-  /usr/lib/libSDL2_ttf.so \
+  /usr/lib/libSvtAv1Enc.so.3 \
+  /usr/lib/libaom.so.3 \
+  /usr/lib/libavif.so.16 \
   /usr/lib/libbrotlicommon.so.1 \
   /usr/lib/libbrotlidec.so.1 \
+  /usr/lib/libbrotlienc.so.1 \
   /usr/lib/libbz2.so.1.0 \
   /usr/lib/libc.so.6 \
   /usr/lib/libc_nonshared.a \
+  /usr/lib/libdav1d.so.7 \
   /usr/lib/libfreetype.so.6 \
   /usr/lib/libglib-2.0.so.0 \
   /usr/lib/libgraphite2.so.3 \
   /usr/lib/libharfbuzz.so.0 \
+  /usr/lib/libhwy.so.1 \
+  /usr/lib/libjbig.so.2.1 \
+  /usr/lib/libjpeg.so.8 \
+  /usr/lib/libjxl.so.0.11 \
+  /usr/lib/libjxl_cms.so.0.11 \
+  /usr/lib/liblzma.so.5 \
   /usr/lib/libm.so.6 \
   /usr/lib/libmvec.so.1 \
   /usr/lib/libpcre2-8.so.0 \
   /usr/lib/libpng16.so.16 \
+  /usr/lib/librav1e.so.0.7 \
+  /usr/lib/libsharpyuv.so.0 \
+  /usr/lib/libtiff.so.6 \
+  /usr/lib/libwebp.so.7 \
+  /usr/lib/libwebpdemux.so.2 \
+  /usr/lib/libyuv.so \
   /usr/lib/libz.so.1 \
+  /usr/lib/libzstd.so.1 \
   CMakeFiles/main.dir/src/main.cpp.o
 
 
 CMakeFiles/main.dir/src/main.cpp.o:
 
-/usr/lib/libpng16.so.16:
+/usr/lib/libzstd.so.1:
+
+/usr/lib/libyuv.so:
+
+/usr/lib/libwebpdemux.so.2:
+
+/usr/lib/libwebp.so.7:
 
 /usr/lib/libpcre2-8.so.0:
 
 /usr/lib/libmvec.so.1:
+
+/usr/lib/libjxl_cms.so.0.11:
+
+/usr/lib/libjbig.so.2.1:
 
 /usr/lib/libharfbuzz.so.0:
 
@@ -444,17 +474,25 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/lib/libfreetype.so.6:
 
+/usr/lib/libpng16.so.16:
+
+/usr/lib/libdav1d.so.7:
+
 /usr/lib/libc_nonshared.a:
 
 /usr/lib/libc.so.6:
 
-/usr/lib/libSDL2_ttf.so:
+/usr/lib/libbrotlienc.so.1:
 
-/usr/lib/libSDL2-2.0.so.0.3200.54:
+/usr/lib/libavif.so.16:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/libgcc.a:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/crtendS.o:
+
+/usr/lib/libSDL2_ttf.so:
+
+/usr/lib/libSDL2_image.so:
 
 /usr/lib/crti.o:
 
@@ -588,6 +626,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512bf16intrin.h:
 
+/usr/lib/liblzma.so.5:
+
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx5124fmapsintrin.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/amxtileintrin.h:
@@ -618,6 +658,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/stdc-predef.h:
 
+/usr/lib/libaom.so.3:
+
 /usr/lib/libstdc++.so:
 
 /usr/include/locale.h:
@@ -639,6 +681,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/gnu/stubs-64.h:
 
 /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/os_defines.h:
+
+/usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h:
 
 /usr/include/bits/types/mbstate_t.h:
 
@@ -690,6 +734,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/bits/mathcalls-helper-functions.h:
 
+/usr/lib/libSDL2.so:
+
 /usr/include/features-time64.h:
 
 /usr/include/c++/14.2.1/bits/range_access.h:
@@ -719,6 +765,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/movdirintrin.h:
 
 /usr/include/bits/libc-header-start.h:
+
+/usr/lib/librav1e.so.0.7:
 
 /usr/include/bits/iscanonical.h:
 
@@ -766,11 +814,15 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/SDL2/SDL_main.h:
 
+/usr/lib/libtiff.so.6:
+
 /usr/include/SDL2/SDL_log.h:
 
 /usr/include/c++/14.2.1/bits/basic_string.h:
 
 /usr/include/SDL2/SDL_messagebox.h:
+
+/usr/lib/libjxl.so.0.11:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx5124vnniwintrin.h:
 
@@ -784,17 +836,9 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/SDL2/SDL_stdinc.h:
 
-/usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h:
-
 /usr/include/asm-generic/errno-base.h:
 
 /usr/include/bits/types.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512dqintrin.h:
-
-/usr/include/bits/types/struct_timespec.h:
-
-/usr/include/SDL2/SDL_hidapi.h:
 
 /usr/include/c++/14.2.1/bits/alloc_traits.h:
 
@@ -870,18 +914,6 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/bits/locale_facets.h:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/cmpccxaddintrin.h:
-
-/usr/include/bits/stdlib-float.h:
-
-/usr/include/SDL2/SDL_metal.h:
-
-/usr/include/linux/posix_types.h:
-
-/usr/include/bits/types/FILE.h:
-
-/usr/include/c++/14.2.1/cctype:
-
 /usr/include/SDL2/SDL_assert.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/x86gprintrin.h:
@@ -902,6 +934,12 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/ios:
 
+/usr/include/SDL2/SDL_image.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/sm3intrin.h:
+
+/usr/include/alloca.h:
+
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/prfchwintrin.h:
 
 /usr/include/wctype.h:
@@ -915,6 +953,18 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/c++/14.2.1/tr1/modified_bessel_func.tcc:
 
 /usr/include/c++/14.2.1/tr1/legendre_function.tcc:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/cmpccxaddintrin.h:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/include/SDL2/SDL_metal.h:
+
+/usr/include/linux/posix_types.h:
+
+/usr/include/bits/types/FILE.h:
+
+/usr/include/c++/14.2.1/cctype:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/float.h:
 
@@ -930,9 +980,9 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/bits/types/__sigset_t.h:
 
-/usr/include/SDL2/SDL_filesystem.h:
-
 /usr/include/asm-generic/posix_types.h:
+
+/usr/include/SDL2/SDL_filesystem.h:
 
 /usr/include/SDL2/SDL_platform.h:
 
@@ -959,6 +1009,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/bits/wchar.h:
 
 /usr/include/SDL2/SDL_atomic.h:
+
+/usr/lib/libsharpyuv.so.0:
 
 /usr/include/SDL2/SDL_quit.h:
 
@@ -1018,9 +1070,11 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/type_traits:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/sm3intrin.h:
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512dqintrin.h:
 
-/usr/include/alloca.h:
+/usr/include/SDL2/SDL_hidapi.h:
+
+/usr/include/bits/types/struct_timespec.h:
 
 /usr/include/bits/types/struct_timeval.h:
 
@@ -1136,6 +1190,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/bits/move.h:
 
+/usr/lib/libjpeg.so.8:
+
 /usr/include/pthread.h:
 
 /usr/include/SDL2/SDL_hints.h:
@@ -1194,6 +1250,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 
 /usr/include/c++/14.2.1/cerrno:
 
+/usr/lib/libhwy.so.1:
+
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/lzcntintrin.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/avx512vnniintrin.h:
@@ -1207,6 +1265,8 @@ CMakeFiles/main.dir/src/main.cpp.o:
 /usr/include/c++/14.2.1/cstdlib:
 
 /usr/include/c++/14.2.1/cwctype:
+
+/usr/lib/libSvtAv1Enc.so.3:
 
 /usr/include/bits/time.h:
 

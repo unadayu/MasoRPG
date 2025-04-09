@@ -1,6 +1,57 @@
 #include <SDL2/SDL.h>
 #include <SDL_ttf.h>
 #include <iostream>
+#include <SDL_image.h>
+
+
+// プレイヤーやオブジェクトの矩形
+struct Rectangle {
+    float x;
+    float y;
+    float Width;
+    float Height;
+};
+
+struct Camera {
+    int x, y;
+    int width, height;
+    float zoom;
+};
+
+void initCamera(Camera &camera, int width, int height) {
+    camera.x = 0;
+    camera.y = 0;
+    camera.width = width;
+    camera.height = height;
+    camera.zoom = 1.0f;
+}
+
+void applyCamera(Camera &camera, SDL_Rect &destRect) {
+    destRect.x -= camera.x;
+    destRect.y -= camera.y;
+    destRect.w *= camera.zoom;
+    destRect.h *= camera.zoom;
+}
+
+void playerRender(SDL_Renderer* renderer, SDL_Texture* texture, Camera &camera) {
+    SDL_Rect destRect = { 100, 100, 50, 50 }; // 描画するオブジェクトの位置とサイズ
+
+    // カメラを適用
+    applyCamera(camera, destRect);
+
+    // 画像を描画
+    SDL_RenderCopy(renderer, texture, NULL, &destRect);
+}
+
+void moveCamera(Camera &camera, int dx, int dy) {
+    camera.x += dx;
+    camera.y += dy;
+}
+
+void zoomCamera(Camera &camera, float factor) {
+    camera.zoom *= factor;
+}
+
 
 void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, std::string Text, float x, float y)
 {
@@ -50,16 +101,8 @@ int main() {
       return 1;
     }
 
-    // ウィンドウサイズ
-    struct Rectangle {
-        float Width;
-        float Height;
-        float x;
-        float y;
-    };
-
-    Rectangle WindowSise = { 800, 500, 0, 0 };
-    Rectangle titleCursor = { 10, 10, 3, 250};
+    Rectangle WindowSise = { 0, 0, 800, 500 };
+    Rectangle titleCursor = { 3, 250, 10, 10};
 
     SDL_Window* window = SDL_CreateWindow(
         "SDL Window",
@@ -83,12 +126,40 @@ int main() {
         return 1;
     }
 
+    // SDL_imageの初期化
+    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+        std::cerr << "IMG_Init Error: " << IMG_GetError() << std::endl;
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
+
+    // カメラを初期化
+    Camera camera;
+    initCamera(camera, 800, 600);
+
     bool title = true;
+
+    Rectangle player = {10, 10, 0, 0,};
+
+    SDL_Rect playerRect;
+    playerRect.x = player.x;  // 描画する位置のX座標
+    playerRect.y = player.y;  // 描画する位置のY座標
+    playerRect.w = player.Width;  // テクスチャの幅（変更したい場合）
+    playerRect.h = player.Height;  // テクスチャの高さ（変更したい場合）
 
     // フォント読み込み（.ttfファイルが必要）
     TTF_Font* noJapaneseFontTitle = TTF_OpenFont("fonts/8-bit-no-ja/8bitOperatorPlus8-Bold.ttf", 50);
     TTF_Font* noJapaneseFont = TTF_OpenFont("fonts/8-bit-no-ja/8bitOperatorPlus8-Bold", 24);
     TTF_Font* japaneseFont = TTF_OpenFont("fonts/ja-16-bit/DotGothic16-Regular.ttf", 24);
+
+    SDL_Surface* woodLightImage = IMG_Load("Image/woodLight.png");
+    SDL_Surface* backImage = IMG_Load("Image/back.png");
+
+    SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
+    SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backImage);
+    SDL_FreeSurface(backImage);
 
     // メインループフラグとイベント構造体
     bool running = true;
@@ -118,7 +189,7 @@ int main() {
                     titleCursor.y -= 30.0f; // カーソルを上に移動
                   }
                   
-                  if (isKeyPressed(event, SDLK_RETURN)) if (titleCursor.y = 250) title = false;
+                  if (isKeyPressed(event, SDLK_RETURN)) if (titleCursor.y == 250) title = false;
                 }
             }
         }
@@ -143,10 +214,21 @@ int main() {
           // 少し待つ（CPU負荷軽減）
           SDL_Delay(8); // 約60FPS
         }
-        else {
+        else 
+        {
+            zoomCamera(camera, 1.1f);
           SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
           SDL_RenderClear(renderer);
 
+          SDL_Rect cameraRect = { 100, 100, 200, 200 };  // 描画するオブジェクトの初期位置とサイズ
+          applyCamera(camera, cameraRect);  // カメラを適用して調整
+          cameraRect.x = player.x;
+          cameraRect.y = player.y;
+
+          SDL_QueryTexture(woodLightTexture, NULL, NULL, &playerRect.w, &playerRect.h);
+          SDL_RenderCopy(renderer, woodLightTexture, nullptr, &playerRect);
+          std::cout << "X : " << player.x << "\nY : " << player.y << "\n" << std::endl;
+        //   drawText(renderer, 255.0f, 255.0f, 255.0f, japaneseFont, player.x, player.x - 10, player.y - 10);
           SDL_RenderPresent(renderer);
           SDL_Delay(16);
         }
