@@ -228,9 +228,13 @@ int main() {
           if (isKeyPressed(event, SDLK_LEFT)) playerRect.x -= 5;
           if (isKeyPressed(event, SDLK_RIGHT)) playerRect.x += 5;
 
+          //左
           if (playerRect.x <= -15) playerRect.x = -15;
+          //上
           if (playerRect.y <= -10) playerRect.y = -10;
+          //右
           if (playerRect.x >= 755) playerRect.x = 755;
+          //下
           if (playerRect.y >= 450) playerRect.y = 450;
 
           zoomCamera(camera, 0.1f);
@@ -244,175 +248,20 @@ int main() {
 
           if (roomNumber == 1)
           {
-            //右
             if (playerRect.x == 755)
             {
+              playerRect.y = 450 /2;
               roomNumber = 2;
-              playerRect.x = 0;
-            }
-            //下
-            if (playerRect.y == 450)
-            {
-              roomNumber = 4;
-              playerRect.x = 0;
             }
           }
           if (roomNumber == 2)
-          {
-            //左
-            if (playerRect.x == -15)
-            {
-                roomNumber = 1;
-                playerRect.x = 755;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-              roomNumber = 3;
-              playerRect.x = 0;
-            }
-            //下
-            if (playerRect.y == 450)
-            {
-              roomNumber = 5;
-              playerRect.x = 0;
-            }
-          }
           if (roomNumber == 3)
-          {
-            //右
-            if (playerRect.x == -15)
-            {
-                roomNumber = 2;
-                playerRect.x = 755;
-            }
-            //下
-            if (playerRect.y == 450)
-            {
-              roomNumber = 6;
-              playerRect.x = 0;
-            }
-          }
           if (roomNumber == 4)
-          {
-            //右
-            if (playerRect.x == 755)
-            {
-              roomNumber = 5;
-              playerRect.x = 0;
-            }
-            //下
-            if (playerRect.y == 450)
-            {
-              roomNumber = 7;
-              playerRect.x = 0;
-            }
-            //上
-            if (playerRect.y == -10)
-            {
-                roomNumber = 1;
-                playerRect.y = 450;
-            }
-          }
           if (roomNumber == 5)
-          {
-            //左
-            if (playerRect.x == -15)
-            {
-                roomNumber = 4;
-                playerRect.x = 755;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-              roomNumber = 6;
-              playerRect.x = 0;
-            }
-            //下
-            if (playerRect.y == 450)
-            {
-              roomNumber = 8;
-              playerRect.x = 0;
-            }
-            //上
-            if (playerRect.y == -10)
-            {
-                roomNumber = 2;
-                playerRect.y = 450;
-            }
-          }
           if (roomNumber == 6)
-          {
-            //右
-            if (playerRect.x == -15)
-            {
-                roomNumber = 5;
-                playerRect.x = 755;
-            }
-            //下
-            if (playerRect.y == 450)
-            {
-              roomNumber = 9;
-              playerRect.x = 0;
-            }
-            //上
-            if (playerRect.y == -10)
-            {
-                roomNumber = 3;
-                playerRect.y = 450;
-            }
-          }
           if (roomNumber == 7)
-          {
-            //左
-            if (playerRect.x == 755)
-            {
-              roomNumber = 8;
-              playerRect.x = 0;
-            }
-            //上
-            if (playerRect.y == -10)
-            {
-                roomNumber = 4;
-                playerRect.y = 450;
-            }
-          }
           if (roomNumber == 8)
-          {
-            //右
-            if (playerRect.x == -15)
-            {
-                roomNumber = 7;
-                playerRect.x = 755;
-            }
-            //左
-            if (playerRect.x == 755)
-            {
-              roomNumber = 9;
-              playerRect.x = 0;
-            }
-            //上
-            if (playerRect.y == -10)
-            {
-                roomNumber = 5;
-                playerRect.y = 450;
-            }
-          }
           if (roomNumber == 9)
-          {
-            //右
-            if (playerRect.x == -15)
-            {
-                roomNumber = 8;
-                playerRect.x = 755;
-            }
-            //上
-            if (playerRect.y == -10)
-            {
-                roomNumber = 6;
-                playerRect.y = 450;
-            }
-          }
           if (roomNumber == 10)
           if (roomNumber == 11)
           if (roomNumber == 12)
@@ -425,16 +274,12 @@ int main() {
           if (roomNumber == 19)
           if (roomNumber == 20)
           if (roomNumber == 21)
-          {
-            //右
-            if (playerRect.x == -15)
-            {
-                roomNumber = 1;
-                playerRect.x = 755;
-                playerRect.y = player.y;
-            }
-          }
-
+          if (roomNumber == 22)
+          if (roomNumber == 23)
+          if (roomNumber == 24)
+          if (roomNumber == 25)
+          if (roomNumber == 26)
+          
           SDL_Rect cameraRect = { 100, 100, playerRect.w, playerRect.h };  // 描画するオブジェクトの初期位置とサイズ
           cameraRect.x = playerRect.x;
           cameraRect.y = playerRect.y;
