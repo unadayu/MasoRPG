@@ -248,28 +248,350 @@ int main() {
 
           if (roomNumber == 1)
           {
+            // 右
             if (playerRect.x == 755)
             {
               playerRect.y = 450 /2;
+              playerRect.x = 0;
               roomNumber = 2;
             }
           }
           if (roomNumber == 2)
+          {
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 3;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 6;
+            }
+          }
           if (roomNumber == 3)
+          {
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 2;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 4;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 7;
+            }
+          }
           if (roomNumber == 4)
+          {
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 3;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 5;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 8;
+            }
+          }
           if (roomNumber == 5)
+          {
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 4;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 9;
+            }
+          }
           if (roomNumber == 6)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 2
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 5;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 8;
+            }
+          }
           if (roomNumber == 7)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 3;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 8;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 6;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 11;
+            }
+          }
           if (roomNumber == 8)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 4;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 9;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 7;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 12;
+            }
+          }
           if (roomNumber == 9)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 5;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 8;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 13;
+            }
+          }
           if (roomNumber == 10)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 6;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 11;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 14;
+            }
+          }
           if (roomNumber == 11)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 7;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 12;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 10;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 15;
+            }
+          }
           if (roomNumber == 12)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 8;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 13;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 11;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 16;
+            }
+          }
           if (roomNumber == 13)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 9;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 12;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 17;
+            }
+          }
           if (roomNumber == 14)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 10;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 15;
+            }
+          }
           if (roomNumber == 15)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 11;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 16;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 14;
+            }
+          }
           if (roomNumber == 16)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 12;
+            }
+            //右
+            if (playerRect.x == 755)
+            {
+                playerRect.x = 0;
+                roomNumber = 17;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 15;
+            }
+          }
           if (roomNumber == 17)
+          {
+            // 上
+            if (playerRect.y <= -10)
+            {
+                playerRect.y = 450;
+                roomNumber = 13;
+            }
+            // 左
+            if (playerRect.x == -15)
+            {
+                playerRect.x == 755;
+                roomNumber = 16;
+            }
+          }
           if (roomNumber == 18)
           if (roomNumber == 19)
           if (roomNumber == 20)
