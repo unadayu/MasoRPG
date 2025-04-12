@@ -228,6 +228,7 @@ int main() {
           if (isKeyPressed(event, SDLK_LEFT)) playerRect.x -= 5;
           if (isKeyPressed(event, SDLK_RIGHT)) playerRect.x += 5;
 
+                
           //左
           if (playerRect.x <= -15) playerRect.x = -15;
           //上
@@ -246,6 +247,7 @@ int main() {
           //playerの住んでいる場所をこと
           //roomNumberの指定は、 Image/map.xcfを見て
 
+            //  ========== 移動の設定のみ ==========
           if (roomNumber == 1)
           {
             // 右
@@ -625,6 +627,37 @@ int main() {
           if (roomNumber == 24)
           if (roomNumber == 25)
           if (roomNumber == 26)
+        // ========== 移動の設定のみ ==========
+
+
+
+        if (roomNumber == 1)
+        if (roomNumber == 2)
+        if (roomNumber == 3)
+        if (roomNumber == 4)
+        if (roomNumber == 5)
+        if (roomNumber == 6)
+        if (roomNumber == 7)
+        if (roomNumber == 8)
+        if (roomNumber == 9)
+        if (roomNumber == 10)
+        if (roomNumber == 11)
+        if (roomNumber == 12)
+        if (roomNumber == 13)
+        if (roomNumber == 14)
+        if (roomNumber == 15)
+        if (roomNumber == 16)
+        if (roomNumber == 17)
+        if (roomNumber == 18)
+        if (roomNumber == 19)
+        if (roomNumber == 20)
+        if (roomNumber == 21)
+        if (roomNumber == 22)
+        if (roomNumber == 23)
+        if (roomNumber == 24)
+        if (roomNumber == 25)
+        if (roomNumber == 26)
+        if (roomNumber == 114514)
           
           SDL_Rect cameraRect = { 100, 100, playerRect.w, playerRect.h };  // 描画するオブジェクトの初期位置とサイズ
         //   cameraRect.x = playerRect.x;
