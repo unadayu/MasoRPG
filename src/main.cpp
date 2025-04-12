@@ -534,6 +534,12 @@ int main() {
                 playerRect.x = 0;
                 roomNumber = 15;
             }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 18;
+            }
           }
           if (roomNumber == 15)
           {
@@ -554,6 +560,12 @@ int main() {
             {
                 playerRect.x == 755;
                 roomNumber = 14;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 19;
             }
           }
           if (roomNumber == 16)
@@ -576,6 +588,12 @@ int main() {
                 playerRect.x == 755;
                 roomNumber = 15;
             }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 19;
+            }
           }
           if (roomNumber == 17)
           {
@@ -590,6 +608,12 @@ int main() {
             {
                 playerRect.x == 755;
                 roomNumber = 16;
+            }
+            // 下
+            if (playerRect.y == 450)
+            {
+                playerRect.y = 0;
+                roomNumber = 20;
             }
           }
           if (roomNumber == 18)
