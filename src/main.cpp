@@ -163,6 +163,7 @@ int main() {
 
     SDL_Surface* woodLightImage = IMG_Load("Image/woodLight.png");
     SDL_Surface* backImage = IMG_Load("Image/back.png");
+    // SDL_Surface* nomalHouse = 
 
     SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
     SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backImage);
