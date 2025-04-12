@@ -334,7 +334,7 @@ int main() {
             if (playerRect.y <= -10)
             {
                 playerRect.y = 450;
-                roomNumber = 2
+                roomNumber = 2;
             }
             //右
             if (playerRect.x == 755)
@@ -603,15 +603,15 @@ int main() {
           if (roomNumber == 26)
           
           SDL_Rect cameraRect = { 100, 100, playerRect.w, playerRect.h };  // 描画するオブジェクトの初期位置とサイズ
-          cameraRect.x = playerRect.x;
-          cameraRect.y = playerRect.y;
-          cameraRect.w = playerRect.w;
-          cameraRect.h = playerRect.h;
+        //   cameraRect.x = playerRect.x;
+        //   cameraRect.y = playerRect.y;
+        //   cameraRect.w = playerRect.w;
+        //   cameraRect.h = playerRect.h;
           //applyCamera(camera, cameraRect, playerRect);
 
           //SDL_QueryTexture(woodLightTexture, NULL, NULL, &playerRect.w, &playerRect.h);
           SDL_RenderCopy(renderer, woodLightTexture, nullptr, &playerRect);
-          std::cout << "player" << "X : " << playerRect.x << "\nY : " << playerRect.y << "\ncamera X : " << cameraRect.x << "\nY : " << cameraRect.y << "\n" << std::endl;
+          std::cout << "player" << "X : " << playerRect.x << "\nY : " << playerRect.y << "\nroomNumber : " <<  roomNumber << "\n"  << std::endl;
         //   drawText(renderer, 255.0f, 255.0f, 255.0f, japaneseFont, player.x, player.x - 10, player.y - 10);
           SDL_RenderPresent(renderer);
           SDL_Delay(16);
