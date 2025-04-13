@@ -106,6 +106,36 @@ int main() {
       return 1;
     }
 
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return 1;
+    }
+
+    SDL_AudioSpec wavSpec;
+    Uint32 wavLength;
+    Uint8* wavBuffer;
+
+    // 再生する WAV ファイル名（16bit PCM, stereo, 44100Hz 推奨）
+    if (SDL_LoadWAV("Music/ikisugiyou.wav", &wavSpec, &wavBuffer, &wavLength) == NULL) {
+        std::cerr << "太いシーチキンがほしい " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        return 1;
+    }
+
+    // オーディオデバイスを開く
+    SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+    if (deviceId == 0) {
+        std::cerr << "Failed to open audio: " << SDL_GetError() << std::endl;
+        SDL_FreeWAV(wavBuffer);
+        SDL_Quit();
+        return 1;
+    }
+
+    // // 音声データをキューに追加して再生
+    // SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+    // SDL_PauseAudioDevice(114514, deviceId, 0);  // 再生開始
+
+
     Rectangle WindowSise = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
 
@@ -146,7 +176,7 @@ int main() {
 
     bool title = true;
 
-    int roomNumber = 1;
+    int roomNumber = 114514;
 
     Rectangle player = {10, 225, 50, 50};
 
@@ -628,7 +658,7 @@ int main() {
           if (roomNumber == 24)
           if (roomNumber == 25)
           if (roomNumber == 26)
-        // ========== 移動の設定のみ ==========
+        // ==============================
 
 
 
@@ -659,6 +689,14 @@ int main() {
         if (roomNumber == 25)
         if (roomNumber == 26)
         if (roomNumber == 114514)
+        {
+            // 音声データをキューに追加して再生
+            // SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+            SDL_PauseAudioDevice(deviceId, 0);  // 再生開始
+            // if (SDL_GetQueuedAudioSize(deviceId) < wavLength) {
+                // SDL_QueueAudio(deviceId, wavBuffer, wavLength); // 再度キューに入れる
+            // }
+        }
           
           SDL_Rect cameraRect = { 100, 100, playerRect.w, playerRect.h };  // 描画するオブジェクトの初期位置とサイズ
         //   cameraRect.x = playerRect.x;
