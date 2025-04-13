@@ -8,3 +8,7 @@
 /build
 
 /main
+
+/compiler/build/
+/compiler/build/*
+/compiler/build

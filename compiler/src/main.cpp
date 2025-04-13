@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <unistd.h> // for access() and chdir()
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 bool command_exists(const char* cmd) {
     std::string check = std::string("command -v ") + cmd + " > /dev/null 2>&1";
@@ -32,7 +35,10 @@ int main() {
     }
 
     std::cout << "build ディレクトリを作成しています...\n";
-    system("rm -rf build");
+    if (fs::exists("build")) {
+        std::cout << "build ディレクトリを削除します...\n";
+        fs::remove_all("build");
+    }
     system("mkdir build");
 
     if (chdir("build") != 0) {
@@ -51,6 +57,12 @@ int main() {
 
     system("make");
     system("mv main ../main");
+    system("cd ..");
+    if (fs::exists("build")) {
+        std::cout << "build ディレクトリを削除します...\n";
+        fs::remove_all("build");
+    }
+    system("sleep 1");
     std::cout << "ビルドに成功しました\n 実行するには | ./main | とだけ打ってください。" << std::endl;
     return 0;
 }
