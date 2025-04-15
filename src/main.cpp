@@ -159,6 +159,8 @@ int main() {
     SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backImage);
     SDL_FreeSurface(backImage);
 
+    Camera2D camera(WindowSise.Width, WindowSise.Height, 10000, 10000);
+
     // メインループフラグとイベント構造体
     bool running = true;
     SDL_Event event;
@@ -214,7 +216,6 @@ int main() {
         }
         else 
         {
-            Camera2D camera(WindowSise.Width, WindowSise.Height, 10000, 10000);
             // 毎フレーム、プレイヤーを追う
             camera.follow(playerRect);
             // 描画時にスクリーン座標へ変換
