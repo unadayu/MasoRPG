@@ -12,51 +12,15 @@ struct Rectangle {
     float Height;
 };
 
-struct Camera {
-    int x, y;
-    int width, height;
-    float zoom;
-};
+// void playerRender(SDL_Renderer* renderer, SDL_Texture* texture, Camera &camera, SDL_Rect &rect) {
+//     SDL_Rect destRect = { 100, 100, 50, 50 }; // 描画するオブジェクトの位置とサイズ
 
-void initCamera(Camera &camera, int width, int height) {
-    camera.x = 0;
-    camera.y = 0;
-    camera.width = width;
-    camera.height = height;
-    camera.zoom = 1.0f;
-}
+//     // カメラを適用
+//     applyCamera(camera, destRect, rect);
 
-void applyCamera(Camera &camera, SDL_Rect &destRect, SDL_Rect &rect) {
-    camera.x = rect.x;
-    camera.y = rect.y;
-    camera.zoom = rect.w * 2;
-    camera.zoom = rect.h * 2;
-
-    //destRect.x -= camera.x;
-    //destRect.y -= camera.y;
-    //destRect.w *= camera.zoom;
-    //destRect.h *= camera.zoom;
-}
-
-void playerRender(SDL_Renderer* renderer, SDL_Texture* texture, Camera &camera, SDL_Rect &rect) {
-    SDL_Rect destRect = { 100, 100, 50, 50 }; // 描画するオブジェクトの位置とサイズ
-
-    // カメラを適用
-    applyCamera(camera, destRect, rect);
-
-    // 画像を描画
-    SDL_RenderCopy(renderer, texture, NULL, &destRect);
-}
-
-void moveCamera(Camera &camera, int dx, int dy) {
-    camera.x += dx;
-    camera.y += dy;
-}
-
-void zoomCamera(Camera &camera, float factor) {
-    camera.zoom *= factor;
-}
-
+//     // 画像を描画
+//     SDL_RenderCopy(renderer, texture, NULL, &destRect);
+// }
 
 void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, std::string Text, float x, float y)
 {
@@ -268,9 +232,7 @@ int main() {
           if (playerRect.x >= 755) playerRect.x = 755;
           //下
           if (playerRect.y >= 450) playerRect.y = 450;
-
-          zoomCamera(camera, 0.1f);
-          //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+            
           SDL_RenderClear(renderer);
 
           //
