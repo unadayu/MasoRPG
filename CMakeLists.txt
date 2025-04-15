@@ -9,11 +9,21 @@ find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_image REQUIRED)
 
 # インクルードディレクトリの追加
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+include_directories(
+    ${SDL2_INCLUDE_DIRS}
+    ${SDL2_TTF_INCLUDE_DIRS}
+    ${SDL2_IMAGE_INCLUDE_DIRS}
+)
 
-# 実行ファイル作成
-add_executable(main src/main.cpp)
+# ソースファイルを追加
+add_executable(MasoRPG
+    src/main.cpp
+    src/Camera2D.cpp
+)
 
-# SDL2, SDL2_ttf, SDL2_imageをリンク
-target_link_libraries(main SDL2::SDL2 SDL2_ttf::SDL2_ttf SDL2_image::SDL2_image)
-
+# ライブラリをリンク
+target_link_libraries(MasoRPG
+    SDL2::SDL2
+    SDL2_ttf::SDL2_ttf
+    SDL2_image::SDL2_image
+)

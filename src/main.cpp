@@ -2,7 +2,7 @@
 #include <SDL_ttf.h>
 #include <iostream>
 #include <SDL_image.h>
-
+#include "Camera2D.h"
 
 // プレイヤーやオブジェクトの矩形
 struct Rectangle {
@@ -134,10 +134,6 @@ int main() {
         return 1;
     }
 
-    // カメラを初期化
-    Camera camera;
-    initCamera(camera, 800, 600);
-
     bool title = true;
 
     int roomNumber = 114514;
@@ -218,6 +214,13 @@ int main() {
         }
         else 
         {
+            Camera2D camera(WindowSise.Width, WindowSise.Height, 10000, 10000);
+            // 毎フレーム、プレイヤーを追う
+            camera.follow(playerRect);
+            // 描画時にスクリーン座標へ変換
+            SDL_Rect screenRect = camera.worldToScreen(playerRect);
+            SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
+
           if (isKeyPressed(event, SDLK_UP)) playerRect.y -= 5;
           if (isKeyPressed(event, SDLK_DOWN)) playerRect.y += 5;
           if (isKeyPressed(event, SDLK_LEFT)) playerRect.x -= 5;
@@ -235,431 +238,24 @@ int main() {
             
           SDL_RenderClear(renderer);
 
-          //
-          //roomNumberとは？
-          //playerの住んでいる場所をこと
-          //roomNumberの指定は、 Image/map.xcfを見て
+            // カメラのビューポート
+            // SDL_Rect camera = {0, 0, WindowSise.Width, WindowSise.Height};
 
-            //  ========== 移動の設定のみ ==========
-          if (roomNumber == 1)
-          {
-            // 右
-            if (playerRect.x == 755)
-            {
-              playerRect.y = 450 /2;
-              playerRect.x = 0;
-              roomNumber = 2;
-            }
-          }
-          if (roomNumber == 2)
-          {
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 3;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 6;
-            }
-          }
-          if (roomNumber == 3)
-          {
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 2;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 4;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 7;
-            }
-          }
-          if (roomNumber == 4)
-          {
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 3;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 5;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 8;
-            }
-          }
-          if (roomNumber == 5)
-          {
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 4;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 9;
-            }
-          }
-          if (roomNumber == 6)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 2;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 5;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 8;
-            }
-          }
-          if (roomNumber == 7)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 3;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 8;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 6;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 11;
-            }
-          }
-          if (roomNumber == 8)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 4;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 9;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 7;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 12;
-            }
-          }
-          if (roomNumber == 9)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 5;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 8;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 13;
-            }
-          }
-          if (roomNumber == 10)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 6;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 11;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 14;
-            }
-          }
-          if (roomNumber == 11)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 7;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 12;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 10;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 15;
-            }
-          }
-          if (roomNumber == 12)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 8;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 13;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 11;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 16;
-            }
-          }
-          if (roomNumber == 13)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 9;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 12;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 17;
-            }
-          }
-          if (roomNumber == 14)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 10;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 15;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 18;
-            }
-          }
-          if (roomNumber == 15)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 11;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 16;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 14;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 19;
-            }
-          }
-          if (roomNumber == 16)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 12;
-            }
-            //右
-            if (playerRect.x == 755)
-            {
-                playerRect.x = 0;
-                roomNumber = 17;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 15;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 19;
-            }
-          }
-          if (roomNumber == 17)
-          {
-            // 上
-            if (playerRect.y <= -10)
-            {
-                playerRect.y = 450;
-                roomNumber = 13;
-            }
-            // 左
-            if (playerRect.x == -15)
-            {
-                playerRect.x == 755;
-                roomNumber = 16;
-            }
-            // 下
-            if (playerRect.y == 450)
-            {
-                playerRect.y = 0;
-                roomNumber = 20;
-            }
-          }
-          if (roomNumber == 18)
-          if (roomNumber == 19)
-          if (roomNumber == 20)
-          if (roomNumber == 21)
-          if (roomNumber == 22)
-          if (roomNumber == 23)
-          if (roomNumber == 24)
-          if (roomNumber == 25)
-          if (roomNumber == 26)
-        // ==============================
+            // プレイヤーの位置が変わったらカメラも更新
+            camera.x = player.x + player.Width / 2 - WindowSise.Width / 2;
+            camera.y = player.y + player.Height / 2 - WindowSise.Height / 2;
 
+            // カメラがマップ外に出ないよう制限
+            if (camera.x < 0) camera.x = 0;
+            if (camera.y < 0) camera.y = 0;
+            if (camera.x > 10000 - camera.w) camera.x = 10000 - camera.w;   //map_w
+            if (camera.y > 10000 - camera.h) camera.y = 10000 - camera.h;   //map_h
+            
+            SDL_Rect dst;
+            dst.x = playerRect.x - camera.x;
+            dst.y = playerRect.y - camera.y;
+            SDL_RenderCopy(renderer, woodLightTexture, NULL, &dst);
 
-
-        if (roomNumber == 1)
-        if (roomNumber == 2)
-        if (roomNumber == 3)
-        if (roomNumber == 4)
-        if (roomNumber == 5)
-        if (roomNumber == 6)
-        if (roomNumber == 7)
-        if (roomNumber == 8)
-        if (roomNumber == 9)
-        if (roomNumber == 10)
-        if (roomNumber == 11)
-        if (roomNumber == 12)
-        if (roomNumber == 13)
-        if (roomNumber == 14)
-        if (roomNumber == 15)
-        if (roomNumber == 16)
-        if (roomNumber == 17)
-        if (roomNumber == 18)
-        if (roomNumber == 19)
-        if (roomNumber == 20)
-        if (roomNumber == 21)
-        if (roomNumber == 22)
-        if (roomNumber == 23)
-        if (roomNumber == 24)
-        if (roomNumber == 25)
-        if (roomNumber == 26)
-        if (roomNumber == 114514)
-        {
-            // 音声データをキューに追加して再生
-            // SDL_QueueAudio(deviceId, wavBuffer, wavLength);
-            SDL_PauseAudioDevice(deviceId, 0);  // 再生開始
-            // if (SDL_GetQueuedAudioSize(deviceId) < wavLength) {
-                // SDL_QueueAudio(deviceId, wavBuffer, wavLength); // 再度キューに入れる
-            // }
-        }
-          
           SDL_Rect cameraRect = { 100, 100, playerRect.w, playerRect.h };  // 描画するオブジェクトの初期位置とサイズ
         //   cameraRect.x = playerRect.x;
         //   cameraRect.y = playerRect.y;
