@@ -197,7 +197,7 @@ int main() {
           SDL_RenderPresent(renderer);
 
           // 少し待つ（CPU負荷軽減）
-          SDL_Delay(8); // 約60FPS
+          SDL_Delay(8);
         }
         else 
         {
