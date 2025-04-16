@@ -1,68 +1,70 @@
+/*
+  Hamster-crabが急いで作ったg++ベースのコンパイラーです。
+  たぶんインストールのところのパッケージをAIで調べたので多分違います。
+  なにか問題があったら
+  hamstercrab123@gmail.com
+  までメールくれ
+**/
+
 #include <iostream>
 #include <cstdlib>
-#include <unistd.h> // for access() and chdir()
-#include <filesystem>
+#include <string>
+#include <vector>
 
-namespace fs = std::filesystem;
-
-bool command_exists(const char* cmd) {
-    std::string check = std::string("command -v ") + cmd + " > /dev/null 2>&1";
-    return system(check.c_str()) == 0;
+void help()
+{
+    std::cout << "yajuiku  +  bootstrap     で環境構築(Linux)\n"
+    << "yajuiku  +  build     でビルド\n"
+    << "yajuiku  +  run     で実行(runはまだ開発中)\n" << std::endl;
 }
 
-bool install_with_package_manager(const char* cmd_name) {
+void bootstrap()
+{
+        auto command_exists = [](const std::string& cmd) -> bool {
+        return std::system((cmd + " --version > /dev/null 2>&1").c_str()) == 0;
+    };
+
+    if (command_exists("g++")) {
+        std::cout << "g++ is already installed.\n";
+        return;
+    }
+
+    std::cout << "g++ not found. Attempting to install...\n";
+
     if (command_exists("apt")) {
-        std::cout << cmd_name << " が見つかりません。apt を使ってインストールを試みます...\n";
-        return system((std::string("sudo apt update && sudo apt install -y ") + cmd_name).c_str()) == 0;
+        std::system("sudo apt update && sudo apt install -y g++");
     } else if (command_exists("dnf")) {
-        std::cout << cmd_name << " が見つかりません。dnf を使ってインストールを試みます...\n";
-        return system((std::string("sudo dnf install -y ") + cmd_name).c_str()) == 0;
+        std::system("sudo dnf install -y g++");
+    } else if (command_exists("yum")) {
+        std::system("sudo yum install -y gcc-c++");
     } else if (command_exists("pacman")) {
-        std::cout << cmd_name << " が見つかりません。pacman を使ってインストールを試みます...\n";
-        return system((std::string("sudo pacman -Sy --noconfirm ") + cmd_name).c_str()) == 0;
+        std::system("sudo pacman -Sy --noconfirm gcc");
+    } else if (command_exists("zypper")) {
+        std::system("sudo zypper install -y gcc-c++");
     } else {
-        std::cerr << "対応するパッケージマネージャーが見つかりません。" << cmd_name << " を手動でインストールしてください。\n";
-        return false;
+        std::cerr << "Unsupported package manager. Please install g++ manually.\n";
     }
 }
 
-int main() {
-    if (!command_exists("cmake")) {
-        if (!install_with_package_manager("cmake")) {
-            std::cerr << "cmake のインストールに失敗しました。処理を中断します。\n";
-            return 1;
-        }
-    }
+void build()
+{
+    system("g++ -std=c++17 -o MasoRPG src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf)");
+}
 
-    std::cout << "build ディレクトリを作成しています...\n";
-    if (fs::exists("build")) {
-        std::cout << "build ディレクトリを削除します...\n";
-        fs::remove_all("build");
-    }
-    system("mkdir build");
-
-    if (chdir("build") != 0) {
-        std::cerr << "build ディレクトリへの移動に失敗しました。\n";
-        return 1;
-    }
-
-    std::cout << "cmake を実行しています...\n";
-    int result = system("cmake ..");
-    if (result != 0) {
-        std::cerr << "cmake の実行に失敗しました（終了コード: " << result << "）。\n";
-        return 1;
-    }
-
-    std::cout << "cmake の実行が正常に完了しました。\n";
-
-    system("make");
-    system("mv main ../main");
-    system("cd ..");
-    if (fs::exists("build")) {
-        std::cout << "build ディレクトリを削除します...\n";
-        fs::remove_all("build");
-    }
+void run()
+{
+    std::cout << "※開発中" << std::endl;
     system("sleep 1");
-    std::cout << "ビルドに成功しました\n 実行するには | ./main | とだけ打ってください。" << std::endl;
+    system("./MasoRPG");
+}
+
+int main(int argc, char* argv[]) {
+    std::vector<std::string> args(argv + 1, argv + argc);
+    for (const std::string& arg : args) {
+        if (arg == "bootstrap") bootstrap();
+        else if (arg == "build") build();
+        else if (arg == "run") run();
+        else if (arg == "help") help();
+    }
     return 0;
 }

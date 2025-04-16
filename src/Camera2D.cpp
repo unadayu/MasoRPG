@@ -1,31 +1,29 @@
 #include "Camera2D.h"
 
+// コンストラクタ
 Camera2D::Camera2D(int screenWidth, int screenHeight, int mapWidth, int mapHeight)
-    : x(0), y(0), w(screenWidth), h(screenHeight), mapWidth(mapWidth), mapHeight(mapHeight) {}
+    : screenWidth(screenWidth), screenHeight(screenHeight),
+      mapWidth(mapWidth), mapHeight(mapHeight),
+      x(0), y(0), w(screenWidth), h(screenHeight) {}
 
+// カメラをターゲットに追従させる
 void Camera2D::follow(const SDL_Rect& target) {
-    x = target.x + target.w / 2 - w / 2;
-    y = target.y + target.h / 2 - h / 2;
-
-    if (x < 0) x = 0;
-    if (y < 0) y = 0;
-    if (x > mapWidth - w) x = mapWidth - w;
-    if (y > mapHeight - h) y = mapHeight - h;
+    x = target.x + target.w / 2 - screenWidth / 2;
+    y = target.y + target.h / 2 - screenHeight / 2;
 }
 
+// 現在のカメラの視界を返す
 SDL_Rect Camera2D::getView() const {
-    return SDL_Rect{x, y, w, h};
+    SDL_Rect view = { x, y, w, h };
+    return view;
 }
 
-SDL_Point Camera2D::worldToScreen(int worldX, int worldY) const {
-    return SDL_Point{worldX - x, worldY - y};
-}
-
+// ワールド座標をスクリーン座標に変換
 SDL_Rect Camera2D::worldToScreen(const SDL_Rect& worldRect) const {
-    return SDL_Rect{
-        worldRect.x - x,
-        worldRect.y - y,
-        worldRect.w,
-        worldRect.h
-    };
+    SDL_Rect screenRect;
+    screenRect.x = worldRect.x - x;
+    screenRect.y = worldRect.y - y;
+    screenRect.w = worldRect.w;
+    screenRect.h = worldRect.h;
+    return screenRect;
 }
