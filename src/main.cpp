@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SDL_image.h>
 #include "Camera2D.h"
+#include <SDL_mixer.h>
 
 // プレイヤーやオブジェクトの矩形
 struct Rectangle {
@@ -70,35 +71,10 @@ int main() {
       return 1;
     }
 
-    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
-        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << "SDL_mixer Error: " << Mix_GetError() << std::endl;
         return 1;
     }
-
-    SDL_AudioSpec wavSpec;
-    Uint32 wavLength;
-    Uint8* wavBuffer;
-
-    // 再生する WAV ファイル名（16bit PCM, stereo, 44100Hz 推奨）
-    if (SDL_LoadWAV("Music/ikisugiyou.wav", &wavSpec, &wavBuffer, &wavLength) == NULL) {
-        std::cerr << "太いシーチキンがほしい " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
-    }
-
-    // オーディオデバイスを開く
-    SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
-    if (deviceId == 0) {
-        std::cerr << "Failed to open audio: " << SDL_GetError() << std::endl;
-        SDL_FreeWAV(wavBuffer);
-        SDL_Quit();
-        return 1;
-    }
-
-    // // 音声データをキューに追加して再生
-    // SDL_QueueAudio(deviceId, wavBuffer, wavLength);
-    // SDL_PauseAudioDevice(114514, deviceId, 0);  // 再生開始
-
 
     Rectangle WindowSise = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};

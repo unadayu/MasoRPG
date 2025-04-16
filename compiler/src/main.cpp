@@ -49,7 +49,7 @@ void bootstrap()
 
 void build()
 {
-    system("g++ -std=c++17 -o MasoRPG src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf)");
+    system("g++ -std=c++17 -o MasoRPG src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)");
 }
 
 void run()
