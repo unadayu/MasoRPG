@@ -15,7 +15,8 @@ void help()
 {
     std::cout << "yajuiku  +  bootstrap     で環境構築(Linux)\n"
     << "yajuiku  +  build     でビルド\n"
-    << "yajuiku  +  run     で実行(runはまだ開発中)\n" << std::endl;
+    << "yajuiku  +  run     で実行(runはまだ開発中)\n"
+    << "yajuiku  +  yajuiku     でyajuikuをビルド" << std::endl;
 }
 
 void bootstrap()
@@ -60,7 +61,7 @@ void run()
 
 void yajuiku()
 {
-    system("g++ -std=c++17 compiler/src/main.cpp -o ../../yajuiku");
+    system("g++ -std=c++17 compiler/src/main.cpp -o ./yajuiku");
 }
 
 int main(int argc, char* argv[]) {
@@ -70,6 +71,7 @@ int main(int argc, char* argv[]) {
         else if (arg == "build") build();
         else if (arg == "run") run();
         else if (arg == "help") help();
+        else if (arg == "yajuiku") yajuiku();
     }
     return 0;
 }
