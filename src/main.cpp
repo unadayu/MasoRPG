@@ -50,7 +50,7 @@ bool isKeyPressed(SDL_Event& event, SDL_Keycode key) {
 int main() {
     std::filesystem::path basePath = std::filesystem::current_path();
     std::filesystem::path ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
-    std::filesystem::path lethal_chinpoMusicPath = basePath / "run" / "data" / "music" / "lethalchinpo.wav";
+    std::filesystem::path lethal_chinpoMusicPath = basePath / "compiler" / "run" / "data" / "music" / "lethalchinpo.wav";
     std::cout << "Current working directory: " << basePath
     << "\n" << lethal_chinpoMusicPath << std::endl;
     if (!std::filesystem::exists(lethal_chinpoMusicPath)) {
