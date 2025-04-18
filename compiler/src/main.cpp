@@ -52,14 +52,17 @@ void bootstrap()
 
 void build()
 {
-    system("g++ -std=c++17 -o MasoRPG src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)");
+    system("g++ -std=c++17 -o ./compiler/run/bin/main src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)");
+    system("cp -r fonts compiler/run/data");
+    system("cp -r image compiler/run/data");
+    system("cp -r music compiler/run/data");
 }
 
 void run()
 {
     std::cout << "※開発中" << std::endl;
     system("sleep 1");
-    system("./MasoRPG");
+    system("./compiler/run/bin/main");
 }
 
 void yajuiku()

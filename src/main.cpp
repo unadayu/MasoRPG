@@ -4,6 +4,7 @@
 #include <SDL_image.h>
 #include "Camera2D.h"
 #include <SDL_mixer.h>
+#include <filesystem>
 
 // プレイヤーやオブジェクトの矩形
 struct Rectangle {
@@ -47,6 +48,15 @@ bool isKeyPressed(SDL_Event& event, SDL_Keycode key) {
 }
 
 int main() {
+    std::filesystem::path basePath = std::filesystem::current_path();
+    std::filesystem::path ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
+    std::filesystem::path lethal_chinpoMusicPath = basePath / "run" / "data" / "music" / "lethalchinpo.wav";
+    std::cout << "Current working directory: " << std::filesystem::current_path() << std::endl;
+    if (!std::filesystem::exists(lethal_chinpoMusicPath)) {
+        std::cerr << "ファイルが存在しません！" << std::endl;
+    }
+
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;
@@ -64,8 +74,8 @@ int main() {
     }
 
     // 音楽ファイルの読み込み
-    Mix_Music* ikisugi = Mix_LoadMUS("Music/ikisugiyou.wav");
-    Mix_Music* lethal_chinpo = Mix_LoadMUS("Music/LETHAL_CHINPO.wav");
+    Mix_Music* ikisugi = Mix_LoadMUS(ikisugiMusicPath.string().c_str());
+    Mix_Music* lethal_chinpo = Mix_LoadMUS(lethal_chinpoMusicPath.string().c_str());
 
     Rectangle WindowSise = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
@@ -106,12 +116,12 @@ int main() {
     Rectangle player = {5000, 5000, 50, 50};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
 
-    TTF_Font* noJapaneseFontTitle = TTF_OpenFont("fonts/8-bit-no-ja/8bitOperatorPlus8-Bold.ttf", 50);
-    TTF_Font* noJapaneseFont = TTF_OpenFont("fonts/8-bit-no-ja/8bitOperatorPlus8-Bold", 24);
-    TTF_Font* japaneseFont = TTF_OpenFont("fonts/ja-16-bit/DotGothic16-Regular.ttf", 24);
+    TTF_Font* noJapaneseFontTitle = TTF_OpenFont("../compiler/run/data/fonts/8-bit-no-ja/8bitOperatorPlus8-Bold.ttf", 50);
+    TTF_Font* noJapaneseFont = TTF_OpenFont("../compiler/run/data/fonts/8-bit-no-ja/8bitOperatorPlus8-Bold", 24);
+    TTF_Font* japaneseFont = TTF_OpenFont("../compiler/run/data/fonts/ja-16-bit/DotGothic16-Regular.ttf", 24);
 
-    SDL_Surface* woodLightImage = IMG_Load("Image/woodLight.png");
-    SDL_Surface* backImage = IMG_Load("Image/back.png");
+    SDL_Surface* woodLightImage = IMG_Load("../run/data/image/woodLight.png");
+    SDL_Surface* backImage = IMG_Load("../run/data/image/back.png");
 
     SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
     SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backImage);
