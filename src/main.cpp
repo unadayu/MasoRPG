@@ -76,11 +76,8 @@ int main() {
         return 1;
     }
 
-    Mix_Music* bgm = Mix_LoadMUS("Music/ikisugiyou.wav"); // WAVファイルを読み込む
-    if (!bgm) {
-        std::cerr << "音楽の読み込みに失敗: " << Mix_GetError() << std::endl;
-        return 1;
-    }
+    Mix_Music* ikisugi = Mix_LoadMUS("Music/ikisugiyou.wav");
+    Mix_Music* lethal_chinpo = Mix_LoadMUS("Music/LETHAL_CHINPO.wav");
 
     Rectangle WindowSise = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
@@ -179,7 +176,7 @@ int main() {
         if (title)
         {
             if (!Mix_PlayingMusic()) {
-                Mix_PlayMusic(bgm, -1);
+                Mix_PlayMusic(lethal_chinpo, -1);
             }
           // 背景色設定＆クリア（青）
           SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
