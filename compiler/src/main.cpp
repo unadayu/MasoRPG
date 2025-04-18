@@ -13,11 +13,13 @@
 
 void help()
 {
-    std::cout << "yajuiku  +  bootstrap     で環境構築(Linux)\n"
+    std::cout << "yajuiku  +  bootstrap     で環境構築(Linux)(開発中)\n"
     << "yajuiku  +  build     でビルド\n"
-    << "yajuiku  +  run     で実行(runはまだ開発中)\n"
+    << "yajuiku  +  run     で実行(開発中)\n"
     << "yajuiku  +  yajuiku     でyajuikuをビルド\n"
-    << "yajuiku  +  builrun     でビルドと実行(runはまだ開発中)" << std::endl;
+    << "yajuiku  +  builrun     でビルドと実行(開発中)"
+    << "yajuiku  +  install     でこのコンピューターにインストール(実装予定)"
+    << "yajuiku  +  remove     でこのコンピューターにインストールされたMasoRPGを削除(実装予定)" << std::endl;
 }
 
 void bootstrap()
@@ -65,6 +67,16 @@ void yajuiku()
     system("g++ -std=c++17 compiler/src/main.cpp -o ./yajuiku");
 }
 
+void install()
+{
+    std::cout << "まだ" << std::endl;
+}
+
+void remove()
+{
+    std::cout << "まだ" << std::endl;
+}
+
 int main(int argc, char* argv[]) {
     std::vector<std::string> args(argv + 1, argv + argc);
     for (const std::string& arg : args) {
@@ -78,6 +90,8 @@ int main(int argc, char* argv[]) {
             build();
             run();
         }
+        else if (arg == "install") install();
+        else if (arg == "remove") remove();
     }
     return 0;
 }
