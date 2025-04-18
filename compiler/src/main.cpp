@@ -52,8 +52,6 @@ void bootstrap()
 
 void build()
 {
-    system("rm -rf compiler/run");
-    system("cp -r compiler/sample compiler/run");
     system("g++ -std=c++17 -o ./compiler/run/bin/main src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)");
     system("cp -r fonts compiler/run/data");
     system("cp -r image compiler/run/data");
@@ -82,6 +80,12 @@ void remove()
     std::cout << "まだ" << std::endl;
 }
 
+void reset()
+{
+    system("rm -rf compiler/run");
+    system("cp -r compiler/sample compiler/run");
+}
+
 int main(int argc, char* argv[]) {
     std::vector<std::string> args(argv + 1, argv + argc);
     for (const std::string& arg : args) {
@@ -97,6 +101,7 @@ int main(int argc, char* argv[]) {
         }
         else if (arg == "install") install();
         else if (arg == "remove") remove();
+        else if ((arg == "reset")) reset();
     }
     return 0;
 }
