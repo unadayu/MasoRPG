@@ -56,6 +56,7 @@ void build()
     system("cp -r fonts compiler/run/data");
     system("cp -r image compiler/run/data");
     system("cp -r music compiler/run/data");
+    system("cp -r compiler/run ")
 }
 
 void run()
