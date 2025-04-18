@@ -51,11 +51,11 @@ int main() {
     std::filesystem::path basePath = std::filesystem::current_path();
     std::filesystem::path ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
     std::filesystem::path lethal_chinpoMusicPath = basePath / "compiler" / "run" / "data" / "music" / "lethalchinpo.wav";
-    std::cout << "Current working directory: " << basePath
-    << "\n" << lethal_chinpoMusicPath << std::endl;
-    if (!std::filesystem::exists(lethal_chinpoMusicPath)) {
-        std::cerr << "ファイルが存在しません！" << std::endl;
-    }
+    
+    std::filesystem::path noJapaneseFontFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
+    std::filesystem::path dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
+
+    std::filesystem::path woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
 
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -117,16 +117,14 @@ int main() {
     Rectangle player = {5000, 5000, 50, 50};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
 
-    TTF_Font* noJapaneseFontTitle = TTF_OpenFont("../compiler/run/data/fonts/8-bit-no-ja/8bitOperatorPlus8-Bold.ttf", 50);
-    TTF_Font* noJapaneseFont = TTF_OpenFont("../compiler/run/data/fonts/8-bit-no-ja/8bitOperatorPlus8-Bold", 24);
-    TTF_Font* japaneseFont = TTF_OpenFont("../compiler/run/data/fonts/ja-16-bit/DotGothic16-Regular.ttf", 24);
+    TTF_Font* noJapaneseFontTitle = TTF_OpenFont(noJapaneseFontFontsPath.string().c_str(), 50);
+    TTF_Font* noJapaneseFont = TTF_OpenFont(noJapaneseFontFontsPath.string().c_str(), 24);
+    TTF_Font* japaneseFont = TTF_OpenFont(dotGothicFontsPath.string().c_str(), 24);
 
-    SDL_Surface* woodLightImage = IMG_Load("../run/data/image/woodLight.png");
-    SDL_Surface* backImage = IMG_Load("../run/data/image/back.png");
+    SDL_Surface* woodLightImage = IMG_Load(woodLightImagePath.string().c_str());
 
     SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
-    SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backImage);
-    SDL_FreeSurface(backImage);
+    SDL_FreeSurface(woodLightImage);
 
     Camera2D camera(WindowSise.Width, WindowSise.Height, 10000, 10000);
 
@@ -212,7 +210,6 @@ int main() {
     TTF_CloseFont(noJapaneseFont);
     TTF_CloseFont(japaneseFont);
     SDL_DestroyTexture(woodLightTexture);
-    SDL_DestroyTexture(backTexture);
     Mix_FreeMusic(ikisugi);
     Mix_FreeMusic(lethal_chinpo);
     Mix_CloseAudio();
