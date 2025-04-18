@@ -103,7 +103,7 @@ int main() {
     bool title = true;
     int roomNumber = 114514;
 
-    Rectangle player = {WindowSise.Width / 2, WindowSise.Height / 2, 50, 50};
+    Rectangle player = {5000, 5000, 50, 50};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
 
     TTF_Font* noJapaneseFontTitle = TTF_OpenFont("fonts/8-bit-no-ja/8bitOperatorPlus8-Bold.ttf", 50);
