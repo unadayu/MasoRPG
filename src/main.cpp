@@ -57,8 +57,9 @@ bool isKeyPressed(SDL_Event& event, SDL_Keycode key) {
 int main(int argc, char* argv[]) {
     std::filesystem::path basePath = std::filesystem::current_path();
     
-    std::filesystem::path ikisugiMusicPath;
-    std::filesystem::path lethal_chinpoMusicPath;
+    std::filesystem::path ikisugiMusicPath; //musicNumber 1
+    std::filesystem::path lethal_chinpoMusicPath; // musicNumber2
+    std::filesystem::path lethal_dealMusicPath; // musicNumber3
     
     std::filesystem::path noJapaneseFontFontsPath;
     std::filesystem::path dotGothicFontsPath;
@@ -71,10 +72,10 @@ int main(int argc, char* argv[]) {
         {
             ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
             lethal_chinpoMusicPath = basePath / "compiler" / "run" / "data" / "music" / "lethalchinpo.wav";
+            lethal_dealMusicPath = basePath / "compiler" / "run" / "data" / "music" / "LETHAL_DEAL.wav";
             noJapaneseFontFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
-            
         }
         else
         {
@@ -105,6 +106,7 @@ int main(int argc, char* argv[]) {
     // 音楽ファイルの読み込み
     Mix_Music* ikisugi = Mix_LoadMUS(ikisugiMusicPath.string().c_str());
     Mix_Music* lethal_chinpo = Mix_LoadMUS(lethal_chinpoMusicPath.string().c_str());
+    Mix_Music* lethal_deal = Mix_LoadMUS(lethal_dealMusicPath.string().c_str());
 
     Rectangle WindowSise = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
@@ -140,7 +142,9 @@ int main(int argc, char* argv[]) {
     }
 
     bool title = true;
-    int roomNumber = 114514;
+    bool roomNumberEditMusicTF = false;
+    int roomNumber = 5; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス
+    int musicNumber;
 
     Rectangle player = {5000, 5000, 50, 50};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
@@ -185,10 +189,33 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        if (title) {
-            if (!Mix_PlayingMusic()) {
-                Mix_PlayMusic(lethal_chinpo, -1);
+        if (title)
+        {
+            if (musicNumber == 2)
+            {}
+            else
+            {
+                Mix_HaltMusic();
+                musicNumber = 2;
+                if (!Mix_PlayingMusic()) Mix_PlayMusic(lethal_chinpo, -1);
             }
+        }
+        else if (!title)
+        {
+            if (roomNumber == 5)
+            {
+                if (musicNumber == 3)
+                {}
+                else
+                {
+                    Mix_HaltMusic();
+                    musicNumber = 3;
+                    if (!Mix_PlayingMusic()) Mix_PlayMusic(lethal_deal, -1);
+                }
+            }
+        }
+
+        if (title) {
             SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
             SDL_RenderClear(renderer);
 
@@ -204,9 +231,6 @@ int main(int argc, char* argv[]) {
             SDL_RenderPresent(renderer);
             SDL_Delay(8);
         } else {
-            if (Mix_PlayingMusic()) {
-                Mix_HaltMusic();
-            }
             camera.follow(playerRect);
             camera.setPosition(playerRect.x, playerRect.y);
             camera.clampPosition(10000, 10000);
@@ -230,6 +254,16 @@ int main(int argc, char* argv[]) {
             if (playerRect.x >= 755) playerRect.x = 755;
             if (playerRect.y >= 450) playerRect.y = 450;
 
+            if (roomNumber == 1)
+            {}
+            else if (roomNumber == 2)
+            {}
+            else if (roomNumber == 3)
+            {}
+            else if (roomNumber == 4)
+            {}
+            else if (roomNumber == 5)
+            {}
             SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
             SDL_RenderPresent(renderer);
             SDL_Delay(16);
@@ -242,6 +276,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(woodLightTexture);
     Mix_FreeMusic(ikisugi);
     Mix_FreeMusic(lethal_chinpo);
+    Mix_FreeMusic(lethal_deal);
     Mix_CloseAudio();
     TTF_Quit();
     IMG_Quit();
