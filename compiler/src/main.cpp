@@ -102,14 +102,13 @@ void yajuiku()
 
 void install(std::filesystem::path compilerPath)
 {
-    fs::path runPath = compilerPath / "run";
-    std::string command = "sudo mv " + runPath.string() + " /opt/masorpg";
+    std::string command = "sudo cp -r " + compilerPath.string() + " /opt/masoRpgDebugData";
     system(command.c_str());
 }
 
 void remove()
 {
-    std::string command = "sudo rm -rf /opt/masorpg";
+    std::string command = "sudo rm -rf /opt/masoRpgDebugData";
     system(command.c_str());
 }
 
