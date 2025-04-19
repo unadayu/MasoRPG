@@ -141,7 +141,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    bool title = true;
+    int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定
     bool roomNumberEditMusicTF = false;
     int roomNumber = 5; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス
     int musicNumber;
@@ -170,11 +170,7 @@ int main(int argc, char* argv[]) {
             }
 
             if (event.type == SDL_KEYDOWN) {
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    running = false;
-                }
-
-                if (title) {
+                if (title == 1) {
                     if (isKeyPressed(event, SDLK_DOWN)) {
                         titleCursor.y += 30.0f;
                     }
@@ -182,14 +178,18 @@ int main(int argc, char* argv[]) {
                         titleCursor.y -= 30.0f;
                     }
                     
-                    if (isKeyPressed(event, SDLK_RETURN) && titleCursor.y == 250) {
-                        title = false;
-                    }
+                    if (isKeyPressed(event, SDLK_RETURN) && titleCursor.y == 250) title = 2;
+                    else if (isKeyPressed(event, SDLK_RETURN) && titleCursor.y == 280) title = 3;
+                    else if (isKeyPressed(event, SDLK_RETURN) && titleCursor.y == 310) running = false;
+                }
+                if (title == 3)
+                {
+                    if (isKeyPressed(event, SDLK_ESCAPE)) title = 1;
                 }
             }
         }
 
-        if (title)
+        if (title == 1)
         {
             if (musicNumber == 2)
             {}
@@ -200,7 +200,7 @@ int main(int argc, char* argv[]) {
                 if (!Mix_PlayingMusic()) Mix_PlayMusic(lethal_chinpo, -1);
             }
         }
-        else if (!title)
+        else if (title == 2)
         {
             if (roomNumber == 5)
             {
@@ -215,7 +215,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        if (title) {
+        if (title == 1) {
             SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
             SDL_RenderClear(renderer);
 
@@ -230,7 +230,8 @@ int main(int argc, char* argv[]) {
 
             SDL_RenderPresent(renderer);
             SDL_Delay(8);
-        } else {
+        } else if (title == 2)
+        {
             camera.follow(playerRect);
             camera.setPosition(playerRect.x, playerRect.y);
             camera.clampPosition(10000, 10000);
@@ -273,6 +274,22 @@ int main(int argc, char* argv[]) {
             {}
             SDL_RenderPresent(renderer);
             SDL_Delay(16);
+        }
+        else if (title == 3)
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+            SDL_RenderClear(renderer);
+
+            if (titleCursor.y < 250) titleCursor.y = 250;
+            if (titleCursor.y > 310) titleCursor.y = 310;
+
+            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "何もないよ", 20, 250.0f);
+            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "設定", 20, 280.0f);
+            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "おわり", 20, 310.0f);
+            // drawText(renderer, 255.0f, 0.0f, 0.0f, japaneseFont, ">", titleCursor.x, titleCursor.y);
+
+            SDL_RenderPresent(renderer);
+            SDL_Delay(8);
         }
     }
 
