@@ -73,6 +73,9 @@ void build(std::filesystem::path compilerPath)
             std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
         std::filesystem::copy("music", dataPath / "music",
             std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy("memory", compilerPath / "run" / "bin" / "memory",
+            std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+            
     } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << "コピーエラー: " << e.what() << std::endl;
     }
