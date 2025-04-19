@@ -40,6 +40,14 @@ void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font,
     SDL_DestroyTexture(texture);
 }
 
+void drawNumber(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, int number, float x, float y)
+{
+    // 数字を文字列に変換
+    std::string str = std::to_string(number);
+
+    // drawText に渡す（文字列を .c_str() で const char* に変換）
+    drawText(renderer, R, G, B, font, str.c_str(), x, y);
+}
 
 // キーが押されたかどうかをチェックする関数
 bool isKeyPressed(SDL_Event& event, SDL_Keycode key) {
@@ -208,13 +216,15 @@ int main(int argc, char* argv[]) {
             SDL_Rect screenRect = camera.worldToScreen(playerRect);
             SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
 
+            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "X: ", 10.0f, 100.0f);
+            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Y: ", 10.0f, 130.0f);
+            drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.x, 40.0f, 100.0f);
+            drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.y, 40.0f, 130.0f);
             if (isKeyPressed(event, SDLK_UP)) playerRect.y -= 5;
             if (isKeyPressed(event, SDLK_DOWN)) playerRect.y += 5;
             if (isKeyPressed(event, SDLK_LEFT)) playerRect.x -= 5;
             if (isKeyPressed(event, SDLK_RIGHT)) playerRect.x += 5;
 
-            std::cout << playerRect.x << "\n"
-            << playerRect.y << std::endl;
             if (playerRect.x <= -15) playerRect.x = -15;
             if (playerRect.y <= -10) playerRect.y = -10;
             if (playerRect.x >= 755) playerRect.x = 755;
