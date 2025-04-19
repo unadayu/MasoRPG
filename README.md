@@ -5,6 +5,7 @@
 #### もし、yajuikuが動かなかったらそっちの方でyajuikuをコンパイルしてください
 ### 基本的な操作
 #### yajuiku + bootstrap (初期設定)
+#### yajuiku + reset (デバッグデータ出力ディレクトリ作成)
 #### yajuiku + build (ビルド)
 #### yajuiku + run (ビルドしたアプリ実行)
 

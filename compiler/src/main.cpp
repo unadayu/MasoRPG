@@ -22,10 +22,10 @@ void help()
     << "yajuiku  +  build     でビルド\n"
     << "yajuiku  +  run     で実行(開発中)\n"
     << "yajuiku  +  yajuiku     でyajuikuをビルド\n"
-    << "yajuiku  +  builrun     でビルドと実行(開発中)"
-    << "yajuiku  +  install     でこのコンピューターにインストール(実装予定)"
-    << "yajuiku  +  ruun     でこのコンピューターにインストールされたMasoRPGを実行"
-    << "yajuiku  +  remove     でこのコンピューターにインストールされたMasoRPGを削除(実装予定)"
+    << "yajuiku  +  builrun     でビルドと実行(開発中)\n"
+    << "yajuiku  +  install     でこのコンピューターにインストール(実装予定)\n"
+    << "yajuiku  +  ruun     でこのコンピューターにインストールされたMasoRPGを実行\n"
+    << "yajuiku  +  remove     でこのコンピューターにインストールされたMasoRPGを削除(実装予定)\n"
     << "yajuiku  + reset     で、ビルドの設定とか削除" << std::endl;
 }
 
@@ -141,22 +141,29 @@ int main(int argc, char* argv[]) {
     std::vector<std::string> args(argv + 1, argv + argc);
     for (const std::string& arg : args) {
         if (arg == "bootstrap") bootstrap();
-        else if (arg == "build") build(compilerPath);
+        else if (arg == "build")
+        {
+            reset();
+            build(compilerPath);
+        }
         else if (arg == "run") run();
         else if (arg == "help") help();
         else if (arg == "yajuiku") yajuiku();
         else if (arg == "builrun")
         {
+            reset();
             build(compilerPath);
             run();
         }
         else if (arg == "install")
         {
+            reset();
             build(compilerPath);
             install(compilerPath);
         }
         else if (arg == "remove") remove();
         else if ((arg == "reset")) reset();
+        else if ((arg == "ruun")) ruun();
     }
     return 0;
 }
