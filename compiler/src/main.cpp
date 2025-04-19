@@ -161,8 +161,8 @@ int main(int argc, char* argv[]) {
         else if (arg == "install")
         {
             reset();
-            build(compilerPath);
             install(compilerPath);
+            // build();
         }
         else if (arg == "remove") remove();
         else if ((arg == "reset")) reset();
