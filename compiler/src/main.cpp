@@ -112,7 +112,7 @@ void remove()
 
 void ruun()
 {
-    system("./opt/bin/main");
+    system("./opt/masorpg/bin/main");
 }
 
 void reset()
