@@ -238,7 +238,6 @@ int main(int argc, char* argv[]) {
             SDL_RenderClear(renderer);
 
             SDL_Rect screenRect = camera.worldToScreen(playerRect);
-            SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
 
             drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "X: ", 10.0f, 100.0f);
             drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Y: ", 10.0f, 130.0f);
@@ -255,16 +254,23 @@ int main(int argc, char* argv[]) {
             if (playerRect.y >= 450) playerRect.y = 450;
 
             if (roomNumber == 1)
-            {}
+            {
+                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
+            }
             else if (roomNumber == 2)
-            {}
+            {
+                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
+            }
             else if (roomNumber == 3)
-            {}
+            {
+                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
+            }
             else if (roomNumber == 4)
-            {}
+            {
+                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
+            }
             else if (roomNumber == 5)
             {}
-            SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
             SDL_RenderPresent(renderer);
             SDL_Delay(16);
         }
