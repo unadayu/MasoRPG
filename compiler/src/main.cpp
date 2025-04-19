@@ -24,7 +24,8 @@ void help()
     << "yajuiku  +  yajuiku     でyajuikuをビルド\n"
     << "yajuiku  +  builrun     でビルドと実行(開発中)"
     << "yajuiku  +  install     でこのコンピューターにインストール(実装予定)"
-    << "yajuiku  +  remove     でこのコンピューターにインストールされたMasoRPGを削除(実装予定)" << std::endl;
+    << "yajuiku  +  remove     でこのコンピューターにインストールされたMasoRPGを削除(実装予定)"
+    << "yajuiku  + reset     で、ビルドの設定とか削除" << std::endl;
 }
 
 void bootstrap()
