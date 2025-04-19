@@ -75,7 +75,6 @@ void build(std::filesystem::path compilerPath)
             std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
         std::filesystem::copy("fentanyL", compilerPath / "run" / "bin" / "fentanyL",
             std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
-            
     } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << "コピーエラー: " << e.what() << std::endl;
     }
@@ -104,6 +103,23 @@ void install(std::filesystem::path compilerPath)
 {
     std::string command = "sudo cp -r " + compilerPath.string() + " /opt/masoRpgDebugData";
     system(command.c_str());
+
+    std::string commandi = "g++ -std=c++17 -o opt/compiler/run/bin/main src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+    system(commandi.c_str());
+
+    try {
+        std::filesystem::copy("fonts", "/opt/masoRpgDebugData/compiler/run/data/fonts",
+            std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy("image", "/opt/masoRpgDebugData/compiler/run/data/image",
+            std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy("music", "/opt/masoRpgDebugData/compiler/run/data/music",
+            std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy("fentanyL", "/opt/masoRpgDebugData/compiler/run/data/fentanyL",
+            std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
+
+    } catch (const std::filesystem::filesystem_error& e) {
+        std::cerr << "コピーエラー: " << e.what() << std::endl;
+    }
 }
 
 void remove()
@@ -161,7 +177,6 @@ int main(int argc, char* argv[]) {
         {
             reset();
             install(compilerPath);
-            // build();
         }
         else if (arg == "remove") remove();
         else if ((arg == "reset")) reset();
