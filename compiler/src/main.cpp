@@ -24,6 +24,7 @@ void help()
     << "yajuiku  +  yajuiku     でyajuikuをビルド\n"
     << "yajuiku  +  builrun     でビルドと実行(開発中)"
     << "yajuiku  +  install     でこのコンピューターにインストール(実装予定)"
+    << "yajuiku  +  ruun     でこのコンピューターにインストールされたMasoRPGを実行"
     << "yajuiku  +  remove     でこのコンピューターにインストールされたMasoRPGを削除(実装予定)"
     << "yajuiku  + reset     で、ビルドの設定とか削除" << std::endl;
 }
@@ -96,14 +97,22 @@ void yajuiku()
     system(command.c_str());
 }
 
-void install()
+void install(std::filesystem::path compilerPath)
 {
-    std::cout << "まだ" << std::endl;
+    fs::path runPath = compilerPath / "run";
+    std::string command = "sudo mv " + runPath.string() + " /opt/masorpg";
+    system(command.c_str());
 }
 
 void remove()
 {
-    std::cout << "まだ" << std::endl;
+    std::string command = "sudo rm -rf /opt/masorpg";
+    system(command.c_str());
+}
+
+void ruun()
+{
+    system("./opt/bin/main");
 }
 
 void reset()
@@ -141,7 +150,11 @@ int main(int argc, char* argv[]) {
             build(compilerPath);
             run();
         }
-        else if (arg == "install") install();
+        else if (arg == "install")
+        {
+            build(compilerPath);
+            install(compilerPath);
+        }
         else if (arg == "remove") remove();
         else if ((arg == "reset")) reset();
     }
