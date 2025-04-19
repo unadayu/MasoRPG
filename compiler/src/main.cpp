@@ -62,7 +62,7 @@ void run()
 {
     std::cout << "※開発中" << std::endl;
     system("sleep 1");
-    system("./compiler/run/bin/main");
+    system("./compiler/run/bin/main debug");
 }
 
 void yajuiku()

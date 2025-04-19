@@ -5,6 +5,9 @@
 #include "Camera2D.h"
 #include <SDL_mixer.h>
 #include <filesystem>
+#include <cstdlib>
+#include <string>
+#include <vector>
 
 // プレイヤーやオブジェクトの矩形
 struct Rectangle {
@@ -15,48 +18,62 @@ struct Rectangle {
 };
 
 // テキスト描画関数
-void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, std::string Text, float x, float y)
+void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, const char* Text, float x, float y)
 {
     SDL_Color color = {static_cast<Uint8>(R), static_cast<Uint8>(G), static_cast<Uint8>(B)};
     
-    SDL_Surface* surface = TTF_RenderUTF8_Blended(font, Text.c_str(), color);
+    SDL_Surface* surface = TTF_RenderUTF8_Blended(font, Text, color);
     if (!surface) {
         std::cerr << "テキストのレンダリングに失敗しました: " << TTF_GetError() << std::endl;
         return;
     }
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface); // サーフェス解放
-
-    if (!texture) {
-        std::cerr << "テクスチャの作成に失敗しました: " << SDL_GetError() << std::endl;
-        return;
-    }
-
+    
     int w = surface->w;
     int h = surface->h;
-    
+    SDL_FreeSurface(surface); // SDL_Surfaceを解放するのはサイズ取得後
+
     SDL_Rect dstRect = {static_cast<int>(x), static_cast<int>(y), w, h};
     SDL_RenderCopy(renderer, texture, NULL, &dstRect);
 
     SDL_DestroyTexture(texture);
 }
 
+
 // キーが押されたかどうかをチェックする関数
 bool isKeyPressed(SDL_Event& event, SDL_Keycode key) {
     return (event.type == SDL_KEYDOWN && event.key.keysym.sym == key);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     std::filesystem::path basePath = std::filesystem::current_path();
-    std::filesystem::path ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
-    std::filesystem::path lethal_chinpoMusicPath = basePath / "compiler" / "run" / "data" / "music" / "lethalchinpo.wav";
     
-    std::filesystem::path noJapaneseFontFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
-    std::filesystem::path dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
+    std::filesystem::path ikisugiMusicPath;
+    std::filesystem::path lethal_chinpoMusicPath;
+    
+    std::filesystem::path noJapaneseFontFontsPath;
+    std::filesystem::path dotGothicFontsPath;
 
-    std::filesystem::path woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
+    std::filesystem::path woodLightImagePath;
 
+    std::vector<std::string> args(argv + 1, argv + argc);
+    for (const std::string& arg : args) {
+        if (arg == "debug")
+        {
+            ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
+            lethal_chinpoMusicPath = basePath / "compiler" / "run" / "data" / "music" / "lethalchinpo.wav";
+            noJapaneseFontFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
+            dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
+            woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
+            
+        }
+        else
+        {
+            std::cout << "開発中" << std::endl;
+            return -1;
+        }
+    }
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
