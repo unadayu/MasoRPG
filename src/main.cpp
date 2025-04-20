@@ -49,6 +49,8 @@ enemy* enemyThree = new enemy("U", 10, 3, 1);
 enemy* enemyFive = new enemy("N", 10, 3, 1);
 enemy* enemyFour = new enemy("KO", 10, 3, 1);
 
+enemy* boss = new enemy("boss", 10, 3, 1);
+
 // テキスト描画関数
 void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, const char* Text, float x, float y)
 {
