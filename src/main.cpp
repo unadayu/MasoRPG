@@ -245,6 +245,7 @@ int main(int argc, char* argv[]) {
 
     SDL_Surface* woodLightImage = IMG_Load(woodLightImagePath.string().c_str());
     SDL_Surface* waruImage = IMG_Load(waruImagePath.string().c_str());
+    if (!waruImage)std::cout << "そっか！全部俺のせいなんだ！！ちょこっっとミスしただけで全部俺が悪いんだ！！勝手に練習辞めて俺のせいにして俺なんか先生首になって死んじゃえばいいんだ！！そう言いたいんだ！！あぁー「敵」！！「敵」「敵」「敵」お前「敵」！！" << std::endl;
 
     SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
     SDL_FreeSurface(woodLightImage);
