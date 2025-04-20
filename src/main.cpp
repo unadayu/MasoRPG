@@ -8,13 +8,21 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <chrono>
 
-// プレイヤーやオブジェクトの矩形
 struct Rectangle {
     int x;
     int y;
     int Width;
     int Height;
+};
+
+struct PlayerData {
+    int x;
+    int y;
+    int room;
+    int hp;
 };
 
 // テキスト描画関数
@@ -49,8 +57,45 @@ void drawNumber(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* fon
     drawText(renderer, R, G, B, font, str.c_str(), x, y);
 }
 
-// キーが押されたかどうかをチェックする関数
-bool isKeyPressed(SDL_Event& event, SDL_Keycode key) {
+PlayerData loadGame(const std::string& filename) {
+    PlayerData data{0, 0, 0, 100}; // デフォルト値
+    std::ifstream file(filename);
+    std::string line;
+
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string key;
+        if (std::getline(iss, key, '=')) {
+            std::string valueStr;
+            if (std::getline(iss, valueStr)) {
+                int value = std::stoi(valueStr);
+                if (key == "x") data.x = value;
+                else if (key == "y") data.y = value;
+                else if (key == "room") data.room = value;
+                else if (key == "hp") data.hp = value;
+            }
+        }
+    }
+
+    return data;
+}
+
+bool isKeyPressed(SDL_Event& event, SDL_Keycode key, Uint32& nextAllowedTime) {
+    Uint32 now = SDL_GetTicks();  // 現在時刻（ミリ秒）
+
+    if (now < nextAllowedTime) return false;  // 無効化中
+
+    if (event.type == SDL_KEYDOWN &&
+        event.key.keysym.sym == key &&
+        event.key.repeat == 0) {
+        nextAllowedTime = now + 500;  // 0.5秒間無効にする
+        return true;
+    }
+
+    return false;
+}
+
+bool isKeyDown(SDL_Event& event, SDL_Keycode key) {
     return (event.type == SDL_KEYDOWN && event.key.keysym.sym == key);
 }
 
@@ -66,6 +111,10 @@ int main(int argc, char* argv[]) {
 
     std::filesystem::path woodLightImagePath;
 
+    std::filesystem::path oneSavePath;
+    std::filesystem::path twoSavePath;
+    std::filesystem::path threeSavePath;
+
     std::vector<std::string> args(argv + 1, argv + argc);
     for (const std::string& arg : args) {
         if (arg == "debug")
@@ -76,6 +125,9 @@ int main(int argc, char* argv[]) {
             noJapaneseFontFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
+            oneSavePath = basePath / "compiler" / "run" / "etc" / "save" / "one.txt";
+            twoSavePath = basePath / "compiler" / "run" / "etc" / "save" / "two.txt";
+            threeSavePath = basePath / "compiler" / "run" / "etc" / "save" / "three.txt";
         }
         else
         {
@@ -141,13 +193,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定
-    bool roomNumberEditMusicTF = false;
+    int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定
+    // bool roomNumberEditMusicTF = false;
     int roomNumber = 5; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス
-    int musicNumber;
+    int musicNumber = 1;
 
     Rectangle player = {5000, 5000, 50, 50};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
+    Uint32 enterCooldown = 0;
 
     TTF_Font* noJapaneseFontTitle = TTF_OpenFont(noJapaneseFontFontsPath.string().c_str(), 50);
     TTF_Font* noJapaneseFont = TTF_OpenFont(noJapaneseFontFontsPath.string().c_str(), 24);
@@ -171,20 +224,60 @@ int main(int argc, char* argv[]) {
 
             if (event.type == SDL_KEYDOWN) {
                 if (title == 1) {
-                    if (isKeyPressed(event, SDLK_DOWN)) {
+                    if (isKeyPressed(event, SDLK_DOWN, enterCooldown)) {
                         titleCursor.y += 30.0f;
                     }
-                    if (isKeyPressed(event, SDLK_UP)) {
+                    if (isKeyPressed(event, SDLK_UP, enterCooldown)) {
                         titleCursor.y -= 30.0f;
                     }
                     
-                    if (isKeyPressed(event, SDLK_RETURN) && titleCursor.y == 250) title = 2;
-                    else if (isKeyPressed(event, SDLK_RETURN) && titleCursor.y == 280) title = 3;
-                    else if (isKeyPressed(event, SDLK_RETURN) && titleCursor.y == 310) running = false;
+                    if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 250)
+                    {
+                        title = 4;
+                        titleCursor.y = 100;
+                        titleCursor.x = WindowSise.Width / 2 - 60;
+                    }
+                    else if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 280) title = 3;
+                    else if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 310) running = false;
                 }
                 if (title == 3)
                 {
-                    if (isKeyPressed(event, SDLK_ESCAPE)) title = 1;
+                    if (isKeyPressed(event, SDLK_ESCAPE, enterCooldown)) title = 1;
+                }
+                if (title == 4)
+                {
+                    if (isKeyPressed(event, SDLK_DOWN, enterCooldown)) {
+                        titleCursor.y += 50.0f;
+                    }
+                    if (isKeyPressed(event, SDLK_UP, enterCooldown)) {
+                        titleCursor.y -= 50.0f;
+                    }
+                    if (isKeyPressed(event, SDLK_ESCAPE, enterCooldown))
+                    {
+                        title = 1;
+                        titleCursor.x = 3;
+                        titleCursor.y = 250;
+                    }
+                    if (isKeyPressed(event, SDLK_RETURN, enterCooldown))
+                    {
+                        if (titleCursor.y == 100)
+                        {
+                            PlayerData playerSaveData = loadGame("save.txt");
+                            playerRect.x = playerSaveData.x;
+                            playerRect.y = playerSaveData.y;
+                            title = 2;
+                            if (playerSaveData.room == 1) roomNumber = 1;
+                            else if (playerSaveData.room == 2) roomNumber = 2;
+                            else if (playerSaveData.room == 3) roomNumber = 3;
+                            else if (playerSaveData.room == 4) roomNumber = 4;
+                            else if (playerSaveData.room == 5) roomNumber = 5;
+                            // playerHP = player.hp;
+                        }
+                        else if (titleCursor.y == 150)
+                        {}
+                        else if (titleCursor.y == 200)
+                        {}
+                    }
                 }
             }
         }
@@ -197,6 +290,7 @@ int main(int argc, char* argv[]) {
             {
                 Mix_HaltMusic();
                 musicNumber = 2;
+                std::cout << roomNumber << "\n";
                 if (!Mix_PlayingMusic()) Mix_PlayMusic(lethal_chinpo, -1);
             }
         }
@@ -210,6 +304,7 @@ int main(int argc, char* argv[]) {
                 {
                     Mix_HaltMusic();
                     musicNumber = 3;
+                    std::cout << roomNumber << "\n";
                     if (!Mix_PlayingMusic()) Mix_PlayMusic(lethal_deal, -1);
                 }
             }
@@ -244,10 +339,10 @@ int main(int argc, char* argv[]) {
             drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Y: ", 10.0f, 130.0f);
             drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.x, 40.0f, 100.0f);
             drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.y, 40.0f, 130.0f);
-            if (isKeyPressed(event, SDLK_UP)) playerRect.y -= 5;
-            if (isKeyPressed(event, SDLK_DOWN)) playerRect.y += 5;
-            if (isKeyPressed(event, SDLK_LEFT)) playerRect.x -= 5;
-            if (isKeyPressed(event, SDLK_RIGHT)) playerRect.x += 5;
+            if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
+            if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
+            if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
+            if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
 
             if (playerRect.x <= -15) playerRect.x = -15;
             if (playerRect.y <= -10) playerRect.y = -10;
@@ -287,6 +382,24 @@ int main(int argc, char* argv[]) {
             // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "設定", 20, 280.0f);
             // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "おわり", 20, 310.0f);
             // drawText(renderer, 255.0f, 0.0f, 0.0f, japaneseFont, ">", titleCursor.x, titleCursor.y);
+
+            SDL_RenderPresent(renderer);
+            SDL_Delay(8);
+        }
+        else if (title == 4)
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
+            SDL_RenderClear(renderer);
+
+            if (titleCursor.y < 100) titleCursor.y = 100;
+            if (titleCursor.y > 200) titleCursor.y = 200;
+
+            drawText(renderer, 0.0f, 0.0f, 0.0f, noJapaneseFontTitle, "World", WindowSise.Width / 2 - 80, 20.0f);
+
+            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "World 1", WindowSise.Width / 2 - 40, 100.0f);
+            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "World 2", WindowSise.Width / 2 - 40, 150.0f);
+            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "World 3", WindowSise.Width / 2 - 40, 200.0f);
+            drawText(renderer, 255.0f, 0.0f, 0.0f, japaneseFont, ">", titleCursor.x, titleCursor.y);
 
             SDL_RenderPresent(renderer);
             SDL_Delay(8);
