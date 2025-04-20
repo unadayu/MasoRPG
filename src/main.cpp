@@ -201,13 +201,18 @@ int main(int argc, char* argv[]) {
 
     int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定
     // bool roomNumberEditMusicTF = false;
-    int roomNumber = 5; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス
+    int roomNumber = 1; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス
     int musicNumber = 1;
+    bool playStop = false;
 
     Rectangle player = {5000, 5000, 50, 50};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
     int attackOne, attackTwo, attackThree;
     Uint32 enterCooldown = 0;
+
+    SDL_Rect rect;
+    rect.x = 800 / 2 - WindowSise.Width / 2;
+    rect.y = 600 / 2 - WindowSise.Height / 2;
 
     TTF_Font* noJapaneseFontTitle = TTF_OpenFont(noJapaneseFontFontsPath.string().c_str(), 50);
     TTF_Font* noJapaneseFont = TTF_OpenFont(noJapaneseFontFontsPath.string().c_str(), 24);
@@ -247,6 +252,14 @@ int main(int argc, char* argv[]) {
                     else if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 280) title = 3;
                     else if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 310) running = false;
                 }
+                if (title == 2)
+                {
+                    if (isKeyPressed(event, SDLK_ESCAPE, enterCooldown))
+                    {
+                        if (!playStop) playStop = true;
+                        else if (playStop) playStop = false;
+                    }
+                }
                 if (title == 3)
                 {
                     if (isKeyPressed(event, SDLK_ESCAPE, enterCooldown)) title = 1;
@@ -269,13 +282,14 @@ int main(int argc, char* argv[]) {
                     {
                         if (titleCursor.y == 100)
                         {
-                            PlayerData playerSaveData = loadGame("save.txt");
+                            PlayerData playerSaveData = loadGame(oneSavePath);
                             playerRect.x = playerSaveData.x;
                             playerRect.y = playerSaveData.y;
                             attackOne = playerSaveData.attackone;
                             attackTwo = playerSaveData.attacktwo;
                             attackThree = playerSaveData.attackthree;
                             title = 2;
+                            std::cout << playerSaveData.room << std::endl;
                             if (playerSaveData.room == 1) roomNumber = 1;
                             else if (playerSaveData.room == 2) roomNumber = 2;
                             else if (playerSaveData.room == 3) roomNumber = 3;
@@ -335,7 +349,8 @@ int main(int argc, char* argv[]) {
 
             SDL_RenderPresent(renderer);
             SDL_Delay(8);
-        } else if (title == 2)
+        }
+        else if (title == 2)
         {
             camera.follow(playerRect);
             camera.setPosition(playerRect.x, playerRect.y);
@@ -352,9 +367,9 @@ int main(int argc, char* argv[]) {
                 if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
                 if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
             }
+            SDL_RenderClear(renderer);
 
             SDL_Rect screenRect = camera.worldToScreen(playerRect);
-            SDL_RenderClear(renderer);
 
             drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "X: ", 10.0f, 100.0f);
             drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Y: ", 10.0f, 130.0f);
@@ -366,24 +381,17 @@ int main(int argc, char* argv[]) {
             if (playerRect.x >= 755) playerRect.x = 755;
             if (playerRect.y >= 450) playerRect.y = 450;
 
-            if (roomNumber == 1)
-            {
-                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
-            }
-            else if (roomNumber == 2)
-            {
-                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
-            }
-            else if (roomNumber == 3)
-            {
-                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
-            }
-            else if (roomNumber == 4)
-            {
-                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
-            }
-            else if (roomNumber == 5)
+            if (roomNumber == 5)
             {}
+            else
+            {
+                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
+                if (playStop)
+                {
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白
+                    SDL_RenderFillRect(renderer, &rect);
+                }
+            }
             SDL_RenderPresent(renderer);
             SDL_Delay(16);
         }
