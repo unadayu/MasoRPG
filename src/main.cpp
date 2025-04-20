@@ -139,6 +139,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path dotGothicFontsPath;
 
     std::filesystem::path woodLightImagePath;
+    std::filesystem::path waruImagePath;
 
     std::filesystem::path oneSavePath;
     std::filesystem::path twoSavePath;
@@ -154,6 +155,7 @@ int main(int argc, char* argv[]) {
             noJapaneseFontFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
+            waruImagePath = basePath / "compiler"  / "run" / "data" / "image" / "Isee!It'sallmyfault!Imadeasmallmistakeandit'sallmyfault!.png";
             oneSavePath = basePath / "compiler" / "run" / "etc" / "save" / "one.txt";
             twoSavePath = basePath / "compiler" / "run" / "etc" / "save" / "two.txt";
             threeSavePath = basePath / "compiler" / "run" / "etc" / "save" / "three.txt";
@@ -242,9 +244,13 @@ int main(int argc, char* argv[]) {
     TTF_Font* japaneseFont = TTF_OpenFont(dotGothicFontsPath.string().c_str(), 24);
 
     SDL_Surface* woodLightImage = IMG_Load(woodLightImagePath.string().c_str());
+    SDL_Surface* waruImage = IMG_Load(waruImagePath.string().c_str());
 
     SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
     SDL_FreeSurface(woodLightImage);
+
+    SDL_Texture* waruiTexture = SDL_CreateTextureFromSurface(renderer, waruImage);
+    SDL_FreeSurface(waruImage);
 
     Camera2D camera(WindowSise.Width, WindowSise.Height, 10000, 10000);
 
@@ -360,6 +366,8 @@ int main(int argc, char* argv[]) {
         if (title == 1) {
             SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
             SDL_RenderClear(renderer);
+            SDL_Rect warauXYWH = {0, 0, 791, 421};
+            SDL_RenderCopy(renderer, waruiTexture, nullptr, &warauXYWH);
 
             if (titleCursor.y < 250) titleCursor.y = 250;
             if (titleCursor.y > 310) titleCursor.y = 310;
@@ -454,6 +462,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    delete boss;
     delete enemyOne;
     delete enemyTwo;
     delete enemyThree;
