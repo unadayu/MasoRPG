@@ -23,6 +23,9 @@ struct PlayerData {
     int y;
     int room;
     int hp;
+    int attackone;
+    int attacktwo;
+    int attackthree;
 };
 
 // テキスト描画関数
@@ -73,6 +76,9 @@ PlayerData loadGame(const std::string& filename) {
                 else if (key == "y") data.y = value;
                 else if (key == "room") data.room = value;
                 else if (key == "hp") data.hp = value;
+                else if (key == "attackone") data.attackone = value;
+                else if (key == "attacktwo") data.attacktwo = value;
+                else if (key == "attackthree") data.attackthree = value;
             }
         }
     }
@@ -200,6 +206,7 @@ int main(int argc, char* argv[]) {
 
     Rectangle player = {5000, 5000, 50, 50};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
+    int attackOne, attackTwo, attackThree;
     Uint32 enterCooldown = 0;
 
     TTF_Font* noJapaneseFontTitle = TTF_OpenFont(noJapaneseFontFontsPath.string().c_str(), 50);
@@ -265,6 +272,9 @@ int main(int argc, char* argv[]) {
                             PlayerData playerSaveData = loadGame("save.txt");
                             playerRect.x = playerSaveData.x;
                             playerRect.y = playerSaveData.y;
+                            attackOne = playerSaveData.attackone;
+                            attackTwo = playerSaveData.attacktwo;
+                            attackThree = playerSaveData.attackthree;
                             title = 2;
                             if (playerSaveData.room == 1) roomNumber = 1;
                             else if (playerSaveData.room == 2) roomNumber = 2;
@@ -331,18 +341,25 @@ int main(int argc, char* argv[]) {
             camera.setPosition(playerRect.x, playerRect.y);
             camera.clampPosition(10000, 10000);
 
-            SDL_RenderClear(renderer);
+            if (roomNumber == 5)
+            {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+            }
+            else
+            {
+                if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
+                if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
+                if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
+                if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
+            }
 
             SDL_Rect screenRect = camera.worldToScreen(playerRect);
+            SDL_RenderClear(renderer);
 
             drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "X: ", 10.0f, 100.0f);
             drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Y: ", 10.0f, 130.0f);
             drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.x, 40.0f, 100.0f);
             drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.y, 40.0f, 130.0f);
-            if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
-            if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
-            if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
-            if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
 
             if (playerRect.x <= -15) playerRect.x = -15;
             if (playerRect.y <= -10) playerRect.y = -10;
