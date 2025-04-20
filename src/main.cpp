@@ -10,6 +10,7 @@
 #include <vector>
 #include <fstream>
 #include <chrono>
+#include <memory>
 
 struct Rectangle {
     int x;
@@ -27,6 +28,26 @@ struct PlayerData {
     int attacktwo;
     int attackthree;
 };
+
+struct enemy {
+    std::string name;
+    int hp;
+    int attackDamage;
+    int enemyNumber;
+
+    enemy(std::string n, int h, int atk, int eN) {
+        name = n;
+        hp = h;
+        attackDamage = atk;
+        enemyNumber = eN;
+    }
+};
+
+enemy* enemyOne = new enemy("Ochin", 10, 3, 1);
+enemy* enemyTwo = new enemy("Po", 10, 3, 1);
+enemy* enemyThree = new enemy("U", 10, 3, 1);
+enemy* enemyFive = new enemy("N", 10, 3, 1);
+enemy* enemyFour = new enemy("KO", 10, 3, 1);
 
 // テキスト描画関数
 void drawText(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, const char* Text, float x, float y)
@@ -431,6 +452,11 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    delete enemyOne;
+    delete enemyTwo;
+    delete enemyThree;
+    delete enemyFour;
+    delete enemyFive;
     TTF_CloseFont(noJapaneseFontTitle);
     TTF_CloseFont(noJapaneseFont);
     TTF_CloseFont(japaneseFont);
