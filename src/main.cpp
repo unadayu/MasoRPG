@@ -439,9 +439,6 @@ int main(int argc, char* argv[]) {
     Mix_FreeMusic(lethal_chinpo);
     Mix_FreeMusic(lethal_deal);
     Mix_CloseAudio();
-    Mix_CloseAudio();
-    TTF_Quit();
-    IMG_Quit();
     TTF_Quit();
     IMG_Quit();
     SDL_DestroyRenderer(renderer);
