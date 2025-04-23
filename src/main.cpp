@@ -230,7 +230,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定
+    int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定  5 -> sampleFight
     // bool roomNumberEditMusicTF = false;
     int roomNumber = 1; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス
     int musicNumber = 1;
@@ -484,6 +484,13 @@ int main(int argc, char* argv[]) {
 
             SDL_RenderPresent(renderer);
             SDL_Delay(8);
+        }
+        else if (title == 5)
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+            SDL_RenderClear(renderer);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(16);
         }
     }
 
