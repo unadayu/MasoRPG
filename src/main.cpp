@@ -272,6 +272,7 @@ int main(int argc, char* argv[]) {
 
             if (event.type == SDL_KEYDOWN) {
                 if (title == 1) {
+                    titleCursor.x = 3;
                     if (isKeyPressed(event, SDLK_DOWN, enterCooldown)) {
                         titleCursor.y += 30.0f;
                     }
@@ -294,6 +295,16 @@ int main(int argc, char* argv[]) {
                     {
                         if (!playStop) playStop = true;
                         else if (playStop) playStop = false;
+                    }
+                    if (playStop)
+                    {
+                        titleCursor.x = 3;
+                        if (isKeyPressed(event, SDLK_DOWN, enterCooldown)) {
+                            titleCursor.y += 50.0f;
+                        }
+                        if (isKeyPressed(event, SDLK_UP, enterCooldown)) {
+                            titleCursor.y -= 50.0f;
+                        }
                     }
                 }
                 if (title == 3)
@@ -406,12 +417,15 @@ int main(int argc, char* argv[]) {
             {
                 if (playStop)
                 {
+                    if (titleCursor.y < 50) titleCursor.y = 50;
+                    if (titleCursor.y > 250) titleCursor.y = 250;
                     SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "セーブ", WindowSise.Width / 2, 50.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "ステータス", WindowSise.Width / 2, 100.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "スキル", WindowSise.Width / 2, 150.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "持ち物", WindowSise.Width / 2, 200.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "終わる", WindowSise.Width / 2, 250.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "セーブ", 20, 50.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "ステータス", 20, 100.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "スキル",  20, 150.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "hayasHi", 20, 200.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "終わろう", 20, 250.0f);
+                    drawText(renderer, 255.0f, 0.0f, 0.0f, japaneseFont, ">", titleCursor.x, titleCursor.y);
                     // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白
                     // SDL_RenderFillRect(renderer, &rect);
                 }
