@@ -156,20 +156,24 @@ int main(int argc, char* argv[])
 
     InitWindow(screenWidth, screenHeight, "fentanyL");
 
-    Rectangle graph = { 80, 230, 190, 60 };
+    Rectangle buildR = { 80, 230, 190, 60 };
     bool buildcolor = false;
     bool buildtools = false;
 
-    Rectangle calc = { 500, 230, 190, 60 };
+    Rectangle runR = { 500, 230, 190, 60 };
     bool runcolor = false;
     bool runsummon = false;
+
+    Rectangle bootstrapR = { 80, 180, 190, 60 };
+    bool bootstrapcolor = false;
+    bool bootstrapsummon = false;
 
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
     {
         Vector2 mousePoint = GetMousePosition();
-        if (CheckCollisionPointRec(mousePoint, graph))
+        if (CheckCollisionPointRec(mousePoint, buildR))
         {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
@@ -183,7 +187,7 @@ int main(int argc, char* argv[])
         }
         else buildcolor = false;
 
-        if (CheckCollisionPointRec(mousePoint, calc))
+        if (CheckCollisionPointRec(mousePoint, runR))
         {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
@@ -196,6 +200,20 @@ int main(int argc, char* argv[])
             }
         }
         else runcolor = false;
+
+        if (CheckCollisionPointRec(mousePoint, bootstrapR))
+        {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                bootstrapcolor = false;
+                bootstrapsummon = true;
+            }
+            else
+            {
+                bootstrapcolor = true;
+            }
+        }
+        else bootstrapcolor = false;
         
         if (buildtools)
         {
@@ -208,21 +226,32 @@ int main(int argc, char* argv[])
             run();
             runsummon = false;
         }
+
+        if (bootstrapsummon)
+        {
+            bootstrap();
+            bootstrapsummon = false;
+        }
         
 
         BeginDrawing();
 
         ClearBackground(BLACK);
 
-        DrawRectangle(graph.x, graph.y, graph.width, graph.height, GRAY);
-        DrawRectangle(graph.x + 5, graph.y + 5, graph.width - 10, graph.height - 10, WHITE);
-        if (buildcolor) DrawText("BUILD", graph.x + 5, graph.y + 5, 51, GRAY);
-        else if (!buildcolor) DrawText("BUILD", graph.x + 5, graph.y + 5, 51, BLACK);
+        DrawRectangle(buildR.x, buildR.y, buildR.width, buildR.height, GRAY);
+        DrawRectangle(buildR.x + 5, buildR.y + 5, buildR.width - 10, buildR.height - 10, WHITE);
+        if (buildcolor) DrawText("BUILD", buildR.x + 5, buildR.y + 5, 51, GRAY);
+        else if (!buildcolor) DrawText("BUILD", buildR.x + 5, buildR.y + 5, 51, BLACK);
 
-        DrawRectangle(calc.x, calc.y, calc.width, calc.height, GRAY);
-        DrawRectangle(calc.x + 5, calc.y + 5, calc.width - 10, calc.height - 10, WHITE);
-        if (runcolor) DrawText("RUN", calc.x + 5, calc.y + 5, 51, GRAY);
-        else if (!runcolor) DrawText("RUN", calc.x + 5, calc.y + 5, 51, BLACK);
+        DrawRectangle(runR.x, runR.y, runR.width, runR.height, GRAY);
+        DrawRectangle(runR.x + 5, runR.y + 5, runR.width - 10, runR.height - 10, WHITE);
+        if (runcolor) DrawText("RUN", runR.x + 5, runR.y + 5, 51, GRAY);
+        else if (!runcolor) DrawText("RUN", runR.x + 5, runR.y + 5, 51, BLACK);
+
+        DrawRectangle(bootstrapR.x, bootstrapR.y, bootstrapR.width, bootstrapR.height, GRAY);
+        DrawRectangle(bootstrapR.x + 5, bootstrapR.y + 5, bootstrapR.width - 10, bootstrapR.height - 10, WHITE);
+        if (bootstrapcolor) DrawText("RUN", bootstrapR.x + 5, bootstrapR.y + 5, 51, GRAY);
+        else if (!bootstrapcolor) DrawText("RUN", bootstrapR.x + 5, bootstrapR.y + 5, 51, BLACK);
         
         EndDrawing();
     }
