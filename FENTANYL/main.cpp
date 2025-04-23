@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
     bool runcolor = false;
     bool runsummon = false;
 
-    Rectangle bootstrapR = { 80, 180, 190, 60 };
+    Rectangle bootstrapR = { 80, 150, 360, 60 };
     bool bootstrapcolor = false;
     bool bootstrapsummon = false;
 
@@ -250,8 +250,8 @@ int main(int argc, char* argv[])
 
         DrawRectangle(bootstrapR.x, bootstrapR.y, bootstrapR.width, bootstrapR.height, GRAY);
         DrawRectangle(bootstrapR.x + 5, bootstrapR.y + 5, bootstrapR.width - 10, bootstrapR.height - 10, WHITE);
-        if (bootstrapcolor) DrawText("RUN", bootstrapR.x + 5, bootstrapR.y + 5, 51, GRAY);
-        else if (!bootstrapcolor) DrawText("RUN", bootstrapR.x + 5, bootstrapR.y + 5, 51, BLACK);
+        if (bootstrapcolor) DrawText("BOOTSTRAP", bootstrapR.x + 5, bootstrapR.y + 5, 51, GRAY);
+        else if (!bootstrapcolor) DrawText("BOOTSTRAP", bootstrapR.x + 5, bootstrapR.y + 5, 51, BLACK);
         
         EndDrawing();
     }
