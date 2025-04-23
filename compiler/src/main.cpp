@@ -153,6 +153,12 @@ void reset()
     }
 }
 
+void fentanyL()
+{
+    std::string commandi = "g++ -std=c++17 fentanyL/main.cpp -o fentanyL -I./fentanyL/raygui.h -lraylib -lGL -lm -lpthread -ldl -lrt -lX11";
+    system(commandi.c_str());
+}
+
 int main(int argc, char* argv[]) {
     std::filesystem::path basePath = std::filesystem::current_path();
     std::filesystem::path compilerPath = basePath / "compiler";
@@ -167,6 +173,7 @@ int main(int argc, char* argv[]) {
         else if (arg == "run") run();
         else if (arg == "help") help();
         else if (arg == "yajuiku") yajuiku();
+        else if (arg == "fentanyL") fentanyL();
         else if (arg == "builrun")
         {
             reset();

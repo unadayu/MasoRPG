@@ -393,54 +393,44 @@ int main(int argc, char* argv[]) {
             camera.follow(playerRect);
             camera.setPosition(playerRect.x, playerRect.y);
             camera.clampPosition(10000, 10000);
-
-            if (roomNumber == 5)
-            {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-            }
-            else if (roomNumber == 1)
-            {
-                if (playStop)
-                {
-                    SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "セーブ", WindowSize / 1.5, 30.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "ステータス", WindowSize / 1.5, 30.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "スキル", WindowSize / 1.5, 30.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "持ち物", WindowSize / 1.5, 30.0f);
-                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "終わる", WindowSize / 1.5, 30.0f);
-                }
-            }
-            else
-            {
-                if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
-                if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
-                if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
-                if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
-            }
             SDL_RenderClear(renderer);
 
             SDL_Rect screenRect = camera.worldToScreen(playerRect);
-
-            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "X: ", 10.0f, 100.0f);
-            drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Y: ", 10.0f, 130.0f);
-            drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.x, 40.0f, 100.0f);
-            drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.y, 40.0f, 130.0f);
 
             if (playerRect.x <= -15) playerRect.x = -15;
             if (playerRect.y <= -10) playerRect.y = -10;
             if (playerRect.x >= 755) playerRect.x = 755;
             if (playerRect.y >= 450) playerRect.y = 450;
 
-            if (roomNumber == 5)
-            {}
-            else if (roomNumber == 1)
+            if (roomNumber == 1)
             {
-                SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
                 if (playStop)
                 {
+                    SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "セーブ", WindowSise.Width / 2, 50.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "ステータス", WindowSise.Width / 2, 100.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "スキル", WindowSise.Width / 2, 150.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "持ち物", WindowSise.Width / 2, 200.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "終わる", WindowSise.Width / 2, 250.0f);
                     // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白
                     // SDL_RenderFillRect(renderer, &rect);
                 }
+                else if (!playStop)
+                {
+                    if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
+                    if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
+                    if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
+                    if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "X: ", 10.0f, 100.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Y: ", 10.0f, 130.0f);
+                    drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.x, 40.0f, 100.0f);
+                    drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.y, 40.0f, 130.0f);
+                    SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
+                }
+            }
+            else if (roomNumber == 5)
+            {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             }
             else
             {}
