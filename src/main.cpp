@@ -49,11 +49,11 @@ struct enemy {
     }
 };
 
-enemy* enemyOne = new enemy("Ochin", 10, 3, 1);
-enemy* enemyTwo = new enemy("Po", 10, 3, 1);
-enemy* enemyThree = new enemy("U", 10, 3, 1);
-enemy* enemyFive = new enemy("N", 10, 3, 1);
-enemy* enemyFour = new enemy("KO", 10, 3, 1);
+enemy* enemyOne = new enemy("slime", 10, 3, 1);
+enemy* enemyTwo = new enemy("two", 10, 3, 1);
+enemy* enemyThree = new enemy("three", 10, 3, 1);
+enemy* enemyFive = new enemy("five", 10, 3, 1);
+enemy* enemyFour = new enemy("four", 10, 3, 1);
 
 enemy* boss = new enemy("boss", 10, 3, 1);
 
@@ -236,7 +236,7 @@ int main(int argc, char* argv[]) {
     int musicNumber = 1;
     bool playStop = false;
 
-    Rectangle player = {5000, 5000, 50, 50};
+    Rectangle player = {50, 50, 400, 250};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
     int attackOne, attackTwo, attackThree;
     Uint32 enterCooldown = 0;
@@ -398,6 +398,18 @@ int main(int argc, char* argv[]) {
             {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             }
+            else if (roomNumber == 1)
+            {
+                if (playStop)
+                {
+                    SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "セーブ", WindowSize / 1.5, 30.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "ステータス", WindowSize / 1.5, 30.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "スキル", WindowSize / 1.5, 30.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "持ち物", WindowSize / 1.5, 30.0f);
+                    drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "終わる", WindowSize / 1.5, 30.0f);
+                }
+            }
             else
             {
                 if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
@@ -421,15 +433,17 @@ int main(int argc, char* argv[]) {
 
             if (roomNumber == 5)
             {}
-            else
+            else if (roomNumber == 1)
             {
                 SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
                 if (playStop)
                 {
-                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白
-                    SDL_RenderFillRect(renderer, &rect);
+                    // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白
+                    // SDL_RenderFillRect(renderer, &rect);
                 }
             }
+            else
+            {}
             SDL_RenderPresent(renderer);
             SDL_Delay(16);
         }
