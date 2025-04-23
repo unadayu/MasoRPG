@@ -1,13 +1,6 @@
-/*
-  Hamster-crabが急いで作ったg++ベースのコンパイラーです。
-  たぶんインストールのところのパッケージをAIで調べたので多分違います。
-  なにか問題があったら
-  hamstercrab123@gmail.com
-  までメールくれ
-**/
-
-#include <iostream>
+#include "raylib.h"
 #include <cstdlib>
+#include <iostream>
 #include <string>
 #include <vector>
 #include <filesystem>
@@ -153,41 +146,88 @@ void reset()
     }
 }
 
-void fentanyL()
+int main(int argc, char* argv[])
 {
-    std::string commandi = "g++ FENTANYL/main.cpp -o fentanyL -lraylib -lGL -lm -lpthread -ldl -lrt -lX11";
-    system(commandi.c_str());
-}
-
-int main(int argc, char* argv[]) {
     std::filesystem::path basePath = std::filesystem::current_path();
     std::filesystem::path compilerPath = basePath / "compiler";
     std::vector<std::string> args(argv + 1, argv + argc);
-    for (const std::string& arg : args) {
-        if (arg == "bootstrap") bootstrap();
-        else if (arg == "build")
+    const int screenWidth = 900;
+    const int screenHeight = 600;
+
+    InitWindow(screenWidth, screenHeight, "fentanyL");
+
+    Rectangle graph = { 80, 230, 190, 60 };
+    bool buildcolor = false;
+    bool buildtools = false;
+
+    Rectangle calc = { 500, 230, 190, 60 };
+    bool runcolor = false;
+    bool runsummon = false;
+
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose())
+    {
+        Vector2 mousePoint = GetMousePosition();
+        if (CheckCollisionPointRec(mousePoint, graph))
         {
-            reset();
-            build(compilerPath);
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                buildcolor = false;
+                buildtools = true;
+            }
+            else
+            {
+                buildcolor = true;
+            }
         }
-        else if (arg == "run") run();
-        else if (arg == "help") help();
-        else if (arg == "yajuiku") yajuiku();
-        else if (arg == "fentanyL") fentanyL();
-        else if (arg == "builrun")
+        else buildcolor = false;
+
+        if (CheckCollisionPointRec(mousePoint, calc))
         {
-            reset();
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                runcolor = false;
+                runsummon = true;
+            }
+            else
+            {
+                runcolor = true;
+            }
+        }
+        else runcolor = false;
+        
+        if (buildtools)
+        {
             build(compilerPath);
+            buildtools = false;
+        }
+
+        if (runsummon)
+        {
             run();
+            runsummon = false;
         }
-        else if (arg == "install")
-        {
-            reset();
-            install(compilerPath);
-        }
-        else if (arg == "remove") remove();
-        else if ((arg == "reset")) reset();
-        else if ((arg == "ruun")) ruun();
+        
+
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+
+        DrawRectangle(graph.x, graph.y, graph.width, graph.height, GRAY);
+        DrawRectangle(graph.x + 5, graph.y + 5, graph.width - 10, graph.height - 10, WHITE);
+        if (buildcolor) DrawText("BUILD", graph.x + 5, graph.y + 5, 51, GRAY);
+        else if (!buildcolor) DrawText("BUILD", graph.x + 5, graph.y + 5, 51, BLACK);
+
+        DrawRectangle(calc.x, calc.y, calc.width, calc.height, GRAY);
+        DrawRectangle(calc.x + 5, calc.y + 5, calc.width - 10, calc.height - 10, WHITE);
+        if (runcolor) DrawText("RUN", calc.x + 5, calc.y + 5, 51, GRAY);
+        else if (!runcolor) DrawText("RUN", calc.x + 5, calc.y + 5, 51, BLACK);
+        
+        EndDrawing();
     }
+
+    CloseWindow();
+
     return 0;
 }
