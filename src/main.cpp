@@ -96,7 +96,7 @@ void drawText(SDL_Renderer* renderer, float R, float G, float B, const std::file
 // }
 
 PlayerData loadGame(const std::string& filename) {
-    PlayerData data{0, 0, 0, 100}; // デフォルト値
+    PlayerData data{0, 0, 0, 100, 0, 0, 0}; // デフォルト値
     std::ifstream file(filename);
     std::string line;
 
@@ -140,6 +140,46 @@ bool isKeyDown(SDL_Event& event, SDL_Keycode key) {
     return (event.type == SDL_KEYDOWN && event.key.keysym.sym == key);
 }
 
+static SDL_Renderer* gRenderer = nullptr;
+
+// 初期化時に一度だけ呼ぶ
+inline bool InitSDL(const char* title, int w, int h) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    SDL_Window* win = SDL_CreateWindow(title,
+                                       SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                       w, h,
+                                       SDL_WINDOW_SHOWN);
+    if (!win) {
+        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    gRenderer = SDL_CreateRenderer(win, -1,
+                                   SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!gRenderer) {
+        std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+        SDL_DestroyWindow(win);
+        return false;
+    }
+    return true;
+}
+
+// raylib ライクな一行描画関数
+inline void DrawRectangle(int x, int y, int w, int h, SDL_Color c) {
+    SDL_SetRenderDrawColor(gRenderer, c.r, c.g, c.b, c.a);
+    SDL_Rect r{ x, y, w, h };
+    SDL_RenderFillRect(gRenderer, &r);
+}
+
+// 同じく枠線だけ
+inline void DrawRectangleLines(int x, int y, int w, int h, SDL_Color c) {
+    SDL_SetRenderDrawColor(gRenderer, c.r, c.g, c.b, c.a);
+    SDL_Rect r{ x, y, w, h };
+    SDL_RenderDrawRect(gRenderer, &r);
+}
+
 int main(int argc, char* argv[]) {
     std::filesystem::path basePath = std::filesystem::current_path();
     
@@ -152,6 +192,7 @@ int main(int argc, char* argv[]) {
 
     std::filesystem::path woodLightImagePath;
     std::filesystem::path waruImagePath;
+    std::filesystem::path bossImagePath;
 
     std::filesystem::path oneSavePath;
     std::filesystem::path twoSavePath;
@@ -163,11 +204,12 @@ int main(int argc, char* argv[]) {
         {
             ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
             lethal_chinpoMusicPath = basePath / "compiler" / "run" / "data" / "music" / "lethalchinpo.wav";
-            lethal_dealMusicPath = basePath / "compiler" / "run" / "data" / "music" / "LETHAL_DEAL.wav";
+            lethal_dealMusicPath = basePath / "compiler" / "run" / "data" / "music" / "LETHAL_DEAL" / "LETHAL_DEAL.wav";
             noJapaneseFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
             waruImagePath = basePath / "compiler"  / "run" / "data" / "image" / "Isee!It'sallmyfault!Imadeasmallmistakeandit'sallmyfault!.png";
+            bossImagePath = basePath / "compiler"  / "run" / "data" / "image" / "boss.png";
             oneSavePath = basePath / "compiler" / "run" / "etc" / "save" / "one.txt";
             twoSavePath = basePath / "compiler" / "run" / "etc" / "save" / "two.txt";
             threeSavePath = basePath / "compiler" / "run" / "etc" / "save" / "three.txt";
@@ -227,6 +269,7 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return 1;
     }
+    gRenderer = renderer;
 
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
         std::cerr << "IMG_Init Error: " << IMG_GetError() << std::endl;
@@ -236,9 +279,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int title = 5; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定   5 -> エンドロール
+    int title = 2; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定   5 -> エンドロール
     // bool roomNumberEditMusicTF = false;
-    int roomNumber = 1; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス  6 -> sampleFight
+    int roomNumber = 5; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス  6 -> sampleFight
+    int enemyRoomNumber = 1; //  1 -> ラスボス
     int musicNumber = 1;
     bool playStop = false;
 
@@ -259,12 +303,16 @@ int main(int argc, char* argv[]) {
     SDL_Surface* woodLightImage = IMG_Load(woodLightImagePath.string().c_str());
     SDL_Surface* waruImage = IMG_Load(waruImagePath.string().c_str());
     if (!waruImage)std::cout << "そっか！全部俺のせいなんだ！！ちょこっっとミスしただけで全部俺が悪いんだ！！勝手に練習辞めて俺のせいにして俺なんか先生首になって死んじゃえばいいんだ！！そう言いたいんだ！！あぁー「敵」！！「敵」「敵」「敵」お前「敵」！！" << std::endl;
+    SDL_Surface* bossImage = IMG_Load(bossImagePath.string().c_str());
 
     SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
     SDL_FreeSurface(woodLightImage);
 
     SDL_Texture* waruiTexture = SDL_CreateTextureFromSurface(renderer, waruImage);
     SDL_FreeSurface(waruImage);
+    
+    SDL_Texture* bossTexture = SDL_CreateTextureFromSurface(renderer, bossImage);
+    SDL_FreeSurface(bossImage);
 
     Camera2D camera(WindowSise.Width, WindowSise.Height, 10000, 10000);
 
@@ -426,7 +474,7 @@ int main(int argc, char* argv[]) {
                 {
                     if (titleCursor.y < 50) titleCursor.y = 50;
                     if (titleCursor.y > 250) titleCursor.y = 250;
-                    SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                    DrawRectangle(20, 20, 20, 20, SDL_Color{ 0, 211, 200, 244 }); // ===============================================
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "セーブ", 20, 50);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "ステータス", 20, 100);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "スキル", 20, 150);
@@ -452,6 +500,33 @@ int main(int argc, char* argv[]) {
             else if (roomNumber == 5)
             {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+                SDL_RenderClear(renderer);
+                if (enemyRoomNumber)
+                {
+                    //ここに敵表示
+                    SDL_Rect bossRect = { 300, 10, 200, 200 };
+                    SDL_RenderCopy(renderer, bossTexture, nullptr, &bossRect);
+
+                    DrawRectangleLines(300, 200, 180, 180, SDL_Color{ 255, 255, 255, 255});
+
+                    // 白
+                    DrawRectangle(20, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                    DrawRectangle(210, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                    DrawRectangle(400, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                    DrawRectangle(590, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                    // 黒
+                    DrawRectangle(25, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                    DrawRectangle(215, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                    DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                    DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+
+                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "しね", 90, 410);
+                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "煽る", 280, 410);
+                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "食事", 470, 410);
+                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "逃げる", 660, 410);
+                }
+                SDL_RenderPresent(renderer);
+                SDL_Delay(16);
             }
             else if (roomNumber == 6)
             {
@@ -545,6 +620,8 @@ int main(int argc, char* argv[]) {
     TTF_CloseFont(noJapaneseFont);
     TTF_CloseFont(japaneseFont);
     SDL_DestroyTexture(woodLightTexture);
+    SDL_DestroyTexture(waruiTexture);
+    SDL_DestroyTexture(bossTexture);
     Mix_FreeMusic(ikisugi);
     Mix_FreeMusic(lethal_chinpo);
     Mix_FreeMusic(lethal_deal);
