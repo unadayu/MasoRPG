@@ -247,6 +247,7 @@ int main(int argc, char* argv[]) {
 
     Rectangle WindowSise = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
+    Rectangle InGamePlayerRect = {10, 10, 50, 50};
 
     SDL_Window* window = SDL_CreateWindow(
         "SDL Window",
@@ -285,6 +286,9 @@ int main(int argc, char* argv[]) {
     int enemyRoomNumber = 1; //  1 -> ラスボス
     int musicNumber = 1;
     bool playStop = false;
+    int phase = 1;
+
+    int RPGCommandnumber;
 
     Rectangle player = {50, 50, 400, 250};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
@@ -359,6 +363,20 @@ int main(int argc, char* argv[]) {
                         }
                         if (isKeyPressed(event, SDLK_UP, enterCooldown)) {
                             titleCursor.y -= 50.0f;
+                        }
+                    }
+
+                    if (title == 2)
+                    {
+                        if (roomNumber == 5)
+                        {
+                            if (phase == 1)
+                            {
+                                // if (isKeyDown(event, SDLK_UP))
+                                // {
+                                //     InGamePlayerRect.x -= 5;
+                                // }
+                            }
                         }
                     }
                 }
@@ -501,32 +519,44 @@ int main(int argc, char* argv[]) {
             {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
                 SDL_RenderClear(renderer);
-                if (enemyRoomNumber)
+                if (enemyRoomNumber == 1)
                 {
-                    //ここに敵表示
-                    SDL_Rect bossRect = { 300, 10, 200, 200 };
-                    SDL_RenderCopy(renderer, bossTexture, nullptr, &bossRect);
+                    if (phase = 1)
+                    {
+                        //ここに敵表示
+                        SDL_Rect bossRect = { 300, 10, 200, 200 };
+                        SDL_RenderCopy(renderer, bossTexture, nullptr, &bossRect);
+                        DrawRectangleLines(200, 200, 380, 180, SDL_Color{ 255, 255, 255, 255});
 
-                    DrawRectangleLines(300, 200, 180, 180, SDL_Color{ 255, 255, 255, 255});
+                        // 白
+                        DrawRectangle(20, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                        DrawRectangle(210, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                        DrawRectangle(400, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                        DrawRectangle(590, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                        // 黒
+                        DrawRectangle(25, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                        DrawRectangle(215, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                        DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                        DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
 
-                    // 白
-                    DrawRectangle(20, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
-                    DrawRectangle(210, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
-                    DrawRectangle(400, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
-                    DrawRectangle(590, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
-                    // 黒
-                    DrawRectangle(25, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
-                    DrawRectangle(215, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
-                    DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
-                    DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                        drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "しね", 90, 410);
+                        drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "煽る", 280, 410);
+                        drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "食事", 470, 410);
+                        drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "逃げる", 660, 410);
 
-                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "しね", 90, 410);
-                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "煽る", 280, 410);
-                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "食事", 470, 410);
-                    drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "逃げる", 660, 410);
+                        // ここにプレいやー
+                        if (isKeyDown(event, SDLK_UP)) InGamePlayerRect.y -= 5;
+                        if (isKeyDown(event, SDLK_DOWN)) InGamePlayerRect.y += 5;
+                        if (isKeyDown(event, SDLK_LEFT)) InGamePlayerRect.x -= 5;
+                        if (isKeyDown(event, SDLK_RIGHT)) InGamePlayerRect.x += 5;
+                        InGamePlayerRect.y = 405;
+                        InGamePlayerRect.x = 30;
+                        SDL_Rect InGamePlayerRectSDL = {InGamePlayerRect.x, InGamePlayerRect.y, InGamePlayerRect.Width, InGamePlayerRect.Height};
+                        SDL_RenderCopy(renderer, woodLightTexture, nullptr, &InGamePlayerRectSDL);
+                    }
                 }
                 SDL_RenderPresent(renderer);
-                SDL_Delay(16);
+                SDL_Delay(2);
             }
             else if (roomNumber == 6)
             {
