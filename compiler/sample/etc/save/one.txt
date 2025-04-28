@@ -1,7 +1,7 @@
 x=150
 y=300
-room=1
+room=5
 hp=80
 attackone=1
-attacktwo=1
-attackthree=1
+attacktwo=2
+attackthree=3

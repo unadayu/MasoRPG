@@ -121,19 +121,11 @@ PlayerData loadGame(const std::string& filename) {
     return data;
 }
 
-bool isKeyPressed(SDL_Event& event, SDL_Keycode key, Uint32& nextAllowedTime) {
-    Uint32 now = SDL_GetTicks();  // 現在時刻（ミリ秒）
-
-    if (now < nextAllowedTime) return false;  // 無効化中
-
-    if (event.type == SDL_KEYDOWN &&
-        event.key.keysym.sym == key &&
-        event.key.repeat == 0) {
-        nextAllowedTime = now + 500;  // 0.5秒間無効にする
-        return true;
-    }
-
-    return false;
+// 長押しによるリピートを無視し、純粋に“キーを押した瞬間だけ”を検知する関数
+bool isKeyTapped(const SDL_Event& event, SDL_Keycode key) {
+    return event.type == SDL_KEYDOWN
+        && event.key.keysym.sym == key
+        && event.key.repeat == 0;  // repeat==0: 長押しの二回目以降を除外
 }
 
 bool isKeyDown(SDL_Event& event, SDL_Keycode key) {
@@ -247,7 +239,7 @@ int main(int argc, char* argv[]) {
 
     Rectangle WindowSise = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
-    Rectangle InGamePlayerRect = {10, 10, 50, 50};
+    Rectangle InGamePlayerRect = {30, 405, 50, 50};
 
     SDL_Window* window = SDL_CreateWindow(
         "SDL Window",
@@ -280,7 +272,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int title = 2; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定   5 -> エンドロール
+    int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定   5 -> エンドロール
     // bool roomNumberEditMusicTF = false;
     int roomNumber = 5; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス  6 -> sampleFight
     int enemyRoomNumber = 1; //  1 -> ラスボス
@@ -288,11 +280,11 @@ int main(int argc, char* argv[]) {
     bool playStop = false;
     int phase = 1;
 
-    int RPGCommandnumber;
+    int RPGCommandnumber = 0; // ラスボスでは 0は選択1は技選択
 
     Rectangle player = {50, 50, 400, 250};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
-    int attackOne, attackTwo, attackThree;
+    int attackOne, attackTwo, attackThree; // 1 殴る 2 蹴る 3 ちんこ
     Uint32 enterCooldown = 0;
 
     SDL_Rect rect;
@@ -332,25 +324,25 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_KEYDOWN) {
                 if (title == 1) {
                     titleCursor.x = 3;
-                    if (isKeyPressed(event, SDLK_DOWN, enterCooldown)) {
+                    if (isKeyTapped(event, SDLK_DOWN)) {
                         titleCursor.y += 30.0f;
                     }
-                    if (isKeyPressed(event, SDLK_UP, enterCooldown)) {
+                    if (isKeyTapped(event, SDLK_UP)) {
                         titleCursor.y -= 30.0f;
                     }
                     
-                    if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 250)
+                    if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 250)
                     {
                         title = 4;
                         titleCursor.y = 100;
                         titleCursor.x = WindowSise.Width / 2 - 60;
                     }
-                    else if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 280) title = 3;
-                    else if (isKeyPressed(event, SDLK_RETURN, enterCooldown) && titleCursor.y == 310) running = false;
+                    else if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 280) title = 3;
+                    else if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 310) running = false;
                 }
                 if (title == 2)
                 {
-                    if (isKeyPressed(event, SDLK_ESCAPE, enterCooldown))
+                    if (isKeyTapped(event, SDLK_ESCAPE))
                     {
                         if (!playStop) playStop = true;
                         else if (playStop) playStop = false;
@@ -358,10 +350,10 @@ int main(int argc, char* argv[]) {
                     if (playStop)
                     {
                         titleCursor.x = 3;
-                        if (isKeyPressed(event, SDLK_DOWN, enterCooldown)) {
+                        if (isKeyTapped(event, SDLK_DOWN)) {
                             titleCursor.y += 50.0f;
                         }
-                        if (isKeyPressed(event, SDLK_UP, enterCooldown)) {
+                        if (isKeyTapped(event, SDLK_UP)) {
                             titleCursor.y -= 50.0f;
                         }
                     }
@@ -372,42 +364,71 @@ int main(int argc, char* argv[]) {
                         {
                             if (phase == 1)
                             {
-                                // if (isKeyDown(event, SDLK_UP))
-                                // {
-                                //     InGamePlayerRect.x -= 5;
-                                // }
+                                if (RPGCommandnumber == 0)
+                                {
+                                    InGamePlayerRect.y = 405;
+                                    if (InGamePlayerRect.x <= 30) InGamePlayerRect.x = 30;
+                                    if (InGamePlayerRect.x >= 600) InGamePlayerRect.x = 600;
+                                    
+                                    if (isKeyTapped(event, SDLK_LEFT)) InGamePlayerRect.x -= 190;
+                                    if (isKeyTapped(event, SDLK_RIGHT)) InGamePlayerRect.x += 190;
+
+                                    if (InGamePlayerRect.x == 30)
+                                    {
+                                        if (isKeyTapped(event, SDLK_RETURN))
+                                        {
+                                            RPGCommandnumber = 1;
+                                            InGamePlayerRect.x = 190;
+                                            InGamePlayerRect.y = 200;
+                                        }
+                                    }
+                                }
+                                else if (RPGCommandnumber == 1)
+                                {
+                                    InGamePlayerRect.y = 200;
+                                    if (isKeyTapped(event, SDLK_LEFT)) InGamePlayerRect.x -= 190;
+                                }
                             }
                         }
                     }
                 }
                 if (title == 3)
                 {
-                    if (isKeyPressed(event, SDLK_ESCAPE, enterCooldown)) title = 1;
+                    if (isKeyTapped(event, SDLK_ESCAPE)) title = 1;
                 }
                 if (title == 4)
                 {
-                    if (isKeyPressed(event, SDLK_DOWN, enterCooldown)) {
+                    if (isKeyTapped(event, SDLK_DOWN)) {
                         titleCursor.y += 50.0f;
                     }
-                    if (isKeyPressed(event, SDLK_UP, enterCooldown)) {
+                    if (isKeyTapped(event, SDLK_UP)) {
                         titleCursor.y -= 50.0f;
                     }
-                    if (isKeyPressed(event, SDLK_ESCAPE, enterCooldown))
+                    if (isKeyTapped(event, SDLK_ESCAPE))
                     {
                         title = 1;
                         titleCursor.x = 3;
                         titleCursor.y = 250;
                     }
-                    if (isKeyPressed(event, SDLK_RETURN, enterCooldown))
+                    if (isKeyTapped(event, SDLK_RETURN))
                     {
                         if (titleCursor.y == 100)
                         {
                             PlayerData playerSaveData = loadGame(oneSavePath);
                             playerRect.x = playerSaveData.x;
                             playerRect.y = playerSaveData.y;
-                            attackOne = playerSaveData.attackone;
-                            attackTwo = playerSaveData.attacktwo;
-                            attackThree = playerSaveData.attackthree;
+
+                            if (playerSaveData.attackone == '1') attackOne = 1;
+                            else if (playerSaveData.attackone == '2') attackOne = 2;
+                            else if (playerSaveData.attackone == '3') attackOne = 3;
+
+                            if (playerSaveData.attacktwo == '1') attackTwo = 1;
+                            else if (playerSaveData.attacktwo == '2') attackTwo = 2;
+                            else if (playerSaveData.attacktwo == '3') attackTwo = 3;
+
+                            if (playerSaveData.attackthree == '1') attackThree = 1;
+                            else if (playerSaveData.attackthree == '2') attackThree = 2;
+                            else if (playerSaveData.attackthree == '3') attackThree = 3;
                             title = 2;
                             std::cout << playerSaveData.room << std::endl;
                             if (playerSaveData.room == 1) roomNumber = 1;
@@ -463,11 +484,11 @@ int main(int argc, char* argv[]) {
             if (titleCursor.y < 250) titleCursor.y = 250;
             if (titleCursor.y > 310) titleCursor.y = 310;
 
-            drawText(renderer, 0, 0, 0, noJapaneseFontsPath, 50, "MasoRPG", 100, 100);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "スタート", 100, 100);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "設定", 100, 100);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "おわり", 100, 100);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, ">", 100, 100);
+            drawText(renderer, 0, 0, 0, noJapaneseFontsPath, 50, "MasoRPG", 10, 30);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "スタート", 20, 250);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "設定", 20, 280);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "おわり", 20, 310);
+            drawText(renderer, 255, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
 
             SDL_RenderPresent(renderer);
             SDL_Delay(8);
@@ -492,15 +513,13 @@ int main(int argc, char* argv[]) {
                 {
                     if (titleCursor.y < 50) titleCursor.y = 50;
                     if (titleCursor.y > 250) titleCursor.y = 250;
-                    DrawRectangle(20, 20, 20, 20, SDL_Color{ 0, 211, 200, 244 }); // ===============================================
+                    DrawRectangle(20, 400, playerRect.x + 30, playerRect.y + 30, SDL_Color{ 0, 211, 200, 0 });
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "セーブ", 20, 50);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "ステータス", 20, 100);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "スキル", 20, 150);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "hayasHi", 20, 200);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "終わろう", 20, 250);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
-                    // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // 白
-                    // SDL_RenderFillRect(renderer, &rect);
                 }
                 else if (!playStop)
                 {
@@ -545,14 +564,23 @@ int main(int argc, char* argv[]) {
                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "逃げる", 660, 410);
 
                         // ここにプレいやー
-                        if (isKeyDown(event, SDLK_UP)) InGamePlayerRect.y -= 5;
-                        if (isKeyDown(event, SDLK_DOWN)) InGamePlayerRect.y += 5;
-                        if (isKeyDown(event, SDLK_LEFT)) InGamePlayerRect.x -= 5;
-                        if (isKeyDown(event, SDLK_RIGHT)) InGamePlayerRect.x += 5;
-                        InGamePlayerRect.y = 405;
-                        InGamePlayerRect.x = 30;
                         SDL_Rect InGamePlayerRectSDL = {InGamePlayerRect.x, InGamePlayerRect.y, InGamePlayerRect.Width, InGamePlayerRect.Height};
                         SDL_RenderCopy(renderer, woodLightTexture, nullptr, &InGamePlayerRectSDL);
+
+                        if (RPGCommandnumber == 1)
+                        {
+                            if (attackOne == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 190, 200);
+                            else if (attackOne == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 190, 200);
+                            else if (attackOne == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 190, 200);
+
+                            if (attackTwo == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 190, 200);
+                            else if (attackTwo == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 190, 200);
+                            else if (attackTwo == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 190, 200);
+
+                            if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 190, 200);
+                            else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 190, 200);
+                            else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 190, 200);
+                        }
                     }
                 }
                 SDL_RenderPresent(renderer);

@@ -285,7 +285,7 @@
 *           - bool IsMouseButtonPressed(int button);
 *           - bool IsMouseButtonReleased(int button);
 *           - bool IsKeyDown(int key);
-*           - bool IsKeyPressed(int key);
+*           - bool isKeyTapped(int key);
 *           - int GetCharPressed(void);         // -- GuiTextBox(), GuiValueBox()
 *
 *           - void DrawRectangle(int x, int y, int width, int height, Color color); // -- GuiDrawRectangle()
@@ -1442,7 +1442,7 @@ static bool IsMouseButtonPressed(int button);
 static bool IsMouseButtonReleased(int button);
 
 static bool IsKeyDown(int key);
-static bool IsKeyPressed(int key);
+static bool isKeyTapped(int key);
 static int GetCharPressed(void);         // -- GuiTextBox(), GuiValueBox()
 //-------------------------------------------------------------------------------
 
@@ -2569,14 +2569,14 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
             }
 
             int codepoint = GetCharPressed();       // Get Unicode codepoint
-            if (multiline && IsKeyPressed(KEY_ENTER)) codepoint = (int)'\n';
+            if (multiline && isKeyTapped(KEY_ENTER)) codepoint = (int)'\n';
 
             // Encode codepoint as UTF-8
             int codepointSize = 0;
             const char *charEncoded = CodepointToUTF8(codepoint, &codepointSize);
 
             // Handle Paste action
-            if (IsKeyPressed(KEY_V) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
+            if (isKeyTapped(KEY_V) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
             {
                 const char *pasteText = GetClipboardText();
                 if (pasteText != NULL)
@@ -2624,13 +2624,13 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
             }
 
             // Move cursor to start
-            if ((textLength > 0) && IsKeyPressed(KEY_HOME)) textBoxCursorIndex = 0;
+            if ((textLength > 0) && isKeyTapped(KEY_HOME)) textBoxCursorIndex = 0;
 
             // Move cursor to end
-            if ((textLength > textBoxCursorIndex) && IsKeyPressed(KEY_END)) textBoxCursorIndex = textLength;
+            if ((textLength > textBoxCursorIndex) && isKeyTapped(KEY_END)) textBoxCursorIndex = textLength;
 
             // Delete related codepoints from text, after current cursor position
-            if ((textLength > textBoxCursorIndex) && IsKeyPressed(KEY_DELETE) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
+            if ((textLength > textBoxCursorIndex) && isKeyTapped(KEY_DELETE) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
             {
                 int offset = textBoxCursorIndex;
                 int accCodepointSize = 0;
@@ -2664,7 +2664,7 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
                 textLength -= accCodepointSize;
             }
             // Delete single codepoint from text, after current cursor position
-            else if ((textLength > textBoxCursorIndex) && (IsKeyPressed(KEY_DELETE) || (IsKeyDown(KEY_DELETE) && autoCursorShouldTrigger)))
+            else if ((textLength > textBoxCursorIndex) && (isKeyTapped(KEY_DELETE) || (IsKeyDown(KEY_DELETE) && autoCursorShouldTrigger)))
             {
                 int nextCodepointSize = 0;
                 GetCodepointNext(text + textBoxCursorIndex, &nextCodepointSize);
@@ -2676,7 +2676,7 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
             }
 
             // Delete related codepoints from text, before current cursor position
-            if ((textBoxCursorIndex > 0) && IsKeyPressed(KEY_BACKSPACE) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
+            if ((textBoxCursorIndex > 0) && isKeyTapped(KEY_BACKSPACE) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
             {
                 int offset = textBoxCursorIndex;
                 int accCodepointSize = 0;
@@ -2711,7 +2711,7 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
                 textBoxCursorIndex -= accCodepointSize;
             }
             // Delete single codepoint from text, before current cursor position
-            else if ((textBoxCursorIndex > 0) && (IsKeyPressed(KEY_BACKSPACE) || (IsKeyDown(KEY_BACKSPACE) && autoCursorShouldTrigger)))
+            else if ((textBoxCursorIndex > 0) && (isKeyTapped(KEY_BACKSPACE) || (IsKeyDown(KEY_BACKSPACE) && autoCursorShouldTrigger)))
             {
                 int prevCodepointSize = 0;
 
@@ -2725,7 +2725,7 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
             }
 
             // Move cursor position with keys
-            if ((textBoxCursorIndex > 0) && IsKeyPressed(KEY_LEFT) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
+            if ((textBoxCursorIndex > 0) && isKeyTapped(KEY_LEFT) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
             {
                 int offset = textBoxCursorIndex;
                 int accCodepointSize = 0;
@@ -2756,14 +2756,14 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
 
                 textBoxCursorIndex = offset;
             }
-            else if ((textBoxCursorIndex > 0) && (IsKeyPressed(KEY_LEFT) || (IsKeyDown(KEY_LEFT) && autoCursorShouldTrigger)))
+            else if ((textBoxCursorIndex > 0) && (isKeyTapped(KEY_LEFT) || (IsKeyDown(KEY_LEFT) && autoCursorShouldTrigger)))
             {
                 int prevCodepointSize = 0;
                 GetCodepointPrevious(text + textBoxCursorIndex, &prevCodepointSize);
 
                 textBoxCursorIndex -= prevCodepointSize;
             }
-            else if ((textLength > textBoxCursorIndex) && IsKeyPressed(KEY_RIGHT) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
+            else if ((textLength > textBoxCursorIndex) && isKeyTapped(KEY_RIGHT) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
             {
                 int offset = textBoxCursorIndex;
                 int accCodepointSize = 0;
@@ -2795,7 +2795,7 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
 
                 textBoxCursorIndex = offset;
             }
-            else if ((textLength > textBoxCursorIndex) && (IsKeyPressed(KEY_RIGHT) || (IsKeyDown(KEY_RIGHT) && autoCursorShouldTrigger)))
+            else if ((textLength > textBoxCursorIndex) && (isKeyTapped(KEY_RIGHT) || (IsKeyDown(KEY_RIGHT) && autoCursorShouldTrigger)))
             {
                 int nextCodepointSize = 0;
                 GetCodepointNext(text + textBoxCursorIndex, &nextCodepointSize);
@@ -2852,7 +2852,7 @@ int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode)
             //if (multiline) cursor.y = GetTextLines()
 
             // Finish text editing on ENTER or mouse click outside bounds
-            if ((!multiline && IsKeyPressed(KEY_ENTER)) ||
+            if ((!multiline && isKeyTapped(KEY_ENTER)) ||
                 (!CheckCollisionPointRec(mousePosition, bounds) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
             {
                 textBoxCursorIndex = 0;     // GLOBAL: Reset the shared cursor index
@@ -3063,7 +3063,7 @@ int GuiValueBox(Rectangle bounds, const char *text, int *value, int minValue, in
             // Delete text
             if (keyCount > 0)
             {
-                if (IsKeyPressed(KEY_BACKSPACE))
+                if (isKeyTapped(KEY_BACKSPACE))
                 {
                     keyCount--;
                     textValue[keyCount] = '\0';
@@ -3077,7 +3077,7 @@ int GuiValueBox(Rectangle bounds, const char *text, int *value, int minValue, in
             //if (*value > maxValue) *value = maxValue;
             //else if (*value < minValue) *value = minValue;
 
-            if ((IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER)) || (!CheckCollisionPointRec(mousePoint, bounds) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
+            if ((isKeyTapped(KEY_ENTER) || isKeyTapped(KEY_KP_ENTER)) || (!CheckCollisionPointRec(mousePoint, bounds) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
             {
                 if (*value > maxValue) *value = maxValue;
                 else if (*value < minValue) *value = minValue;
@@ -3184,7 +3184,7 @@ int GuiValueBoxFloat(Rectangle bounds, const char *text, char *textValue, float 
             }
 
             // Pressed backspace
-            if (IsKeyPressed(KEY_BACKSPACE))
+            if (isKeyTapped(KEY_BACKSPACE))
             {
                 if (keyCount > 0)
                 {
@@ -3196,7 +3196,7 @@ int GuiValueBoxFloat(Rectangle bounds, const char *text, char *textValue, float 
 
             if (valueHasChanged) *value = TextToFloat(textValue);
 
-            if ((IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_KP_ENTER)) || (!CheckCollisionPointRec(mousePoint, bounds) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) result = 1;
+            if ((isKeyTapped(KEY_ENTER) || isKeyTapped(KEY_KP_ENTER)) || (!CheckCollisionPointRec(mousePoint, bounds) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) result = 1;
         }
         else
         {
