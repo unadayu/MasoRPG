@@ -31,29 +31,18 @@ void help()
 
 void bootstrap()
 {
-        auto command_exists = [](const std::string& cmd) -> bool {
-        return std::system((cmd + " --version > /dev/null 2>&1").c_str()) == 0;
-    };
-
-    if (command_exists("g++")) {
-        std::cout << "g++ is already installed.\n";
-        return;
-    }
-
-    std::cout << "g++ not found. Attempting to install...\n";
-
     if (command_exists("apt")) {
-        std::system("sudo apt update && sudo apt install -y g++");
+        std::system("sudo apt update && sudo apt install -y g++ sdl2_ttf sdl2_image sdl2_mixer");
     } else if (command_exists("dnf")) {
-        std::system("sudo dnf install -y g++");
+        std::system("sudo dnf install -y g++ sdl2_ttf sdl2_image sdl2_mixer");
     } else if (command_exists("yum")) {
-        std::system("sudo yum install -y gcc-c++");
+        std::system("sudo yum install -y gcc-c++ sdl2_ttf sdl2_image sdl2_mixer");
     } else if (command_exists("pacman")) {
-        std::system("sudo pacman -Sy --noconfirm gcc");
+        std::system("sudo pacman -Sy --noconfirm gcc sdl2_ttf sdl2_image sdl2_mixer");
     } else if (command_exists("zypper")) {
-        std::system("sudo zypper install -y gcc-c++");
+        std::system("sudo zypper install -y gcc-c++ sdl2_ttf sdl2_image sdl2_mixer");
     } else {
-        std::cerr << "Unsupported package manager. Please install g++ manually.\n";
+        std::cerr << "Unsupported package manager. Please install g++ sdl2_ttf sdl2_image sdl2_mixer manually.\n";
     }
 }
 
