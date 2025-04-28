@@ -255,7 +255,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    // VSYNC を有効化して垂直同期に合わせる
+    SDL_Renderer* renderer = SDL_CreateRenderer(
+            window, -1,
+            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+        );
     if (!renderer) {
         std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
         SDL_DestroyWindow(window);
@@ -491,21 +495,10 @@ int main(int argc, char* argv[]) {
             drawText(renderer, 255, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
 
             SDL_RenderPresent(renderer);
-            SDL_Delay(8);
         }
         else if (title == 2)
         {
-            camera.follow(playerRect);
-            camera.setPosition(playerRect.x, playerRect.y);
-            camera.clampPosition(10000, 10000);
             SDL_RenderClear(renderer);
-
-            SDL_Rect screenRect = camera.worldToScreen(playerRect);
-
-            if (playerRect.x <= -15) playerRect.x = -15;
-            if (playerRect.y <= -10) playerRect.y = -10;
-            if (playerRect.x >= 755) playerRect.x = 755;
-            if (playerRect.y >= 450) playerRect.y = 450;
 
             if (roomNumber == 1)
             {
@@ -523,6 +516,17 @@ int main(int argc, char* argv[]) {
                 }
                 else if (!playStop)
                 {
+                    camera.follow(playerRect);
+                    camera.setPosition(playerRect.x, playerRect.y);
+                    camera.clampPosition(10000, 10000);
+                    
+                    SDL_Rect screenRect = camera.worldToScreen(playerRect);
+
+                    if (playerRect.x <= -15) playerRect.x = -15;
+                    if (playerRect.y <= -10) playerRect.y = -10;
+                    if (playerRect.x >= 755) playerRect.x = 755;
+                    if (playerRect.y >= 450) playerRect.y = 450;
+
                     if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
                     if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
                     if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
@@ -584,19 +588,16 @@ int main(int argc, char* argv[]) {
                     }
                 }
                 SDL_RenderPresent(renderer);
-                SDL_Delay(2);
             }
             else if (roomNumber == 6)
             {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
                 SDL_RenderClear(renderer);
                 SDL_RenderPresent(renderer);
-                SDL_Delay(16);
             }
             else
             {}
             SDL_RenderPresent(renderer);
-            SDL_Delay(16);
         }
         else if (title == 3)
         {
@@ -613,7 +614,6 @@ int main(int argc, char* argv[]) {
             // drawText(renderer, 255.0f, 0.0f, 0.0f, japaneseFont, ">", titleCursor.x, titleCursor.y);
 
             SDL_RenderPresent(renderer);
-            SDL_Delay(8);
         }
         else if (title == 4)
         {
@@ -631,7 +631,6 @@ int main(int argc, char* argv[]) {
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
 
             SDL_RenderPresent(renderer);
-            SDL_Delay(8);
         }
         else if (title == 5)
         {
@@ -663,8 +662,8 @@ int main(int argc, char* argv[]) {
             // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "", WindowSise.Width / 2 - 40, 200.0f);
 
             SDL_RenderPresent(renderer);
-            SDL_Delay(8);
         }
+        SDL_Delay(2);
     }
 
     delete boss;
