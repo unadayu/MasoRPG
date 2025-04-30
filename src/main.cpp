@@ -55,7 +55,7 @@ enemy* enemyThree = new enemy("three", 10, 3, 1);
 enemy* enemyFive = new enemy("five", 10, 3, 1);
 enemy* enemyFour = new enemy("four", 10, 3, 1);
 
-enemy* boss = new enemy("boss", 10, 3, 1);
+enemy* boss = new enemy("tung tung tung sahal", 10, 3, 1);
 
 // テキスト描画関数
 void drawText(SDL_Renderer* renderer, float R, float G, float B, const std::filesystem::path& fontPath, int fontSize, const char* Text, float x, float y)
