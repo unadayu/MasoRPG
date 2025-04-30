@@ -278,7 +278,7 @@ int main(int argc, char* argv[]) {
 
     int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定   5 -> エンドロール
     // bool roomNumberEditMusicTF = false;
-    int roomNumber = 5; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス  6 -> sampleFight
+    int roomNumber = 1; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス  6 -> sampleFight
     int enemyRoomNumber = 1; //  1 -> ラスボス
     int musicNumber = 1;
     bool playStop = false;

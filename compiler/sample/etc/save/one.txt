@@ -1,6 +1,6 @@
 x=150
 y=300
-room=5
+room=1
 hp=80
 attackone=1
 attacktwo=2
