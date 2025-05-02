@@ -394,6 +394,17 @@ int main(int argc, char* argv[]) {
                                 }
                             }
                         }
+                        else
+                        {
+                            if (isKeyTapped(event, SDLK_g))
+                            {
+                                roomNumber = 5;
+                                phase = 1;
+                                RPGCommandnumber = 0;
+                                SDL_RenderClear(renderer);
+                                SDL_RenderPresent(renderer);
+                            }
+                        }
                     }
                 }
                 if (title == 3)
@@ -588,6 +599,7 @@ int main(int argc, char* argv[]) {
                     }
                 }
                 SDL_RenderPresent(renderer);
+                SDL_RenderPresent(gRenderer);
             }
             else if (roomNumber == 6)
             {
