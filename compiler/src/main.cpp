@@ -4,7 +4,7 @@
   なにか問題があったら
   hamstercrab123@gmail.com
   までメールくれ
-**/
+*/
 
 #include <iostream>
 #include <cstdlib>
