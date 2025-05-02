@@ -510,6 +510,7 @@ int main(int argc, char* argv[]) {
         else if (title == 2)
         {
             SDL_RenderClear(renderer);
+            SDL_RenderClear(gRenderer);
 
             if (roomNumber == 1)
             {
@@ -595,6 +596,11 @@ int main(int argc, char* argv[]) {
                             if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 190, 200);
                             else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 190, 200);
                             else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 190, 200);
+                        }
+                        else
+                        {
+                            if (InGamePlayerRect.x <= 30) InGamePlayerRect.x = 30;
+                            if (InGamePlayerRect.x >= 600) InGamePlayerRect.x = 600;
                         }
                     }
                 }
