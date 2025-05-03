@@ -342,7 +342,7 @@ int main(int argc, char* argv[]) {
 
     Rectangle player = {50, 50, 400, 250};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
-    int attackOne, attackTwo, attackThree; // 1 殴る 2 蹴る 3 ちんこ
+    int attackOne, attackTwo, attackThree, playerHPFull, playerHP; // 1 殴る 2 蹴る 3 ちんこ
     Uint32 enterCooldown = 0;
 
     SDL_Rect rect;
@@ -417,7 +417,8 @@ int main(int argc, char* argv[]) {
                         else if (playerSaveData.room == 3) roomNumber = 3;
                         else if (playerSaveData.room == 4) roomNumber = 4;
                         else if (playerSaveData.room == 5) roomNumber = 5;
-                        // playerHP = player.hp;
+                        playerHPFull = playerSaveData.hp;
+                        playerHP = playerHPFull;
 
                         title = 2;
                         titleCursor.y = 100;
@@ -466,6 +467,17 @@ int main(int argc, char* argv[]) {
                                             RPGCommandnumber = 1;
                                             InGamePlayerRect.x = 190;
                                             InGamePlayerRect.y = 200;
+                                        }
+                                    }
+                                    if (InGamePlayerRect.x == 220)
+                                    {
+                                        if (isKeyTapped(event, SDLK_RETURN))
+                                        {
+                                            playerHP -= 10;
+                                            std::cout << playerHP << std::endl;
+                                            RPGCommandnumber = 0;
+                                            // InGamePlayerRect.x = 190;
+                                            // InGamePlayerRect.y = 200;
                                         }
                                     }
                                 }
@@ -767,6 +779,7 @@ int main(int argc, char* argv[]) {
                         DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
                         DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
 
+                        std::cout << InGamePlayerRect.x << std::endl;
                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "しね", 90, 410);
                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "煽る", 280, 410);
                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "食事", 470, 410);
