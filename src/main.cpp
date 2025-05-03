@@ -340,7 +340,7 @@ int main(int argc, char* argv[]) {
 
     int RPGCommandnumber = 0; // ラスボスでは 0は選択1は技選択
 
-    Rectangle player = {50, 50, 400, 250};
+    Rectangle player = {WindowSize.Width / 2, WindowSize.Height / 2, 400, 250};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
     int attackOne, attackTwo, attackThree, playerHPFull, playerHP; // 1 殴る 2 蹴る 3 ちんこ
     Uint32 enterCooldown = 0;
@@ -721,8 +721,8 @@ int main(int argc, char* argv[]) {
                 else if (!playStop)
                 {
                     camera.follow(playerRect);
-                    camera.setPosition(playerRect.x, playerRect.y);
-                    camera.clampPosition(10000, 10000);
+                    // camera.setPosition(playerRect.x, playerRect.y);
+                    camera.clampPosition(50000, 50000);
                     
                     SDL_Rect screenRect = camera.worldToScreen(playerRect);
 
