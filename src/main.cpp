@@ -16,6 +16,7 @@
 #include <vector>
 #include <fstream>
 #include <chrono>
+#include <thread>
 #include <memory>
 
 struct Rectangle {
@@ -40,13 +41,6 @@ struct enemy {
     int hp;
     int attackDamage;
     int enemyNumber;
-
-    enemy(std::string n, int h, int atk, int eN) {
-        name = n;
-        hp = h;
-        attackDamage = atk;
-        enemyNumber = eN;
-    }
 };
 
 struct Line {
@@ -54,13 +48,13 @@ struct Line {
     int fontSize;    // 役割は大きく(40)、名前は小さく(25)
 };
 
-enemy* enemyOne = new enemy("slime", 10, 3, 1);
-enemy* enemyTwo = new enemy("two", 10, 3, 1);
-enemy* enemyThree = new enemy("three", 10, 3, 1);
-enemy* enemyFive = new enemy("five", 10, 3, 1);
-enemy* enemyFour = new enemy("four", 10, 3, 1);
+enemy enemyOne = {"slime", 10, 3, 1};
+enemy enemyTwo = {"two", 10, 3, 1};
+enemy enemyThree = {"three", 10, 3, 1};
+enemy enemyFive = {"five", 10, 3, 1};
+enemy enemyFour = {"four", 10, 3, 1};
 
-enemy* boss = new enemy("tung tung tung sahal", 10, 3, 1);
+enemy boss = {"tung tung tung sahal", 10, 3, 1};
 
 // テキスト描画関数
 void drawText(SDL_Renderer* renderer, float R, float G, float B, const std::filesystem::path& fontPath, int fontSize, const char* Text, float x, float y)
@@ -397,6 +391,34 @@ int main(int argc, char* argv[]) {
                     
                     if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 250)
                     {
+                        // std::this_thread::sleep_for(std::chrono::seconds(1));
+                        PlayerData playerSaveData = loadGame(oneSavePath);
+                        playerRect.x = playerSaveData.x;
+                        playerRect.y = playerSaveData.y;
+
+                        if (playerSaveData.attackone == 1) attackOne = 1;
+                        else if (playerSaveData.attackone == 2) attackOne = 2;
+                        else if (playerSaveData.attackone == 3) attackOne = 3;
+                        else running = false;
+
+                        if (playerSaveData.attacktwo == 1) attackTwo = 1;
+                        else if (playerSaveData.attacktwo == 2) attackTwo = 2;
+                        else if (playerSaveData.attacktwo == 3) attackTwo = 3;
+                        else running = false;
+
+                        if (playerSaveData.attackthree == 1) attackThree = 1;
+                        else if (playerSaveData.attackthree == 2) attackThree = 2;
+                        else if (playerSaveData.attackthree == 3) attackThree = 3;
+                        else running = false;
+                        
+                        std::cout << playerSaveData.room << std::endl;
+                        if (playerSaveData.room == 1) roomNumber = 1;
+                        else if (playerSaveData.room == 2) roomNumber = 2;
+                        else if (playerSaveData.room == 3) roomNumber = 3;
+                        else if (playerSaveData.room == 4) roomNumber = 4;
+                        else if (playerSaveData.room == 5) roomNumber = 5;
+                        // playerHP = player.hp;
+
                         title = 2;
                         titleCursor.y = 100;
                         titleCursor.x = WindowSize.Width / 2 - 60;
@@ -450,7 +472,66 @@ int main(int argc, char* argv[]) {
                                 else if (RPGCommandnumber == 1)
                                 {
                                     InGamePlayerRect.y = 200;
-                                    if (isKeyTapped(event, SDLK_LEFT)) InGamePlayerRect.x -= 190;
+                                    if (isKeyTapped(event, SDLK_LEFT)) InGamePlayerRect.x -= 100;
+                                    if (isKeyTapped(event, SDLK_RIGHT)) InGamePlayerRect.x += 100;
+
+                                    if (isKeyTapped(event, SDLK_RETURN))
+                                    {
+                                        if (InGamePlayerRect.x <= 190)
+                                        {
+                                            if (attackOne == 1)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                            if (attackOne == 2)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                            if (attackOne == 3)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                        }
+                                        else if (InGamePlayerRect.x >= 290)
+                                        {
+                                            if (attackOne == 1)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                            if (attackOne == 2)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                            if (attackOne == 3)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                        }
+                                        else if (InGamePlayerRect.x >= 390)
+                                        {
+                                            if (attackOne == 1)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                            if (attackOne == 2)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                            if (attackOne == 3)
+                                            {
+                                            boss.hp -= 10;
+                                            std::cout << boss.hp << std::endl;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -471,54 +552,58 @@ int main(int argc, char* argv[]) {
                 {
                     if (isKeyTapped(event, SDLK_ESCAPE)) title = 1;
                 }
-                if (title == 4)
-                {
-                    if (isKeyTapped(event, SDLK_DOWN)) {
-                        titleCursor.y += 50.0f;
-                    }
-                    if (isKeyTapped(event, SDLK_UP)) {
-                        titleCursor.y -= 50.0f;
-                    }
-                    if (isKeyTapped(event, SDLK_ESCAPE))
-                    {
-                        title = 1;
-                        titleCursor.x = 3;
-                        titleCursor.y = 250;
-                    }
-                    if (isKeyTapped(event, SDLK_RETURN))
-                    {
-                        if (titleCursor.y == 100)
-                        {
-                            PlayerData playerSaveData = loadGame(oneSavePath);
-                            playerRect.x = playerSaveData.x;
-                            playerRect.y = playerSaveData.y;
+                // if (title == 4)
+                // {
+                    // if (isKeyTapped(event, SDLK_DOWN)) {
+                    //     titleCursor.y += 50.0f;
+                    // }
+                    // if (isKeyTapped(event, SDLK_UP)) {
+                    //     titleCursor.y -= 50.0f;
+                    // }
+                    // if (isKeyTapped(event, SDLK_ESCAPE))
+                    // {
+                    //     title = 1;
+                    //     titleCursor.x = 3;
+                    //     titleCursor.y = 250;
+                    // }
+                    // if (isKeyTapped(event, SDLK_RETURN))
+                    // {
+                    //     if (titleCursor.y == 100)
+                    //     {
+                    //         PlayerData playerSaveData = loadGame(oneSavePath);
+                    //         playerRect.x = playerSaveData.x;
+                    //         playerRect.y = playerSaveData.y;
 
-                            if (playerSaveData.attackone == 1) attackOne = 1;
-                            else if (playerSaveData.attackone == 2) attackOne = 2;
-                            else if (playerSaveData.attackone == 3) attackOne = 3;
+                    //         if (playerSaveData.attackone == 1) attackOne = 1;
+                    //         else if (playerSaveData.attackone == 2) attackOne = 2;
+                    //         else if (playerSaveData.attackone == 3) attackOne = 3;
+                    //         else running = false;
 
-                            if (playerSaveData.attacktwo == 1) attackTwo = 1;
-                            else if (playerSaveData.attacktwo == 2) attackTwo = 2;
-                            else if (playerSaveData.attacktwo == 3) attackTwo = 3;
+                    //         if (playerSaveData.attacktwo == 1) attackTwo = 1;
+                    //         else if (playerSaveData.attacktwo == 2) attackTwo = 2;
+                    //         else if (playerSaveData.attacktwo == 3) attackTwo = 3;
+                    //         else running = false;
 
-                            if (playerSaveData.attackthree == 1) attackThree = 1;
-                            else if (playerSaveData.attackthree == 2) attackThree = 2;
-                            else if (playerSaveData.attackthree == 3) attackThree = 3;
-                            title = 2;
-                            std::cout << playerSaveData.room << std::endl;
-                            if (playerSaveData.room == 1) roomNumber = 1;
-                            else if (playerSaveData.room == 2) roomNumber = 2;
-                            else if (playerSaveData.room == 3) roomNumber = 3;
-                            else if (playerSaveData.room == 4) roomNumber = 4;
-                            else if (playerSaveData.room == 5) roomNumber = 5;
-                            // playerHP = player.hp;
-                        }
-                        else if (titleCursor.y == 150)
-                        {}
-                        else if (titleCursor.y == 200)
-                        {}
-                    }
-                }
+                    //         if (playerSaveData.attackthree == 1) attackThree = 1;
+                    //         else if (playerSaveData.attackthree == 2) attackThree = 2;
+                    //         else if (playerSaveData.attackthree == 3) attackThree = 3;
+                    //         else running = false;
+                            
+                    //         title = 2;
+                    //         std::cout << playerSaveData.room << std::endl;
+                    //         if (playerSaveData.room == 1) roomNumber = 1;
+                    //         else if (playerSaveData.room == 2) roomNumber = 2;
+                    //         else if (playerSaveData.room == 3) roomNumber = 3;
+                    //         else if (playerSaveData.room == 4) roomNumber = 4;
+                    //         else if (playerSaveData.room == 5) roomNumber = 5;
+                    //         // playerHP = player.hp;
+                    //     }
+                    //     else if (titleCursor.y == 150)
+                    //     {}
+                    //     else if (titleCursor.y == 200)
+                    //     {}
+                    // }
+                // }
             }
         }
 
@@ -618,6 +703,27 @@ int main(int argc, char* argv[]) {
                 {
                     if (phase = 1)
                     {
+                        if (RPGCommandnumber == 1)
+                        {
+                            if (InGamePlayerRect.x <= 190) InGamePlayerRect.x = 190;
+                            if (InGamePlayerRect.x >= 390) InGamePlayerRect.x = 390;
+                            if (attackOne == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 230, 200);
+                            else if (attackOne == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 230, 200);
+                            else if (attackOne == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 230, 200);
+
+                            if (attackTwo == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 330, 200);
+                            else if (attackTwo == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 330, 200);
+                            else if (attackTwo == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 330, 200);
+
+                            if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 430, 200);
+                            else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 430, 200);
+                            else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 430, 200);
+                        }
+                        else
+                        {
+                            if (InGamePlayerRect.x <= 30) InGamePlayerRect.x = 30;
+                            if (InGamePlayerRect.x >= 600) InGamePlayerRect.x = 600;
+                        }
                         //ここに敵表示
                         SDL_Rect bossRect = { 300, 10, 200, 200 };
                         SDL_RenderCopy(renderer, bossTexture, nullptr, &bossRect);
@@ -642,26 +748,6 @@ int main(int argc, char* argv[]) {
                         // ここにプレいやー
                         SDL_Rect InGamePlayerRectSDL = {InGamePlayerRect.x, InGamePlayerRect.y, InGamePlayerRect.Width, InGamePlayerRect.Height};
                         SDL_RenderCopy(renderer, woodLightTexture, nullptr, &InGamePlayerRectSDL);
-
-                        if (RPGCommandnumber == 1)
-                        {
-                            if (attackOne == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 230, 200);
-                            else if (attackOne == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 230, 200);
-                            else if (attackOne == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 230, 200);
-
-                            if (attackTwo == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 280, 200);
-                            else if (attackTwo == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 280, 200);
-                            else if (attackTwo == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 280, 200);
-
-                            if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 330, 200);
-                            else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 330, 200);
-                            else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 330, 200);
-                        }
-                        else
-                        {
-                            if (InGamePlayerRect.x <= 30) InGamePlayerRect.x = 30;
-                            if (InGamePlayerRect.x >= 600) InGamePlayerRect.x = 600;
-                        }
                     }
                 }
                 SDL_RenderPresent(renderer);
@@ -728,12 +814,6 @@ int main(int argc, char* argv[]) {
         SDL_Delay(2);
     }
 
-    delete boss;
-    delete enemyOne;
-    delete enemyTwo;
-    delete enemyThree;
-    delete enemyFour;
-    delete enemyFive;
     TTF_CloseFont(noJapaneseFontTitle);
     TTF_CloseFont(japaneseFontTitle);
     TTF_CloseFont(noJapaneseFont);
@@ -748,6 +828,7 @@ int main(int argc, char* argv[]) {
     TTF_Quit();
     IMG_Quit();
     SDL_DestroyRenderer(renderer);
+    SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
