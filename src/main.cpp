@@ -481,54 +481,81 @@ int main(int argc, char* argv[]) {
                                         {
                                             if (attackOne == 1)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
                                             if (attackOne == 2)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
                                             if (attackOne == 3)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
                                         }
                                         else if (InGamePlayerRect.x >= 290)
                                         {
-                                            if (attackOne == 1)
+                                            if (attackTwo == 1)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
-                                            if (attackOne == 2)
+                                            if (attackTwo == 2)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
-                                            if (attackOne == 3)
+                                            if (attackTwo == 3)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
                                         }
                                         else if (InGamePlayerRect.x >= 390)
                                         {
-                                            if (attackOne == 1)
+                                            if (attackThree == 1)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
-                                            if (attackOne == 2)
+                                            if (attackThree == 2)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
-                                            if (attackOne == 3)
+                                            if (attackThree == 3)
                                             {
-                                            boss.hp -= 10;
-                                            std::cout << boss.hp << std::endl;
+                                                boss.hp -= 10;
+                                                std::cout << boss.hp << std::endl;
+                                                RPGCommandnumber = 0;
+                                                InGamePlayerRect.y = 405;
+                                                InGamePlayerRect.x = 30;
                                             }
                                         }
                                     }
