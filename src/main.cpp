@@ -480,6 +480,14 @@ int main(int argc, char* argv[]) {
                                             // InGamePlayerRect.y = 200;
                                         }
                                     }
+                                    if (InGamePlayerRect.x == 600)
+                                    {
+                                        if (isKeyTapped(event, SDLK_RETURN))
+                                        {
+                                            playerHP = 0;
+                                            running = false;
+                                        }
+                                    }
                                 }
                                 else if (RPGCommandnumber == 1)
                                 {
