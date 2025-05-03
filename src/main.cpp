@@ -49,6 +49,11 @@ struct enemy {
     }
 };
 
+struct Line {
+    std::string text;
+    int fontSize;    // 役割は大きく(40)、名前は小さく(25)
+};
+
 enemy* enemyOne = new enemy("slime", 10, 3, 1);
 enemy* enemyTwo = new enemy("two", 10, 3, 1);
 enemy* enemyThree = new enemy("three", 10, 3, 1);
@@ -94,6 +99,61 @@ void drawText(SDL_Renderer* renderer, float R, float G, float B, const std::file
 //     // drawText に渡す（文字列を .c_str() で const char* に変換）
 //     drawText(renderer, R, G, B, font, str.c_str(), x, y);
 // }
+
+// スクロール付きエンドロール描画
+void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screenWidth, int screenHeight)
+{
+    // ---- static 変数で一度だけ初期化・経過時間管理 ----
+    static float scrollOffset = 0.0f;                       // 累積スクロール量
+    static Uint32 lastTicks = SDL_GetTicks();               // 前フレーム時刻
+
+    Uint32 now = SDL_GetTicks();
+    float dt = (now - lastTicks) / 1000.0f;                  // 秒単位の差分時間
+    lastTicks = now;
+
+    const float speed = 50.0f;                              // px/秒
+    scrollOffset += speed * dt;
+
+    // ---- 表示するすべての行を平坦化して作成 ----
+    std::vector<Line> lines;
+    auto pushRole = [&](const char* role){
+    lines.push_back({role, 30});
+    };
+    auto pushName = [&](const char* name){
+    lines.push_back({name, 20});
+    };
+    // CreditEntry 相当の処理
+    pushRole("プロデューサー(githubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("hamutaro1221(旧MeimaruNishimura328)");
+    pushRole("奴隷(githubのid)");
+    pushName("Hamster-crab");
+    pushRole("デザイナー(githubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("hamutaro1221(旧MeimaruNishimura328)");
+    pushRole("音楽(githubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("Hamster-crab");
+    pushRole("ストーリー担当(githubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("hamutaro1221(旧MeimaruNishimura328)");
+    pushRole("テスター(githubのid)");
+    pushName("いない");
+
+    // ---- 描画 ----
+    const float lineSpacing = 35.0f;
+    // スタート位置は画面下端から少しだけ下
+    float baseY = static_cast<float>(screenHeight) + 20.0f;
+
+    for (size_t i = 0; i < lines.size(); ++i) {
+    float y = baseY + i * lineSpacing - scrollOffset;
+    // 完全に画面外（上端）なら飛ばす
+    if (y < -lineSpacing) continue;
+    // まだ画面下（スクロールが追いついていない）ならも描くか判定不要なら描画
+    // フォントサイズに応じて描画
+    drawText(renderer, 0, 0, 0, fontPath, lines[i].fontSize, lines[i].text.c_str(), 10, y);
+    }
+}
 
 PlayerData loadGame(const std::string& filename) {
     PlayerData data{0, 0, 0, 100, 0, 0, 0}; // デフォルト値
@@ -159,17 +219,17 @@ inline bool InitSDL(const char* title, int w, int h) {
 }
 
 // raylib ライクな一行描画関数
-inline void DrawRectangle(int x, int y, int w, int h, SDL_Color c) {
-    SDL_SetRenderDrawColor(gRenderer, c.r, c.g, c.b, c.a);
+inline void DrawRectangle(int x, int y, int w, int h, SDL_Color c, SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
     SDL_Rect r{ x, y, w, h };
-    SDL_RenderFillRect(gRenderer, &r);
+    SDL_RenderFillRect(renderer, &r);
 }
 
 // 同じく枠線だけ
-inline void DrawRectangleLines(int x, int y, int w, int h, SDL_Color c) {
-    SDL_SetRenderDrawColor(gRenderer, c.r, c.g, c.b, c.a);
+inline void DrawRectangleLines(int x, int y, int w, int h, SDL_Color c, SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
     SDL_Rect r{ x, y, w, h };
-    SDL_RenderDrawRect(gRenderer, &r);
+    SDL_RenderDrawRect(renderer, &r);
 }
 
 int main(int argc, char* argv[]) {
@@ -237,7 +297,7 @@ int main(int argc, char* argv[]) {
     Mix_Music* lethal_chinpo = Mix_LoadMUS(lethal_chinpoMusicPath.string().c_str());
     Mix_Music* lethal_deal = Mix_LoadMUS(lethal_dealMusicPath.string().c_str());
 
-    Rectangle WindowSise = { 0, 0, 800, 500 };
+    Rectangle WindowSize = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
     Rectangle InGamePlayerRect = {30, 405, 50, 50};
 
@@ -245,8 +305,8 @@ int main(int argc, char* argv[]) {
         "SDL Window",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        WindowSise.Width,
-        WindowSise.Height,
+        WindowSize.Width,
+        WindowSize.Height,
         SDL_WINDOW_SHOWN);
 
     if (!window) {
@@ -292,8 +352,8 @@ int main(int argc, char* argv[]) {
     Uint32 enterCooldown = 0;
 
     SDL_Rect rect;
-    rect.x = 800 / 2 - WindowSise.Width / 2;
-    rect.y = 600 / 2 - WindowSise.Height / 2;
+    rect.x = 800 / 2 - WindowSize.Width / 2;
+    rect.y = 600 / 2 - WindowSize.Height / 2;
 
     TTF_Font* noJapaneseFontTitle = TTF_OpenFont(noJapaneseFontsPath.string().c_str(), 50);
     TTF_Font* japaneseFontTitle = TTF_OpenFont(dotGothicFontsPath.string().c_str(), 50);
@@ -314,7 +374,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* bossTexture = SDL_CreateTextureFromSurface(renderer, bossImage);
     SDL_FreeSurface(bossImage);
 
-    Camera2D camera(WindowSise.Width, WindowSise.Height, 10000, 10000);
+    Camera2D camera(WindowSize.Width, WindowSize.Height, 10000, 10000);
 
     bool running = true;
     SDL_Event event;
@@ -337,11 +397,11 @@ int main(int argc, char* argv[]) {
                     
                     if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 250)
                     {
-                        title = 4;
+                        title = 2;
                         titleCursor.y = 100;
-                        titleCursor.x = WindowSise.Width / 2 - 60;
+                        titleCursor.x = WindowSize.Width / 2 - 60;
                     }
-                    else if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 280) title = 3;
+                    else if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 280) title = 5;
                     else if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 310) running = false;
                 }
                 if (title == 2)
@@ -433,17 +493,17 @@ int main(int argc, char* argv[]) {
                             playerRect.x = playerSaveData.x;
                             playerRect.y = playerSaveData.y;
 
-                            if (playerSaveData.attackone == '1') attackOne = 1;
-                            else if (playerSaveData.attackone == '2') attackOne = 2;
-                            else if (playerSaveData.attackone == '3') attackOne = 3;
+                            if (playerSaveData.attackone == 1) attackOne = 1;
+                            else if (playerSaveData.attackone == 2) attackOne = 2;
+                            else if (playerSaveData.attackone == 3) attackOne = 3;
 
-                            if (playerSaveData.attacktwo == '1') attackTwo = 1;
-                            else if (playerSaveData.attacktwo == '2') attackTwo = 2;
-                            else if (playerSaveData.attacktwo == '3') attackTwo = 3;
+                            if (playerSaveData.attacktwo == 1) attackTwo = 1;
+                            else if (playerSaveData.attacktwo == 2) attackTwo = 2;
+                            else if (playerSaveData.attacktwo == 3) attackTwo = 3;
 
-                            if (playerSaveData.attackthree == '1') attackThree = 1;
-                            else if (playerSaveData.attackthree == '2') attackThree = 2;
-                            else if (playerSaveData.attackthree == '3') attackThree = 3;
+                            if (playerSaveData.attackthree == 1) attackThree = 1;
+                            else if (playerSaveData.attackthree == 2) attackThree = 2;
+                            else if (playerSaveData.attackthree == 3) attackThree = 3;
                             title = 2;
                             std::cout << playerSaveData.room << std::endl;
                             if (playerSaveData.room == 1) roomNumber = 1;
@@ -518,7 +578,7 @@ int main(int argc, char* argv[]) {
                 {
                     if (titleCursor.y < 50) titleCursor.y = 50;
                     if (titleCursor.y > 250) titleCursor.y = 250;
-                    DrawRectangle(20, 400, playerRect.x + 30, playerRect.y + 30, SDL_Color{ 0, 211, 200, 0 });
+                    DrawRectangle(20, 400, playerRect.x + 30, playerRect.y + 30, SDL_Color{ 0, 211, 200, 0 }, renderer);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "セーブ", 20, 50);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "ステータス", 20, 100);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "スキル", 20, 150);
@@ -561,18 +621,18 @@ int main(int argc, char* argv[]) {
                         //ここに敵表示
                         SDL_Rect bossRect = { 300, 10, 200, 200 };
                         SDL_RenderCopy(renderer, bossTexture, nullptr, &bossRect);
-                        DrawRectangleLines(200, 200, 380, 180, SDL_Color{ 255, 255, 255, 255});
+                        DrawRectangleLines(200, 200, 380, 180, SDL_Color{ 255, 255, 255, 255}, renderer);
 
                         // 白
-                        DrawRectangle(20, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
-                        DrawRectangle(210, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
-                        DrawRectangle(400, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
-                        DrawRectangle(590, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 });
+                        DrawRectangle(20, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
+                        DrawRectangle(210, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
+                        DrawRectangle(400, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
+                        DrawRectangle(590, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
                         // 黒
-                        DrawRectangle(25, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
-                        DrawRectangle(215, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
-                        DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
-                        DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 });
+                        DrawRectangle(25, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
+                        DrawRectangle(215, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
+                        DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
+                        DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
 
                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "しね", 90, 410);
                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "煽る", 280, 410);
@@ -585,17 +645,17 @@ int main(int argc, char* argv[]) {
 
                         if (RPGCommandnumber == 1)
                         {
-                            if (attackOne == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 190, 200);
-                            else if (attackOne == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 190, 200);
-                            else if (attackOne == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 190, 200);
+                            if (attackOne == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 230, 200);
+                            else if (attackOne == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 230, 200);
+                            else if (attackOne == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 230, 200);
 
-                            if (attackTwo == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 230, 200);
-                            else if (attackTwo == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 190, 200);
-                            else if (attackTwo == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 190, 200);
+                            if (attackTwo == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 280, 200);
+                            else if (attackTwo == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 280, 200);
+                            else if (attackTwo == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 280, 200);
 
-                            if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 190, 200);
-                            else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 190, 200);
-                            else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 190, 200);
+                            if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 330, 200);
+                            else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 330, 200);
+                            else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 330, 200);
                         }
                         else
                         {
@@ -641,11 +701,11 @@ int main(int argc, char* argv[]) {
             if (titleCursor.y < 100) titleCursor.y = 100;
             if (titleCursor.y > 200) titleCursor.y = 200;
 
-            drawText(renderer, 0, 0, 0, noJapaneseFontsPath, 50, "World", WindowSise.Width / 2 - 80, 20);
+            drawText(renderer, 0, 0, 0, noJapaneseFontsPath, 50, "World", WindowSize.Width / 2 - 80, 20);
 
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 1", WindowSise.Width / 2 - 40, 100);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 2", WindowSise.Width / 2 - 40, 150);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 3", WindowSise.Width / 2 - 40, 200);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 1", WindowSize.Width / 2 - 40, 100);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 2", WindowSize.Width / 2 - 40, 150);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 3", WindowSize.Width / 2 - 40, 200);
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
 
             SDL_RenderPresent(renderer);
@@ -657,28 +717,12 @@ int main(int argc, char* argv[]) {
 
             if (titleCursor.y < 100) titleCursor.y = 100;
             if (titleCursor.y > 200) titleCursor.y = 200;
-            drawText(renderer, 0, 0, 0, noJapaneseFontsPath, 50, "MasoRPG", WindowSise.Width / 2 - 130, 30);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 15, "カルパスコンブ", WindowSise.Width / 2, 60.0f);
-            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 15, "© 2025 ~ ", WindowSise.Width / 2 - 120, 60.0f);
-
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFontTitle, "プロデューサー(githubのid)", WindowSise.Width / 2 - 40, 100.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "RainbowPuiPuiMolcar", WindowSise.Width / 2 - 40, 100.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "hamutaro1221(旧MeimaruNishimura328)", WindowSise.Width / 2 - 40, 100.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFontTitle, "奴隷(githubのid)", WindowSise.Width / 2 - 40, 100.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Hamster-crab", WindowSise.Width / 2 - 40, 150.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFontTitle, "デザイナー(githubのid)", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "RainbowPuiPuiMolcar", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "hamutaro1221(旧MeimaruNishimura328)", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFontTitle, "音楽(githubのid)", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "RainbowPuiPuiMolcar", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "Hamster-crab", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFontTitle, "ストーリー担当(githubのid)", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "RainbowPuiPuiMolcar", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "hamutaro1221(旧MeimaruNishimura328)", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFontTitle, "テスター", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "いない", WindowSise.Width / 2 - 40, 200.0f);
-            // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "", WindowSise.Width / 2 - 40, 200.0f);
-
+            drawCredits(renderer, dotGothicFontsPath, WindowSize.Width, WindowSize.Height);
+            DrawRectangle(0, 0, WindowSize.Width, 100, SDL_Color{ 0, 184, 255, 255 }, renderer);
+            drawText(renderer, 0, 0, 0, noJapaneseFontsPath, 50, "MasoRPG", WindowSize.Width / 2 - 130, 30);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 15, "カルパスコンブ", WindowSize.Width / 2, 60.0f);
+            drawText(renderer, 0, 0, 0, dotGothicFontsPath, 15, "© 2025 ~ ", WindowSize.Width / 2 - 120, 60.0f);
+            
             SDL_RenderPresent(renderer);
         }
         SDL_Delay(2);
