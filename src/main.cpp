@@ -85,14 +85,14 @@ void drawText(SDL_Renderer* renderer, float R, float G, float B, const std::file
     TTF_CloseFont(font);
 }
 
-// void drawNumber(SDL_Renderer* renderer, float R, float G, float B, TTF_Font* font, int number, float x, float y)
-// {
-//     // 数字を文字列に変換
-//     std::string str = std::to_string(number);
+void drawNumber(SDL_Renderer* renderer, float R, float G, float B, std::filesystem::path& font, int fontSize ,int number, float x, float y)
+{
+    // 数字を文字列に変換
+    std::string str = std::to_string(number);
 
-//     // drawText に渡す（文字列を .c_str() で const char* に変換）
-//     drawText(renderer, R, G, B, font, str.c_str(), x, y);
-// }
+    // drawText に渡す（文字列を .c_str() で const char* に変換）
+    drawText(renderer, R, G, B, font, fontSize, str.c_str(), x, y);
+}
 
 // スクロール付きエンドロール描画
 void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screenWidth, int screenHeight)
@@ -735,10 +735,10 @@ int main(int argc, char* argv[]) {
                     if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
                     if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
                     if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
-                    // drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "X: ", 10, 100);
-                    // drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "Y: ", 10, 130);
-                    // drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.x, 40.0f, 100.0f);
-                    // drawNumber(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, playerRect.y, 40.0f, 130.0f);
+                    drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "X: ", 10, 100);
+                    drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "Y: ", 10, 130);
+                    drawNumber(renderer, 0.0f, 0.0f, 0.0f, dotGothicFontsPath, 24, playerRect.x, 40.0f, 100.0f);
+                    drawNumber(renderer, 0.0f, 0.0f, 0.0f, dotGothicFontsPath, 24, playerRect.y, 40.0f, 130.0f);
                     SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
                 }
             }
