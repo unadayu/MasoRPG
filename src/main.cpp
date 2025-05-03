@@ -111,10 +111,10 @@ void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screen
     // ---- 表示するすべての行を平坦化して作成 ----
     std::vector<Line> lines;
     auto pushRole = [&](const char* role){
-    lines.push_back({role, 30});
+        lines.push_back({role, 30});
     };
-    auto pushName = [&](const char* name){
-    lines.push_back({name, 20});
+        auto pushName = [&](const char* name){
+        lines.push_back({name, 20});
     };
     // CreditEntry 相当の処理
     pushRole("プロデューサー(githubのid)");
@@ -140,12 +140,12 @@ void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screen
     float baseY = static_cast<float>(screenHeight) + 20.0f;
 
     for (size_t i = 0; i < lines.size(); ++i) {
-    float y = baseY + i * lineSpacing - scrollOffset;
-    // 完全に画面外（上端）なら飛ばす
-    if (y < -lineSpacing) continue;
-    // まだ画面下（スクロールが追いついていない）ならも描くか判定不要なら描画
-    // フォントサイズに応じて描画
-    drawText(renderer, 0, 0, 0, fontPath, lines[i].fontSize, lines[i].text.c_str(), 10, y);
+        float y = baseY + i * lineSpacing - scrollOffset;
+        // 完全に画面外（上端）なら飛ばす
+        if (y < -lineSpacing) continue;
+        // まだ画面下（スクロールが追いついていない）ならも描くか判定不要なら描画
+        // フォントサイズに応じて描画
+        drawText(renderer, 0, 0, 0, fontPath, lines[i].fontSize, lines[i].text.c_str(), 10, y);
     }
 }
 
