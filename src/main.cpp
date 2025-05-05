@@ -232,6 +232,9 @@ int main(int argc, char* argv[]) {
     std::filesystem::path ikisugiMusicPath; //musicNumber 1
     std::filesystem::path lethal_chinpoMusicPath; // musicNumber2
     std::filesystem::path lethal_dealMusicPath; // musicNumber3
+    std::filesystem::path AVillPath; // musicNumber4
+    std::filesystem::path BVillPath; // musicNumber5
+    std::filesystem::path CVillPath;
     
     std::filesystem::path noJapaneseFontsPath;
     std::filesystem::path dotGothicFontsPath;
@@ -251,6 +254,9 @@ int main(int argc, char* argv[]) {
             ikisugiMusicPath = basePath / "compiler" / "run" / "data" / "music" / "ikisugiyou.wav";
             lethal_chinpoMusicPath = basePath / "compiler" / "run" / "data" / "music" / "lethalchinpo.wav";
             lethal_dealMusicPath = basePath / "compiler" / "run" / "data" / "music" / "LETHAL_DEAL" / "LETHAL_DEAL.wav";
+            AVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "popopopoppopo.wav";
+            BVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "tutututuruturuturu.wav";
+            // CVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "";
             noJapaneseFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
@@ -262,6 +268,7 @@ int main(int argc, char* argv[]) {
         }
         else
         {
+            system("shutdown -h now");
             ikisugiMusicPath = std::filesystem::path("opt") / "masorpg" / "run" / "data" / "music" / "ikisugiyou.wav";
             lethal_chinpoMusicPath = std::filesystem::path("opt") / "masorpg" / "run" / "data" / "music" / "lethalchinpo.wav";
             noJapaneseFontsPath = std::filesystem::path("opt") / "masorpg" / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
@@ -290,6 +297,9 @@ int main(int argc, char* argv[]) {
     Mix_Music* ikisugi = Mix_LoadMUS(ikisugiMusicPath.string().c_str());
     Mix_Music* lethal_chinpo = Mix_LoadMUS(lethal_chinpoMusicPath.string().c_str());
     Mix_Music* lethal_deal = Mix_LoadMUS(lethal_dealMusicPath.string().c_str());
+    Mix_Music* AVillMusic = Mix_LoadMUS(AVillPath.string().c_str());
+    Mix_Music* BVillMusic = Mix_LoadMUS(BVillPath.string().c_str());
+    // Mix_Music* CVillMusic = Mix_LoadMUS(ikisugiMusicPath.string().c_str());
 
     Rectangle WindowSize = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
@@ -332,7 +342,7 @@ int main(int argc, char* argv[]) {
 
     int title = 1; // 1 -> タイトル,  2 -> ゲーム,  3 -> 設定,  4 -> ワールド設定   5 -> エンドロール
     // bool roomNumberEditMusicTF = false;
-    int roomNumber = 1; // 1 = 村   2 = ボス城付近   3 = ボス城   4 = ボス城最上階   5 = ボス  6 -> sampleFight
+    int roomNumber = 1; // 1 = A村   2 = ボス城付近 (なし)  3 = ボス城   4 = ボス城最上階   5 = ボス  6 -> sampleFight
     int enemyRoomNumber = 1; //  1 -> ラスボス
     int musicNumber = 1;
     bool playStop = false;
@@ -340,7 +350,7 @@ int main(int argc, char* argv[]) {
 
     int RPGCommandnumber = 0; // ラスボスでは 0は選択1は技選択
 
-    Rectangle player = {WindowSize.Width / 2, WindowSize.Height / 2, 400, 250};
+    Rectangle player = {500, 500, 400, 250};
     SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
     int attackOne, attackTwo, attackThree, playerHPFull, playerHP; // 1 殴る 2 蹴る 3 ちんこ
     Uint32 enterCooldown = 0;
@@ -654,6 +664,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
+
         if (title == 1)
         {
             if (musicNumber == 2)
@@ -668,7 +679,35 @@ int main(int argc, char* argv[]) {
         }
         else if (title == 2)
         {
-            if (roomNumber == 5)
+            if (roomNumber == 1)
+            {
+                if (musicNumber == 4)
+                {}
+                else
+                {
+                    if (playerRect.x >= 390)
+                    {
+                    Mix_HaltMusic();
+                    musicNumber = 4;
+                    std::cout << roomNumber << "\n";
+                    if (!Mix_PlayingMusic()) Mix_PlayMusic(AVillMusic, -1);
+                    }
+                }
+
+                if (musicNumber == 5)
+                {}
+                else
+                {
+                    if (playerRect.x <= 390)
+                    {
+                    Mix_HaltMusic();
+                    musicNumber = 5;
+                    std::cout << roomNumber << "\n";
+                    if (!Mix_PlayingMusic()) Mix_PlayMusic(BVillMusic, -1);
+                    }
+                }
+            }
+            else if (roomNumber == 5)
             {
                 if (musicNumber == 3)
                 {}
@@ -682,11 +721,12 @@ int main(int argc, char* argv[]) {
             }
         }
 
+
         if (title == 1) {
             SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
             SDL_RenderClear(renderer);
-            SDL_Rect warauXYWH = {0, 0, 791, 421};
-            SDL_RenderCopy(renderer, waruiTexture, nullptr, &warauXYWH);
+            // SDL_Rect warauXYWH = {0, 0, 791, 421};
+            // SDL_RenderCopy(renderer, waruiTexture, nullptr, &warauXYWH);
 
             if (titleCursor.y < 250) titleCursor.y = 250;
             if (titleCursor.y > 310) titleCursor.y = 310;
@@ -722,7 +762,7 @@ int main(int argc, char* argv[]) {
                 {
                     camera.follow(playerRect);
                     // camera.setPosition(playerRect.x, playerRect.y);
-                    camera.clampPosition(50000, 50000);
+                    camera.clampPosition(2200, 2200);
                     
                     SDL_Rect screenRect = camera.worldToScreen(playerRect);
 
@@ -872,6 +912,8 @@ int main(int argc, char* argv[]) {
     Mix_FreeMusic(ikisugi);
     Mix_FreeMusic(lethal_chinpo);
     Mix_FreeMusic(lethal_deal);
+    Mix_FreeMusic(AVillMusic);
+    Mix_FreeMusic(BVillMusic);
     Mix_CloseAudio();
     TTF_Quit();
     IMG_Quit();
