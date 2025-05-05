@@ -117,22 +117,22 @@ void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screen
         lines.push_back({name, 20});
     };
     // CreditEntry 相当の処理
-    pushRole("プロデューサー(githubのid)");
+    pushRole("プロデューサー(GitHubのid)");
     pushName("RainbowPuiPuiMolcar");
     pushName("hamutaro1221(旧MeimaruNishimura328)");
-    pushRole("奴隷(githubのid)");
+    pushRole("奴隷(GitHubのid)");
     pushName("Hamster-crab");
-    pushRole("デザイナー(githubのid)");
+    pushRole("デザイナー(GitHubのid)");
     pushName("RainbowPuiPuiMolcar");
     pushName("hamutaro1221(旧MeimaruNishimura328)");
     pushName("沼(GitHubアカウント無し)");
-    pushRole("音楽(githubのid)");
+    pushRole("音楽(GitHubのid)");
     pushName("RainbowPuiPuiMolcar");
     pushName("Hamster-crab");
-    pushRole("ストーリー担当(githubのid)");
+    pushRole("ストーリー担当(gGitHubのid)");
     pushName("RainbowPuiPuiMolcar");
     pushName("hamutaro1221(旧MeimaruNishimura328)");
-    pushRole("テスター(githubのid)");
+    pushRole("テスター(GitHubのid)");
     pushName("いない");
 
     // ---- 描画 ----
