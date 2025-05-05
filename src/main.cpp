@@ -125,6 +125,7 @@ void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screen
     pushRole("デザイナー(githubのid)");
     pushName("RainbowPuiPuiMolcar");
     pushName("hamutaro1221(旧MeimaruNishimura328)");
+    pushName("沼(GitHubアカウント無し)");
     pushRole("音楽(githubのid)");
     pushName("RainbowPuiPuiMolcar");
     pushName("Hamster-crab");
