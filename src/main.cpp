@@ -350,8 +350,8 @@ int main(int argc, char* argv[]) {
 
     int RPGCommandnumber = 0; // ラスボスでは 0は選択1は技選択
 
-    Rectangle player = {500, 500, 400, 250};
-    SDL_Rect playerRect = { player.x, player.y, player.Width, player.Height };
+    // Rectangle player = {165, 86, 250, 250};
+    SDL_Rect playerRect = { 165, 86, 250, 250 };
     int attackOne, attackTwo, attackThree, playerHPFull, playerHP; // 1 殴る 2 蹴る 3 ちんこ
     Uint32 enterCooldown = 0;
 
@@ -685,12 +685,12 @@ int main(int argc, char* argv[]) {
                 {}
                 else
                 {
-                    if (playerRect.x >= 390)
+                    if (playerRect.x >= 330 && playerRect.y >= 172)//      330 は左,y172は上
                     {
-                    Mix_HaltMusic();
-                    musicNumber = 4;
-                    std::cout << roomNumber << "\n";
-                    if (!Mix_PlayingMusic()) Mix_PlayMusic(AVillMusic, -1);
+                        Mix_HaltMusic();
+                        musicNumber = 4;
+                        std::cout << roomNumber << "\n";
+                        if (!Mix_PlayingMusic()) Mix_PlayMusic(AVillMusic, -1);
                     }
                 }
 
@@ -698,12 +698,12 @@ int main(int argc, char* argv[]) {
                 {}
                 else
                 {
-                    if (playerRect.x <= 390)
+                    if (playerRect.x <= 410 && playerRect.y <= 172) //    x410 は右,y172は上              豆知識 : y252は下
                     {
-                    Mix_HaltMusic();
-                    musicNumber = 5;
-                    std::cout << roomNumber << "\n";
-                    if (!Mix_PlayingMusic()) Mix_PlayMusic(BVillMusic, -1);
+                        Mix_HaltMusic();
+                        musicNumber = 5;
+                        std::cout << roomNumber << "\n";
+                        if (!Mix_PlayingMusic()) Mix_PlayMusic(BVillMusic, -1);
                     }
                 }
             }
@@ -762,7 +762,7 @@ int main(int argc, char* argv[]) {
                 {
                     camera.follow(playerRect);
                     // camera.setPosition(playerRect.x, playerRect.y);
-                    camera.clampPosition(2200, 2200);
+                    camera.clampPosition(999999999999999999999999999999999999999999999999999999999, 99999999999999999999999999999999999999999999999999999999999999999999999999); // あまり関係ない
                     
                     SDL_Rect screenRect = camera.worldToScreen(playerRect);
 

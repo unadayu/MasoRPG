@@ -18,7 +18,7 @@ public:
     void setPosition(int x, int y);
 
     // カメラの位置を制限する
-    void clampPosition(int mapWidth, int mapHeight);
+    void clampPosition(float mapWidth, float mapHeight);
 
     // カメラのビューポート（画面上でのカメラの位置）を取得する
     SDL_Rect getView() const;

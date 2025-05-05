@@ -27,7 +27,7 @@ void Camera2D::setPosition(int x, int y) {
     this->y = y;
 }
 
-void Camera2D::clampPosition(int mapWidth, int mapHeight) {
+void Camera2D::clampPosition(float mapWidth, float mapHeight) {
     // カメラがマップ外に出ないように制限
     if (x < 0) x = 0;
     if (y < 0) y = 0;
