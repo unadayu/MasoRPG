@@ -53,7 +53,7 @@ void build(std::filesystem::path compilerPath)
     std::filesystem::path binPath = compilerPath / "run" / "bin" / "main";
 
     std::string command = "g++ -std=c++17 -o " + binPath.string() +
-        " src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+        " src/main.cpp src/Camera2D.cpp src/boss_phase_two/AvoidGame.hpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
     system(command.c_str());
 
     try {
