@@ -31,19 +31,20 @@ void help()
 
 void bootstrap()
 {
-    if (command_exists("apt")) {
-        std::system("sudo apt update && sudo apt install -y g++ sdl2_ttf sdl2_image sdl2_mixer");
-    } else if (command_exists("dnf")) {
-        std::system("sudo dnf install -y g++ sdl2_ttf sdl2_image sdl2_mixer");
-    } else if (command_exists("yum")) {
-        std::system("sudo yum install -y gcc-c++ sdl2_ttf sdl2_image sdl2_mixer");
-    } else if (command_exists("pacman")) {
-        std::system("sudo pacman -Sy --noconfirm gcc sdl2_ttf sdl2_image sdl2_mixer");
-    } else if (command_exists("zypper")) {
-        std::system("sudo zypper install -y gcc-c++ sdl2_ttf sdl2_image sdl2_mixer");
-    } else {
-        std::cerr << "Unsupported package manager. Please install g++ sdl2_ttf sdl2_image sdl2_mixer manually.\n";
-    }
+    std::cout << "開発中" << std::endl;
+    // if (command_exists("apt")) {
+    //     std::system("sudo apt update && sudo apt install -y g++ sdl2_ttf sdl2_image sdl2_mixer");
+    // } else if (command_exists("dnf")) {
+    //     std::system("sudo dnf install -y g++ sdl2_ttf sdl2_image sdl2_mixer");
+    // } else if (command_exists("yum")) {
+    //     std::system("sudo yum install -y gcc-c++ sdl2_ttf sdl2_image sdl2_mixer");
+    // } else if (command_exists("pacman")) {
+    //     std::system("sudo pacman -Sy --noconfirm gcc sdl2_ttf sdl2_image sdl2_mixer");
+    // } else if (command_exists("zypper")) {
+    //     std::system("sudo zypper install -y gcc-c++ sdl2_ttf sdl2_image sdl2_mixer");
+    // } else {
+    //     std::cerr << "Unsupported package manager. Please install g++ sdl2_ttf sdl2_image sdl2_mixer manually.\n";
+    // }
 }
 
 void build(std::filesystem::path compilerPath)
