@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
         
         if (buildtools)
         {
-            system("./yajuiku build");
+            system("./yajuiku build -n");
             buildtools = false;
         }
 
