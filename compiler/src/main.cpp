@@ -47,7 +47,7 @@ void bootstrap()
     // }
 }
 
-void build(std::filesystem::path compilerPath)
+void build(std::filesystem::path compilerPath, bool chinkasu)
 {
     std::filesystem::path dataPath = compilerPath / "run" / "data";
     std::filesystem::path binPath = compilerPath / "run" / "bin" / "main";
@@ -57,22 +57,27 @@ void build(std::filesystem::path compilerPath)
     std::cin >> boss;
     std::cout << "\n";
 
-    if (boss == "N" | boss == "n")
+    if (chinkasu)
+    {}
+    else if (!chinkasu)
     {
-        std::string command = "g++ -std=c++17 -o " + binPath.string() +
-            " src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
-        system(command.c_str());
-    }
-    else if (boss == "Y" | boss == "y")
-    {
-        std::string command = "g++ -std=c++17 -o " + binPath.string() +
-        " src/boss_phase_two/main.cpp src/boss_phase_two/AvoidGame.hpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
-        system(command.c_str());
-    }
-    else
-    {
-        std::cout << "O" << std::endl;
-        return;
+      if (boss == "N" | boss == "n")
+      {
+          std::string command = "g++ -std=c++17 -o " + binPath.string() +
+              " src/main.cpp src/Camera2D.cpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+          system(command.c_str());
+      }
+      else if (boss == "Y" | boss == "y")
+      {
+          std::string command = "g++ -std=c++17 -o " + binPath.string() +
+          " src/boss_phase_two/main.cpp src/boss_phase_two/AvoidGame.hpp $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+          system(command.c_str());
+      }
+      else
+      {
+          std::cout << "O" << std::endl;
+          return;
+      }
     }
 
     try {
@@ -177,7 +182,12 @@ int main(int argc, char* argv[]) {
         else if (arg == "build")
         {
             reset();
-            build(compilerPath);
+            build(compilerPath, false);
+        }
+        else if (arg == "build -n")
+        {
+            reset();
+            build(compilerPath, true);
         }
         else if (arg == "run") run();
         else if (arg == "help") help();
@@ -186,7 +196,7 @@ int main(int argc, char* argv[]) {
         else if (arg == "builrun")
         {
             reset();
-            build(compilerPath);
+            build(compilerPath, false);
             run();
         }
         else if (arg == "install")
