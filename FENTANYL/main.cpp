@@ -9,6 +9,16 @@
 
 namespace fs = std::filesystem;
 
+struct buttonHayashi
+{
+    float x;
+    float y;
+    float width;
+    float height;
+    bool color;
+    bool summon;
+}
+
 int main(int argc, char* argv[])
 {
     std::filesystem::path basePath = std::filesystem::current_path();
@@ -19,17 +29,20 @@ int main(int argc, char* argv[])
 
     InitWindow(screenWidth, screenHeight, "fentanyL");
 
-    Rectangle buildR = { 80, 230, 190, 60 };
-    bool buildcolor = false;
-    bool buildtools = false;
+    buttonHayashi builR = { 80, 230, 190, 60, false, false};
+    // Rectangle buildR = { 80, 230, 190, 60 };
+    // bool buildcolor = false;
+    // bool buildtools = false;
 
-    Rectangle runR = { 500, 230, 190, 60 };
-    bool runcolor = false;
-    bool runsummon = false;
+    buttonHayashi runR = { 500, 230, 190, 60, false, false};
+    // Rectangle runR = { 500, 230, 190, 60 };
+    // bool runcolor = false;
+    // bool runsummon = false;
 
-    Rectangle bootstrapR = { 80, 150, 360, 60 };
-    bool bootstrapcolor = false;
-    bool bootstrapsummon = false;
+    buttonHayashi bootstrapR = { 80, 150, 360, 60, false, false};
+    // Rectangle bootstrapR = { 80, 150, 360, 60 };
+    // bool bootstrapcolor = false;
+    // bool bootstrapsummon = false;
 
     SetTargetFPS(60);
 
@@ -40,8 +53,8 @@ int main(int argc, char* argv[])
         {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                buildcolor = false;
-                buildtools = true;
+                buildR.color = false;
+                buildR.tool = true;
             }
             else
             {
