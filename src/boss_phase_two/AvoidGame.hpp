@@ -111,6 +111,7 @@ public:
 
     void run() {
         bool running = true;
+        gameStartTime = SDL_GetTicks();
         while (running) {
             Uint32 now = SDL_GetTicks();
 
@@ -131,21 +132,24 @@ public:
                 playerRect.y + playerRect.h < height)
                 playerRect.y += 5;
 
-            // スポーン制御
-            if (now - lastObs > 300) {
-                spawnObstacle();
-                lastObs = now;
-            }
-            if (now >= lastLine) {
-                spawnWarningLine();
-                lastLine = now + (std::rand()%3000 + 3000);
-            }
-            if (!glitchActive && now >= lastGlitch) {
-                glitchActive = true;
-                lastGlitch   = now + 500;
-            } else if (glitchActive && now >= lastGlitch) {
-                glitchActive = false;
-                lastGlitch   = now + (std::rand()%2000 + 2000);
+            now = SDL_GetTicks();
+            if (now - gameStartTime > 16800) {
+                // スポーン制御
+                if (now - lastObs > 300) {
+                    spawnObstacle();
+                    lastObs = now;
+                }
+                if (now >= lastLine) {
+                    spawnWarningLine();
+                    lastLine = now + (std::rand()%3000 + 3000);
+                }
+                if (!glitchActive && now >= lastGlitch) {
+                    glitchActive = true;
+                    lastGlitch   = now + 500;
+                } else if (glitchActive && now >= lastGlitch) {
+                    glitchActive = false;
+                    lastGlitch   = now + (std::rand()%2000 + 2000);
+                }
             }
 
             // 更新：弾幕
@@ -191,7 +195,7 @@ public:
                     float den = std::sqrt(float((L.y2-L.y1)*(L.y2-L.y1)
                                               + (L.x2-L.x1)*(L.x2-L.x1)));
                     if (den > 0 && num/den < LINE_THICKNESS)
-                        takeDamage(1);
+                        takeDamage(10);
                 }
             }
 
@@ -217,6 +221,8 @@ private:
     float  displayedHealthWidth;
     Uint32 lastDamage, lastObs, lastLine, lastGlitch;
     bool   glitchActive;
+    Uint32 gameStartTime = 0;
+    Uint32 now;
 
     void spawnObstacle() {
         int w  = 10 + std::rand()%60;
