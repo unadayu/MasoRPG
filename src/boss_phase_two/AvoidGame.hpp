@@ -10,6 +10,7 @@
 #include <ctime>
 #include <cmath>
 #include <algorithm>
+#include <cstdlib>
 
 struct Obstacle {
     SDL_Rect rect;
@@ -43,11 +44,12 @@ public:
     }
 
     ~AvoidGame() {
+        // SDL cleanup
         if (music)      Mix_FreeMusic(music);
-        if (playerTex)  SDL_DestroyTexture(playerTex);
-        if (sceneTex)   SDL_DestroyTexture(sceneTex);
         Mix_CloseAudio();
         IMG_Quit();
+        if (playerTex)  SDL_DestroyTexture(playerTex);
+        if (sceneTex)   SDL_DestroyTexture(sceneTex);
         if (renderer)   SDL_DestroyRenderer(renderer);
         if (window)     SDL_DestroyWindow(window);
         SDL_Quit();
@@ -60,44 +62,50 @@ public:
               const char* playerImg = nullptr,
               const char* bgmFile   = nullptr)
     {
-        if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0) return false;
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) return false;
         window   = SDL_CreateWindow(title,
                     SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                     width, height, 0);
+        if (!window) return false;
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (!renderer) return false;
 
         IMG_Init(IMG_INIT_PNG);
         if (playerImg) {
             SDL_Surface* surf = IMG_Load(playerImg);
-            playerTex = SDL_CreateTextureFromSurface(renderer, surf);
-            int pw = surf->w, ph = surf->h;
-            SDL_FreeSurface(surf);
-            const int maxW = 50, maxH = 50;
-            float scale = std::min((float)maxW/pw, (float)maxH/ph);
-            int newW = int(pw*scale), newH = int(ph*scale);
-            playerRect = {
-                width/2 - newW/2,
-                height - newH - 10,
-                newW, newH
-            };
+            if (surf) {
+                playerTex = SDL_CreateTextureFromSurface(renderer, surf);
+                int pw = surf->w, ph = surf->h;
+                SDL_FreeSurface(surf);
+                // 最大 50×50 に縮小
+                const int maxW = 50, maxH = 50;
+                float scale = std::min((float)maxW/pw, (float)maxH/ph);
+                int newW = int(pw*scale), newH = int(ph*scale);
+                playerRect = {
+                    width/2 - newW/2,
+                    height - newH - 10,
+                    newW, newH
+                };
+            }
         } else {
-            playerTex  = nullptr;
             playerRect = { width/2 - 25, height - 60, 50, 50 };
         }
 
         Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
         if (bgmFile) {
             music = Mix_LoadMUS(bgmFile);
-            Mix_PlayMusic(music, -1);
+            if (music) Mix_PlayMusic(music, -1);
         }
 
+        // シーン用オフスクリーン
         sceneTex = SDL_CreateTexture(renderer,
-            SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+            SDL_PIXELFORMAT_RGBA8888,
+            SDL_TEXTUREACCESS_TARGET,
             width, height);
 
         lastObs    = SDL_GetTicks();
-        lastLine   = SDL_GetTicks() + 3000;
-        lastGlitch = SDL_GetTicks() + 2000;
+        lastLine   = SDL_GetTicks() + 3000; // 3秒後
+        lastGlitch = SDL_GetTicks() + 2000; // 2秒後
         return true;
     }
 
@@ -147,7 +155,7 @@ public:
                 [&](auto& o){ return o.rect.y > height; }),
               obstacles.end());
 
-            // 更新：警告線の状態変更＆削除
+            // 更新：警告線の状態＆削除
             for (auto& L : lines) {
                 if (!L.solid && now - L.startTime > 1000)
                     L.solid = true;
@@ -166,17 +174,14 @@ public:
             };
             for (auto& o : obstacles) {
                 if (SDL_HasIntersection(&hb, &o.rect)) {
-                    takeDamage(1);
-                    o.rect.y = height + 1;
+                    takeDamage(1);  // 強制終了
                 }
             }
             for (auto& L : lines) {
                 if (!L.solid) continue;
                 if (L.isHorizontal) {
-                    if (SDL_HasIntersection(&hb, &L.bbox)) {
+                    if (SDL_HasIntersection(&hb, &L.bbox))
                         takeDamage(1);
-                        L.startTime = now; 
-                    }
                 } else {
                     int cx = hb.x + hb.w/2, cy = hb.y + hb.h/2;
                     float num = std::abs((L.y2-L.y1)*cx
@@ -185,10 +190,8 @@ public:
                                       - L.y2*L.x1);
                     float den = std::sqrt(float((L.y2-L.y1)*(L.y2-L.y1)
                                               + (L.x2-L.x1)*(L.x2-L.x1)));
-                    if (den > 0 && num/den < LINE_THICKNESS) {
+                    if (den > 0 && num/den < LINE_THICKNESS)
                         takeDamage(1);
-                        L.startTime = now;
-                    }
                 }
             }
 
@@ -200,12 +203,12 @@ public:
 
 private:
     int width, height;
-    SDL_Window*   window;
-    SDL_Renderer* renderer;
-    SDL_Texture*  playerTex;
+    SDL_Window*   window = nullptr;
+    SDL_Renderer* renderer = nullptr;
+    SDL_Texture*  playerTex = nullptr;
     SDL_Rect      playerRect;
-    SDL_Texture*  sceneTex;
-    Mix_Music*    music;
+    SDL_Texture*  sceneTex = nullptr;
+    Mix_Music*    music = nullptr;
 
     std::vector<Obstacle>    obstacles;
     std::vector<WarningLine> lines;
@@ -230,25 +233,21 @@ private:
             lines.push_back({
                 0, y, width, y,
                 SDL_Rect{0,y,width,LINE_THICKNESS},
-                true,
-                now, false
+                true, now, false
             });
         } else {
-            bool mainDiag = std::rand()%2 == 0;
-            int x1 = mainDiag ? 0 : width;
-            int y1 = 0;
-            int x2 = mainDiag ? width : 0;
-            int y2 = height;
+            bool mainDiag = std::rand()%2==0;
+            int x1 = mainDiag?0:width, y1=0;
+            int x2 = mainDiag?width:0, y2=height;
             lines.push_back({
-                x1, y1, x2, y2,
+                x1,y1,x2,y2,
                 SDL_Rect{
                   std::min(x1,x2),
                   std::min(y1,y2),
                   std::abs(x2-x1),
                   std::abs(y2-y1)
                 },
-                false,
-                now, false
+                false, now, false
             });
         }
     }
@@ -256,11 +255,16 @@ private:
     void takeDamage(int d) {
         if (health <= 0) return;
         health = std::max(0, health - d);
-        lastDamage = SDL_GetTicks();
+        lastDamage = SDL_GetTicks();  // ダメージ時刻を更新
+        if (health == 0) {
+            SDL_Quit();
+            std::exit(0);
+        }
     }
 
     void draw() {
         Uint32 now = SDL_GetTicks();
+
         // オフスクリーン描画
         SDL_SetRenderTarget(renderer, sceneTex);
         SDL_SetRenderDrawColor(renderer, 30,30,30,255);
@@ -297,7 +301,7 @@ private:
             SDL_RenderFillRect(renderer, &playerRect);
         }
 
-        // 体力バー（ダメージ後2秒間だけ）
+        // 体力バー（ダメージ後2秒間だけアニメ）
         if (now - lastDamage < 2000) {
             const int bw=60, bh=8;
             float targetW = health * float(bw) / maxHealth;
@@ -315,7 +319,7 @@ private:
         SDL_SetRenderTarget(renderer, nullptr);
         SDL_RenderCopy(renderer, sceneTex, nullptr, nullptr);
 
-        // グリッチ最前面オーバーレイ
+        // グリッチ最前面
         if (glitchActive) {
             for (int i = 0; i < 400; ++i) {
                 SDL_SetRenderDrawColor(renderer,
