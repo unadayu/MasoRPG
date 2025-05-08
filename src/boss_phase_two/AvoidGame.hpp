@@ -2,6 +2,7 @@
 #ifndef AVOID_GAME_HPP
 #define AVOID_GAME_HPP
 
+#include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
@@ -115,6 +116,11 @@ public:
         while (running) {
             Uint32 now = SDL_GetTicks();
 
+            if (now - gameStartTime > 230000)
+            {
+                running = false;
+            }
+            else std::cout << now - gameStartTime << std::endl;
             // イベント＆入力
             SDL_Event e;
             while (SDL_PollEvent(&e))
@@ -178,14 +184,14 @@ public:
             };
             for (auto& o : obstacles) {
                 if (SDL_HasIntersection(&hb, &o.rect)) {
-                    takeDamage(1);  // 強制終了
+                    takeDamage(99999);
                 }
             }
             for (auto& L : lines) {
                 if (!L.solid) continue;
                 if (L.isHorizontal) {
                     if (SDL_HasIntersection(&hb, &L.bbox))
-                        takeDamage(1);
+                        takeDamage(99999);
                 } else {
                     int cx = hb.x + hb.w/2, cy = hb.y + hb.h/2;
                     float num = std::abs((L.y2-L.y1)*cx
@@ -195,7 +201,7 @@ public:
                     float den = std::sqrt(float((L.y2-L.y1)*(L.y2-L.y1)
                                               + (L.x2-L.x1)*(L.x2-L.x1)));
                     if (den > 0 && num/den < LINE_THICKNESS)
-                        takeDamage(10);
+                        takeDamage(99999);
                 }
             }
 
