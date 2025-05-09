@@ -141,13 +141,13 @@ public:
             now = SDL_GetTicks();
             if (now - gameStartTime > 16800) {
                 // スポーン制御
-                if (now - lastObs > 300) {
+                if (now - lastObs > 100) {
                     spawnObstacle();
                     lastObs = now;
                 }
                 if (now >= lastLine) {
                     spawnWarningLine();
-                    lastLine = now + (std::rand()%3000 + 3000);
+                    lastLine = now + (std::rand()%2000);
                 }
                 if (!glitchActive && now >= lastGlitch) {
                     glitchActive = true;
@@ -313,7 +313,7 @@ private:
             SDL_RenderFillRect(renderer, &playerRect);
         }
 
-        // 体力バー（ダメージ後2秒間だけアニメ）
+        // 体力バー（ダメージ後2秒間だけ）
         if (now - lastDamage < 2000) {
             const int bw=60, bh=8;
             float targetW = health * float(bw) / maxHealth;
