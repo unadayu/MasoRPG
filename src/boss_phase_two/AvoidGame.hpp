@@ -148,7 +148,7 @@ public:
             now = SDL_GetTicks();
             if (now - gameStartTime > 16800) {
                 // スポーン制御
-                if (now - lastObs > 100) {
+                if (now - lastObs > 50) {
                     spawnObstacle();
                     lastObs = now;
                 }
@@ -191,7 +191,7 @@ public:
             };
             for (auto& o : obstacles) {
                 if (SDL_HasIntersection(&hb, &o.rect)) {
-                    if (!shield) takeDamage(20);
+                    if (!shield) takeDamage(5);
                     else if (shield) shieldRyou -= 5;
                 }
             }
@@ -210,7 +210,7 @@ public:
                     float den = std::sqrt(float((L.y2-L.y1)*(L.y2-L.y1)
                                               + (L.x2-L.x1)*(L.x2-L.x1)));
                     if (den > 0 && num/den < LINE_THICKNESS)
-                        if (!shield) takeDamage(20);
+                        if (!shield) takeDamage(5);
                         else if (shield) shieldRyou -= 5;
                 }
             }
