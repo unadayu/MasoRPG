@@ -120,7 +120,7 @@ public:
             {
                 running = false;
             }
-            else std::cout << now - gameStartTime << std::endl;
+            else std::cout << now - gameStartTime << "     " << shieldRyou << std::endl;
             // イベント＆入力
             SDL_Event e;
             while (SDL_PollEvent(&e))
@@ -137,6 +137,13 @@ public:
             if (ks[SDL_SCANCODE_DOWN]  &&
                 playerRect.y + playerRect.h < height)
                 playerRect.y += 5;
+            // if (ks[SDL_SCANCODE_C]) {
+            //     shield = true;
+            //     shieldRyou = shieldRyou - 8;
+            // } else {
+            //     shield = false;
+            //     shieldRyou += 5;
+            // }
 
             now = SDL_GetTicks();
             if (now - gameStartTime > 16800) {
@@ -184,14 +191,16 @@ public:
             };
             for (auto& o : obstacles) {
                 if (SDL_HasIntersection(&hb, &o.rect)) {
-                    takeDamage(99999);
+                    if (!shield) takeDamage(20);
+                    else if (shield) shieldRyou -= 5;
                 }
             }
             for (auto& L : lines) {
                 if (!L.solid) continue;
                 if (L.isHorizontal) {
                     if (SDL_HasIntersection(&hb, &L.bbox))
-                        takeDamage(99999);
+                        if (!shield) takeDamage(99999);
+                        else if (shield) shieldRyou -= 5;
                 } else {
                     int cx = hb.x + hb.w/2, cy = hb.y + hb.h/2;
                     float num = std::abs((L.y2-L.y1)*cx
@@ -201,7 +210,8 @@ public:
                     float den = std::sqrt(float((L.y2-L.y1)*(L.y2-L.y1)
                                               + (L.x2-L.x1)*(L.x2-L.x1)));
                     if (den > 0 && num/den < LINE_THICKNESS)
-                        takeDamage(99999);
+                        if (!shield) takeDamage(20);
+                        else if (shield) shieldRyou -= 5;
                 }
             }
 
@@ -229,6 +239,12 @@ private:
     bool   glitchActive;
     Uint32 gameStartTime = 0;
     Uint32 now;
+
+    bool shield = false;
+    float shieldMaxRyou = 3000;
+    float shieldRyou = 3000;
+    Uint32 shieldStartTime = 0;
+    const Uint32 SHIELD_DURATION = 2000; // 2秒 (ミリ秒単位)
 
     void spawnObstacle() {
         int w  = 10 + std::rand()%60;
@@ -271,6 +287,36 @@ private:
         if (health == 0) {
             SDL_Quit();
             std::exit(0);
+        }
+    }
+
+    void renderShield(SDL_Renderer* renderer) {
+        if (shield) {
+            Uint32 currentTime = SDL_GetTicks();
+
+            if (shieldMaxRyou < shieldRyou) {
+                shieldRyou = shieldMaxRyou;
+            }
+
+            if (shieldRyou >= 0) {
+                shieldRyou = 0;
+            }
+    
+            // shieldがONになった瞬間の時間を記録
+            if (shieldStartTime == 0) {
+                shieldStartTime = currentTime;
+            }
+    
+            // 2秒以内なら描画
+            if (currentTime - shieldStartTime <= SHIELD_DURATION) {
+                SDL_Rect shieldRect = { playerRect.x, playerRect.y - 30, shieldRyou / 2, 10 }; // 四角形の位置とサイズ
+                SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255); // 水色
+                SDL_RenderFillRect(renderer, &shieldRect);
+            } else {
+                // 2秒経過したらリセット
+                shield = false;
+                shieldStartTime = 0;
+            }
         }
     }
 
@@ -327,6 +373,8 @@ private:
             SDL_SetRenderDrawColor(renderer, 0,200,0,255);
             SDL_RenderFillRect(renderer, &fg);
         }
+
+        renderShield(renderer);
 
         SDL_SetRenderTarget(renderer, nullptr);
         SDL_RenderCopy(renderer, sceneTex, nullptr, nullptr);
