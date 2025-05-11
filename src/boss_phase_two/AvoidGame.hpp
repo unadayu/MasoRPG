@@ -116,7 +116,7 @@ public:
         while (running) {
             Uint32 now = SDL_GetTicks();
 
-            if (now - gameStartTime > 230000)
+            if (now - gameStartTime > 230050)
             {
                 running = false;
             }

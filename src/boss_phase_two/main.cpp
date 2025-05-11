@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[]) {
     std::srand((unsigned)std::time(nullptr));
-    AvoidGame game(640, 480, 100);
+    AvoidGame game(640, 480, 999999999);
 
     if (!game.init("", "compiler/run/data/image/boss.png", "compiler/run/data/music/LETHAL_DEAL/LETHAL_DEAL_V2.wav")) {
         SDL_Log("SDL 初期化失敗: %s", SDL_GetError());
