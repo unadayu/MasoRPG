@@ -381,7 +381,7 @@ private:
 
         // グリッチ最前面
         if (glitchActive) {
-            for (int i = 0; i < 1500; ++i) {
+            for (int i = 0; i < 2000; ++i) {
                 SDL_SetRenderDrawColor(renderer,
                     std::rand()%256,
                     std::rand()%256,
