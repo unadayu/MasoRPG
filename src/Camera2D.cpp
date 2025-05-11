@@ -1,19 +1,38 @@
+// Camera2D.cpp
 #include "Camera2D.h"
 
 Camera2D::Camera2D(int width, int height) 
-    : screenWidth(width), screenHeight(height), x(0), y(0), mapWidth(0), mapHeight(0), viewX(0), viewY(0) {}
+    : screenWidth(width)
+    , screenHeight(height)
+    , mapWidth(0)
+    , mapHeight(0)
+    , x(0)
+    , y(0)
+    , viewX(0)
+    , viewY(0)
+{}
 
 Camera2D::Camera2D(int screenWidth, int screenHeight, int mapWidth, int mapHeight) 
-    : screenWidth(screenWidth), screenHeight(screenHeight), mapWidth(mapWidth), mapHeight(mapHeight), x(0), y(0), viewX(0), viewY(0) {}
+    : screenWidth(screenWidth)
+    , screenHeight(screenHeight)
+    , mapWidth(mapWidth)
+    , mapHeight(mapHeight)
+    , x(0)
+    , y(0)
+    , viewX(0)
+    , viewY(0)
+{}
 
 void Camera2D::follow(const SDL_Rect& target) {
-    // プレイヤーを画面の中央に持ってくる
-    x = target.x + target.w / 2 - screenWidth / 2;
-    y = target.y + target.h / 2 - screenHeight / 2;
+    // プレイヤー中心を画面中央に置くように仮のカメラ座標を計算
+    int targetCenterX = target.x + target.w / 2;
+    int targetCenterY = target.y + target.h / 2;
+
+    x = targetCenterX - screenWidth / 2;
+    y = targetCenterY - screenHeight / 2;
 }
 
 SDL_Rect Camera2D::worldToScreen(const SDL_Rect& worldRect) const {
-    // ワールド座標から画面座標への変換
     SDL_Rect screenRect;
     screenRect.x = worldRect.x - x;
     screenRect.y = worldRect.y - y;
@@ -25,19 +44,16 @@ SDL_Rect Camera2D::worldToScreen(const SDL_Rect& worldRect) const {
 void Camera2D::setPosition(int x, int y) {
     this->x = x;
     this->y = y;
+    clampPosition();
 }
 
-void Camera2D::clampPosition(float mapWidth, float mapHeight) {
-    // カメラがマップ外に出ないように制限
-    if (x < 0) x = 0;
-    if (y < 0) y = 0;
-    // SOCHIN
-    if (x + screenWidth > mapWidth) x = mapWidth - screenWidth;
+void Camera2D::clampPosition() {
+    if (x < 0)                        x = 0;
+    if (y < 0)                        y = 0;
+    if (x + screenWidth > mapWidth)   x = mapWidth  - screenWidth;
     if (y + screenHeight > mapHeight) y = mapHeight - screenHeight;
 }
 
 SDL_Rect Camera2D::getView() const {
-    // カメラのビューポート（画面上の領域）を取得
-    SDL_Rect view = { x, y, screenWidth, screenHeight };
-    return view;
+    return SDL_Rect{ x, y, screenWidth, screenHeight };
 }

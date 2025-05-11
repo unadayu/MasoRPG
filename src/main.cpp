@@ -379,7 +379,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* bossTexture = SDL_CreateTextureFromSurface(renderer, bossImage);
     SDL_FreeSurface(bossImage);
 
-    Camera2D camera(WindowSize.Width, WindowSize.Height, 10000, 10000);
+    Camera2D camera(WindowSize.Width, WindowSize.Height, 1000, 1000);
 
     bool running = true;
     SDL_Event event;
@@ -763,14 +763,14 @@ int main(int argc, char* argv[]) {
                 {
                     camera.follow(playerRect);
                     // camera.setPosition(playerRect.x, playerRect.y);
-                    camera.clampPosition(999999999999999999999999999999999999999999999999999999999, 99999999999999999999999999999999999999999999999999999999999999999999999999); // あまり関係ない
+                    // camera.clampPosition();
                     
                     SDL_Rect screenRect = camera.worldToScreen(playerRect);
 
-                    if (playerRect.x <= -15) playerRect.x = -15;
-                    if (playerRect.y <= -10) playerRect.y = -10;
-                    if (playerRect.x >= 755) playerRect.x = 755;
-                    if (playerRect.y >= 450) playerRect.y = 450;
+                    if (playerRect.x <= 0) playerRect.x = 0;
+                    if (playerRect.y <= 0) playerRect.y = 0;
+                    if (playerRect.x >= 1000) playerRect.x = 1000;
+                    if (playerRect.y >= 1000) playerRect.y = 1000;
 
                     if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
                     if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
