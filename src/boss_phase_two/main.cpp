@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[]) {
     std::srand((unsigned)std::time(nullptr));
-    AvoidGame game(640, 480, 999999999);
+    AvoidGame game(640, 480, 1000);
 
     const char* LETHAL_DEALOne = "compiler/run/data/music/LETHAL_DEAL/LETHAL_DEAL.wav";
     const char* LETHAL_DEALOneDotFive = "compiler/run/data/music/LETHAL_DEAL/LETHAL_DEAL_V1.5.wav";
