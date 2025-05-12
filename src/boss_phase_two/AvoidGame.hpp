@@ -359,8 +359,8 @@ private:
             SDL_RenderFillRect(renderer, &playerRect);
         }
 
-        // 体力バー（ダメージ後2秒間だけ）
-        if (now - lastDamage < 2000) {
+        // 体力バー（ダメージ後1秒間だけ）
+        if (now - lastDamage < 1000) {
             const int bw=60, bh=8;
             float targetW = health * float(bw) / maxHealth;
             displayedHealthWidth += (targetW - displayedHealthWidth) * 0.1f;
@@ -381,17 +381,17 @@ private:
 
         // グリッチ最前面
         if (glitchActive) {
-            for (int i = 0; i < 2000; ++i) {
+            for (int i = 0; i < 1500; ++i) {
                 SDL_SetRenderDrawColor(renderer,
-                    std::rand()%256,
-                    std::rand()%256,
-                    std::rand()%256,
+                    std::rand()%150,
+                    std::rand()%150,
+                    std::rand()%150,
                     150);
                 SDL_Rect n = {
                     std::rand()%width,
                     std::rand()%height,
-                    1 + std::rand()%20,
-                    1 + std::rand()%20
+                    1 + std::rand()%50,
+                    1 + std::rand()%50
                 };
                 SDL_RenderFillRect(renderer, &n);
             }
