@@ -116,9 +116,10 @@ public:
         while (running) {
             Uint32 now = SDL_GetTicks();
 
-            if (now - gameStartTime > 230050)
+            if (now - gameStartTime > 200500)
             {
-                running = false;
+                Mix_HaltMusic();
+                spawnWarningLine();
             }
             else std::cout << now - gameStartTime << "     " << shieldRyou << std::endl;
             // イベント＆入力
@@ -233,10 +234,10 @@ private:
     std::vector<Obstacle>    obstacles;
     std::vector<WarningLine> lines;
 
-    int    health, maxHealth;
+    int health, maxHealth;
     float  displayedHealthWidth;
     Uint32 lastDamage, lastObs, lastLine, lastGlitch;
-    bool   glitchActive;
+    bool glitchActive;
     Uint32 gameStartTime = 0;
     Uint32 now;
 
