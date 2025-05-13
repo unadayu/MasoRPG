@@ -240,7 +240,7 @@ private:
     bool glitchActive;
     Uint32 gameStartTime = 0;
     Uint32 now;
-    bool debug = true;
+    bool debug = false;
 
     bool shield = false;
     float shieldMaxRyou = 3000;
@@ -286,9 +286,11 @@ private:
         if (health <= 0) return;
         health = std::max(0, health - d);
         lastDamage = SDL_GetTicks();  // ダメージ時刻を更新
-        if (health <= 0 && !debug) {
-            SDL_Quit();
-            std::exit(0);
+        if (health <= 0) {
+            if (!debug) {
+                SDL_Quit();
+                std::exit(0);
+            } else {}
         }
     }
 
