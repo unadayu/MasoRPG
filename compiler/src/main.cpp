@@ -184,12 +184,13 @@ int main(int argc, char* argv[]) {
             reset();
             build(compilerPath, false);
         }
-        else if (arg == "build -n")
+        else if (arg == "fentanyLbuild")
         {
             reset();
             build(compilerPath, true);
         }
         else if (arg == "run") run();
+        else if (arg == "fentanyLrun") run();
         else if (arg == "help") help();
         else if (arg == "yajuiku") yajuiku();
         else if (arg == "fentanyL") fentanyL();
