@@ -200,7 +200,7 @@ public:
                 if (!L.solid) continue;
                 if (L.isHorizontal) {
                     if (SDL_HasIntersection(&hb, &L.bbox))
-                        if (!shield) takeDamage(99999);
+                        if (!shield) takeDamage(health);
                         else if (shield) shieldRyou -= 5;
                 } else {
                     int cx = hb.x + hb.w/2, cy = hb.y + hb.h/2;
