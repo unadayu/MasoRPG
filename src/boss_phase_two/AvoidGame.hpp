@@ -116,12 +116,7 @@ public:
         while (running) {
             Uint32 now = SDL_GetTicks();
 
-            if (now - gameStartTime > 200500)
-            {
-                Mix_HaltMusic();
-                spawnWarningLine();
-            }
-            else std::cout << now - gameStartTime << "     " << shieldRyou << std::endl;
+            std::cout << now - gameStartTime << "     " << shieldRyou << std::endl;
             // イベント＆入力
             SDL_Event e;
             while (SDL_PollEvent(&e))
@@ -147,7 +142,7 @@ public:
             // }
 
             now = SDL_GetTicks();
-            if (now - gameStartTime > 16800) {
+            if (now - gameStartTime > 16800 && now - gameStartTime < 200500) {
                 // スポーン制御
                 if (now - lastObs > 50) {
                     spawnObstacle();
@@ -164,6 +159,11 @@ public:
                     glitchActive = false;
                     lastGlitch   = now + (std::rand()%2000 + 2000);
                 }
+            }
+            else if (now - gameStartTime > 200500)
+            {
+                Mix_HaltMusic();
+                spawnWarningLine();
             }
 
             // 更新：弾幕
@@ -240,6 +240,7 @@ private:
     bool glitchActive;
     Uint32 gameStartTime = 0;
     Uint32 now;
+    bool debug = true;
 
     bool shield = false;
     float shieldMaxRyou = 3000;
@@ -285,7 +286,7 @@ private:
         if (health <= 0) return;
         health = std::max(0, health - d);
         lastDamage = SDL_GetTicks();  // ダメージ時刻を更新
-        if (health == 0) {
+        if (health <= 0 && !debug) {
             SDL_Quit();
             std::exit(0);
         }
