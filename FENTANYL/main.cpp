@@ -93,13 +93,13 @@ int main(int argc, char* argv[])
         
         if (buildtools)
         {
-            system("./yajuiku build -n");
+            system("./yajuiku fentanyLbuild");
             buildtools = false;
         }
 
         if (runsummon)
         {
-            system("./yajuiku run");
+            system("./yajuiku fentanyLrun");
             runsummon = false;
         }
 
