@@ -64,13 +64,13 @@ void build(std::filesystem::path compilerPath, bool chinkasu)
       if (boss == "N" | boss == "n")
       {
           std::string command = "g++ -std=c++17 -o " + binPath.string() +
-              " src/main.cpp src/Camera2D.cpp src/function.h src/fight.h $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+              " -Iinclude src/main.cpp src/Camera2D.cpp include/function.h include/fight.h $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
           system(command.c_str());
       }
       else if (boss == "Y" | boss == "y")
       {
           std::string command = "g++ -std=c++17 -o " + binPath.string() +
-          " -Isrc src/boss/main.cpp src/boss/AvoidGame.hpp src/function.h  $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+          " -Iinclude src/boss/main.cpp src/boss/AvoidGame.hpp include/function.h  $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
           system(command.c_str());
       }
       else
