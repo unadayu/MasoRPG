@@ -20,18 +20,18 @@
 #include <memory>
 #include "function.h"
 
-enemy enemyOne;
-enemyOne.name = "slime";
-enemyOne.hp = 30;
-enemyOne.strength = 12;
-enemyOne.enemyNumber = 1;
+// enemy enemyOne;
+// enemyOne.name = "slime";
+// enemyOne.hp = 30;
+// enemyOne.strength = 12;
+// enemyOne.enemyNumber = 1;
 
-enemy enemyTwo = {"two", 10, 3, 1};
-enemy enemyThree = {"three", 10, 3, 1};
-enemy enemyFive = {"five", 10, 3, 1};
-enemy enemyFour = {"four", 10, 3, 1};
+// enemy enemyTwo = {"two", 10, 3, 1};
+// enemy enemyThree = {"three", 10, 3, 1};
+// enemy enemyFive = {"five", 10, 3, 1};
+// enemy enemyFour = {"four", 10, 3, 1};
 
-enemy boss = {"tung tung tung sahal", 10, 3, 1};
+// enemy boss = {"tung tung tung sahal", 10, 3, 1};
 
 // スクロール付きエンドロール描画
 void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screenWidth, int screenHeight)
@@ -345,154 +345,7 @@ int main(int argc, char* argv[]) {
                     }
 
                     if (title == 2)
-                    {
-                        if (roomNumber == 5)
-                        {
-                            if (phase == 1)
-                            {
-                                if (RPGCommandnumber == 0)
-                                {
-                                    InGamePlayerRect.y = 405;
-                                    if (InGamePlayerRect.x <= 30) InGamePlayerRect.x = 30;
-                                    if (InGamePlayerRect.x >= 600) InGamePlayerRect.x = 600;
-                                    
-                                    if (isKeyTapped(event, SDLK_LEFT)) InGamePlayerRect.x -= 190;
-                                    if (isKeyTapped(event, SDLK_RIGHT)) InGamePlayerRect.x += 190;
-
-                                    if (InGamePlayerRect.x == 30)
-                                    {
-                                        if (isKeyTapped(event, SDLK_RETURN))
-                                        {
-                                            RPGCommandnumber = 1;
-                                            InGamePlayerRect.x = 190;
-                                            InGamePlayerRect.y = 200;
-                                        }
-                                    }
-                                    if (InGamePlayerRect.x == 220)
-                                    {
-                                        if (isKeyTapped(event, SDLK_RETURN))
-                                        {
-                                            playerHP -= 10;
-                                            std::cout << playerHP << std::endl;
-                                            RPGCommandnumber = 0;
-                                            // InGamePlayerRect.x = 190;
-                                            // InGamePlayerRect.y = 200;
-                                        }
-                                    }
-                                    if (InGamePlayerRect.x == 600)
-                                    {
-                                        if (isKeyTapped(event, SDLK_RETURN))
-                                        {
-                                            playerHP = 0;
-                                            running = false;
-                                        }
-                                    }
-                                }
-                                else if (RPGCommandnumber == 1)
-                                {
-                                    InGamePlayerRect.y = 200;
-                                    if (isKeyTapped(event, SDLK_LEFT)) InGamePlayerRect.x -= 100;
-                                    if (isKeyTapped(event, SDLK_RIGHT)) InGamePlayerRect.x += 100;
-
-                                    if (isKeyTapped(event, SDLK_RETURN))
-                                    {
-                                        if (InGamePlayerRect.x <= 190)
-                                        {
-                                            if (attackOne == 1)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                            if (attackOne == 2)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                            if (attackOne == 3)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                        }
-                                        else if (InGamePlayerRect.x >= 290)
-                                        {
-                                            if (attackTwo == 1)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                            if (attackTwo == 2)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                            if (attackTwo == 3)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                        }
-                                        else if (InGamePlayerRect.x >= 390)
-                                        {
-                                            if (attackThree == 1)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                            if (attackThree == 2)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                            if (attackThree == 3)
-                                            {
-                                                boss.hp -= 10;
-                                                std::cout << boss.hp << std::endl;
-                                                RPGCommandnumber = 0;
-                                                InGamePlayerRect.y = 405;
-                                                InGamePlayerRect.x = 30;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (isKeyTapped(event, SDLK_g))
-                            {
-                                roomNumber = 5;
-                                phase = 1;
-                                RPGCommandnumber = 0;
-                                SDL_RenderClear(renderer);
-                                SDL_RenderPresent(renderer);
-                            }
-                        }
-                    }
+                    {}
                 }
                 if (title == 3)
                 {

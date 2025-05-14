@@ -64,7 +64,7 @@ void build(std::filesystem::path compilerPath, bool chinkasu)
       if (boss == "N" | boss == "n")
       {
           std::string command = "g++ -std=c++17 -o " + binPath.string() +
-              " src/main.cpp src/Camera2D.cpp include/function.h include/fight.h $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+              " src/main.cpp src/Camera2D.cpp src/function.h src/fight.h $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
           system(command.c_str());
       }
       else if (boss == "Y" | boss == "y")
@@ -86,8 +86,6 @@ void build(std::filesystem::path compilerPath, bool chinkasu)
         std::filesystem::copy("image", dataPath / "image",
             std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
         std::filesystem::copy("music", dataPath / "music",
-            std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
-        std::filesystem::copy("fentanyL", compilerPath / "run" / "bin" / "fentanyL",
             std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing);
     } catch (const std::filesystem::filesystem_error& e) {
         std::cerr << "コピーエラー: " << e.what() << std::endl;
