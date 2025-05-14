@@ -31,7 +31,7 @@ class AvoidGame {
 public:
     static constexpr int LINE_THICKNESS = 3;
 
-    AvoidGame(int w, int h, int hp = 5)
+    AvoidGame(int w, int h, int hp)
       : width(w), height(h),
         window(nullptr), renderer(nullptr),
         playerTex(nullptr), sceneTex(nullptr),
@@ -117,7 +117,7 @@ public:
         while (running) {
             Uint32 now = SDL_GetTicks();
 
-            std::cout << now - gameStartTime << std::endl;
+            std::cout << now - gameStartTime << "         " << healthRebornMAX << std::endl;
             // イベント＆入力
             SDL_Event e;
             while (SDL_PollEvent(&e))
@@ -135,6 +135,7 @@ public:
                 playerRect.y + playerRect.h < height)
                 playerRect.y += 5;
 
+            if (isKeyTapped(e, SDLK_c)) healthReborn(1);
             now = SDL_GetTicks();
             if (now - gameStartTime > 16800 && now - gameStartTime < 200500) {
                 // スポーン制御
@@ -232,6 +233,8 @@ private:
     Uint32 gameStartTime = 0;
     Uint32 now;
 
+    int healthRebornMAX = 5;
+
     void spawnObstacle() {
         int w  = 10 + std::rand()%60;
         int x  = std::rand()%(width - w);
@@ -274,6 +277,11 @@ private:
             SDL_Quit();
             std::exit(0);
         }
+    }
+
+    void healthReborn(int remove) {
+        healthRebornMAX -= remove;
+        health = 3000;
     }
 
     void draw(SDL_Event& event) {
