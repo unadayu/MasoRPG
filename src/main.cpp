@@ -20,7 +20,12 @@
 #include <memory>
 #include "function.h"
 
-enemy enemyOne = {"slime", 10, 3, 1};
+enemy enemyOne;
+enemyOne.name = "slime";
+enemyOne.hp = 30;
+enemyOne.strength = 12;
+enemyOne.enemyNumber = 1;
+
 enemy enemyTwo = {"two", 10, 3, 1};
 enemy enemyThree = {"three", 10, 3, 1};
 enemy enemyFive = {"five", 10, 3, 1};
