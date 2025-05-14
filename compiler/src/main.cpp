@@ -64,7 +64,7 @@ void build(std::filesystem::path compilerPath, bool chinkasu)
       if (boss == "N" | boss == "n")
       {
           std::string command = "g++ -std=c++17 -o " + binPath.string() +
-              " src/main.cpp src/Camera2D.cpp src/function.h $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+              " src/main.cpp src/Camera2D.cpp include/function.h $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
           system(command.c_str());
       }
       else if (boss == "Y" | boss == "y")
