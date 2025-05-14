@@ -12,6 +12,7 @@
 #include <cmath>
 #include <algorithm>
 #include <cstdlib>
+#include "function.h"
 
 struct Obstacle {
     SDL_Rect rect;
@@ -133,13 +134,6 @@ public:
             if (ks[SDL_SCANCODE_DOWN]  &&
                 playerRect.y + playerRect.h < height)
                 playerRect.y += 5;
-            // if (ks[SDL_SCANCODE_C]) {
-            //     shield = true;
-            //     shieldRyou = shieldRyou - 8;
-            // } else {
-            //     shield = false;
-            //     shieldRyou += 5;
-            // }
 
             now = SDL_GetTicks();
             if (now - gameStartTime > 16800 && now - gameStartTime < 200500) {
@@ -217,7 +211,7 @@ public:
             }
 
             // 描画
-            draw();
+            draw(e);
             SDL_Delay(16);
         }
     }
@@ -242,10 +236,10 @@ private:
     Uint32 now;
 
     bool shield = false;
-    float shieldMaxRyou = 3000;
-    float shieldRyou = 3000;
+    float shieldMaxRyou = 5000;
+    float shieldRyou = 5000;
     Uint32 shieldStartTime = 0;
-    const Uint32 SHIELD_DURATION = 2000; // 2秒 (ミリ秒単位)
+    const Uint32 SHIELD_DURATION = 1000; // 1秒 (ミリ秒単位)
 
     void spawnObstacle() {
         int w  = 10 + std::rand()%60;
@@ -291,6 +285,10 @@ private:
         }
     }
 
+    void trueShield(SDL_Event& event) {
+        if (isKeyDown(event, SDLK_c)) shieldRyou -= 10;
+    }
+
     void renderShield(SDL_Renderer* renderer) {
         if (shield) {
             Uint32 currentTime = SDL_GetTicks();
@@ -321,7 +319,7 @@ private:
         }
     }
 
-    void draw() {
+    void draw(SDL_Event& event) {
         Uint32 now = SDL_GetTicks();
 
         // オフスクリーン描画
@@ -376,6 +374,7 @@ private:
         }
 
         renderShield(renderer);
+        trueShield(event);
 
         SDL_SetRenderTarget(renderer, nullptr);
         SDL_RenderCopy(renderer, sceneTex, nullptr, nullptr);
