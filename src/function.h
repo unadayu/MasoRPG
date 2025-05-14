@@ -27,8 +27,9 @@ struct PlayerData {
 struct enemy {
     std::string name;
     int hp;
-    int attackDamage;
+    int strength;
     int enemyNumber;
+    int level;
 };
 
 struct Line {
