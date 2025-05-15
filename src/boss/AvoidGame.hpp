@@ -280,8 +280,10 @@ private:
     }
 
     void healthReborn(int remove) {
-        healthRebornMAX -= remove;
-        health = 2000;
+        if (healthRebornMAX != 0) {
+            healthRebornMAX -= remove;
+            health = 2000;
+        }
     }
 
     void draw(SDL_Event& event) {
