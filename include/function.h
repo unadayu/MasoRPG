@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <SDL_ttf.h>
 #include <fstream>
+#include <vector>
 
 struct Rectangle {
     int x;
