@@ -75,6 +75,62 @@ void drawNumber(SDL_Renderer* renderer, float R, float G, float B, std::filesyst
     drawText(renderer, R, G, B, font, fontSize, str.c_str(), x, y);
 }
 
+// スクロール付きエンドロール描画
+void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screenWidth, int screenHeight)
+{
+    // ---- static 変数で一度だけ初期化・経過時間管理 ----
+    static float scrollOffset = 0.0f;                       // 累積スクロール量
+    static Uint32 lastTicks = SDL_GetTicks();               // 前フレーム時刻
+
+    Uint32 now = SDL_GetTicks();
+    float dt = (now - lastTicks) / 1000.0f;                  // 秒単位の差分時間
+    lastTicks = now;
+
+    const float speed = 50.0f;                              // px/秒
+    scrollOffset += speed * dt;
+
+    // ---- 表示するすべての行を平坦化して作成 ----
+    std::vector<Line> lines;
+    auto pushRole = [&](const char* role){
+        lines.push_back({role, 30});
+    };
+        auto pushName = [&](const char* name){
+        lines.push_back({name, 20});
+    };
+    // CreditEntry 相当の処理
+    pushRole("プロデューサー(GitHubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("hamutaro1221(旧MeimaruNishimura328)");
+    pushRole("奴隷(GitHubのid)");
+    pushName("Hamster-crab");
+    pushRole("デザイナー(GitHubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("hamutaro1221(旧MeimaruNishimura328)");
+    pushName("沼(GitHubアカウント無し)");
+    pushRole("音楽(GitHubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("Hamster-crab");
+    pushRole("ストーリー担当(gGitHubのid)");
+    pushName("RainbowPuiPuiMolcar");
+    pushName("hamutaro1221(旧MeimaruNishimura328)");
+    pushRole("テスター(GitHubのid)");
+    pushName("いない");
+
+    // ---- 描画 ----
+    const float lineSpacing = 35.0f;
+    // スタート位置は画面下端から少しだけ下
+    float baseY = static_cast<float>(screenHeight) + 20.0f;
+
+    for (size_t i = 0; i < lines.size(); ++i) {
+        float y = baseY + i * lineSpacing - scrollOffset;
+        // 完全に画面外（上端）なら飛ばす
+        if (y < -lineSpacing) continue;
+        // まだ画面下（スクロールが追いついていない）ならも描くか判定不要なら描画
+        // フォントサイズに応じて描画
+        drawText(renderer, 0, 0, 0, fontPath, lines[i].fontSize, lines[i].text.c_str(), 10, y);
+    }
+}
+
 PlayerData loadGame(const std::string& filename) {
     PlayerData data{0, 0, 0, 100, 0, 0, 0}; // デフォルト値
     std::ifstream file(filename);
