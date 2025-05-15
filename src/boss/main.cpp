@@ -5,11 +5,11 @@ int main(int argc, char* argv[]) {
     AvoidGame game(640, 480, 2000);
 
     const char* LETHAL_DEALOne = "compiler/run/data/music/LETHAL_DEAL/LETHAL_DEAL.wav";
-    const char* LETHAL_DEALOneDotFive = "compiler/run/data/music/LETHAL_DEAL/LETHAL_DEAL_V1.5.wav";
+    const char* LETHAL_DEALOneDotTwoFive = "compiler/run/data/music/LETHAL_DEAL/LETHAL_DEAL_V1.25.wav";
     const char* LETHAL_DEALTwo = "compiler/run/data/music/LETHAL_DEAL/LETHAL_DEAL_V2.wav";
     const char* MASORPG = "compiler/run/data/music/LETHAL_DEAL/MRAPOGS.mp3";
 
-    if (!game.init("", "compiler/run/data/image/boss.png", LETHAL_DEALOneDotFive)) {
+    if (!game.init("", "compiler/run/data/image/boss.png", LETHAL_DEALOneDotTwoFive)) {
         SDL_Log("SDL 初期化失敗: %s", SDL_GetError());
         return -1;
     }
