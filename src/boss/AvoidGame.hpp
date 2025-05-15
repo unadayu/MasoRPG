@@ -233,7 +233,7 @@ private:
     Uint32 gameStartTime = 0;
     Uint32 now;
 
-    int healthRebornMAX = 2;
+    int healthRebornMAX = 3;
 
     void spawnObstacle() {
         int w  = 10 + std::rand()%60;
