@@ -159,6 +159,22 @@ PlayerData loadGame(const std::string& filename) {
     return data;
 }
 
+void saveGame(const PlayerData& data, const std::filesystem::path& filepath) {
+    std::ofstream file(filepath);
+    if (!file) {
+        // ファイルオープン失敗時の処理
+        throw std::runtime_error("Failed to open file for writing: " + filepath.string());
+    }
+
+    file << "x=" << data.x << '\n';
+    file << "y=" << data.y << '\n';
+    file << "room=" << data.room << '\n';
+    file << "hp=" << data.hp << '\n';
+    file << "attackone=" << data.attackone << '\n';
+    file << "attacktwo=" << data.attacktwo << '\n';
+    file << "attackthree=" << data.attackthree << '\n';
+}
+
 // 長押しによるリピートを無視し、純粋に“キーを押した瞬間だけ”を検知する関数
 bool isKeyTapped(const SDL_Event& event, SDL_Keycode key) {
     return event.type == SDL_KEYDOWN

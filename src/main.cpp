@@ -277,16 +277,6 @@ int main(int argc, char* argv[]) {
                         if (!playStop) playStop = true;
                         else if (playStop) playStop = false;
                     }
-                    if (playStop)
-                    {
-                        titleCursor.x = 3;
-                        if (isKeyTapped(event, SDLK_DOWN)) {
-                            titleCursor.y += 50.0f;
-                        }
-                        if (isKeyTapped(event, SDLK_UP)) {
-                            titleCursor.y -= 50.0f;
-                        }
-                    }
 
                     if (title == 2)
                     {}
@@ -434,6 +424,21 @@ int main(int argc, char* argv[]) {
             {
                 if (playStop)
                 {
+                    titleCursor.x = 3;
+                    if (isKeyTapped(event, SDLK_DOWN)) {
+                        titleCursor.y += 50.0f;
+                    }
+                    if (isKeyTapped(event, SDLK_UP)) {
+                        titleCursor.y -= 50.0f;
+                    }
+                    if (isKeyTapped(event, SDLK_RETURN)) {
+                        if (titleCursor.y = 50) {
+                            PlayerData outSavePlayerData = {playerRect.x, playerRect.y, roomNumber, playerHPFull, attackOne, attackTwo, attackThree};
+                            saveGame(outSavePlayerData, oneSavePath);
+                            return 0;
+                        }
+                    }
+                    
                     if (titleCursor.y < 50) titleCursor.y = 50;
                     if (titleCursor.y > 250) titleCursor.y = 250;
                     DrawRectangle(20, 400, playerRect.x + 30, playerRect.y + 30, SDL_Color{ 0, 211, 200, 0 }, renderer);
