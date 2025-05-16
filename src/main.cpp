@@ -182,6 +182,7 @@ int main(int argc, char* argv[]) {
     int phase = 1;
 
     int RPGCommandnumber = 0; // ラスボスでは 0は選択1は技選択
+    int playStopMenu = 0; //1 -> ステータス   2 -> スキル   3 -> hAYASHI
 
     // Rectangle player = {165, 86, 250, 250};
     SDL_Rect playerRect = { 165, 86, 250, 250 };
@@ -432,9 +433,10 @@ int main(int argc, char* argv[]) {
                         titleCursor.y -= 50.0f;
                     }
                     if (isKeyTapped(event, SDLK_RETURN)) {
-                        if (titleCursor.y = 50) {
+                        if (titleCursor.y == 50) {
                             PlayerData outSavePlayerData = {playerRect.x, playerRect.y, roomNumber, playerHPFull, attackOne, attackTwo, attackThree};
                             saveGame(outSavePlayerData, oneSavePath);
+                        } else if (titleCursor.y == 250) {
                             return 0;
                         }
                     }
@@ -448,6 +450,10 @@ int main(int argc, char* argv[]) {
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "hayasHi", 20, 200);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "終わろう", 20, 250);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
+
+                    if (playStopMenu == 1) {}
+                    if (playStopMenu == 2) {}
+                    if (playStopMenu == 3) {}
                 }
                 else if (!playStop)
                 {
