@@ -69,6 +69,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path BVillPath; // musicNumber5
     std::filesystem::path CVillPath;
     std::filesystem::path sexyMoriPath; // musicNumber6
+    std::filesystem::path kazanPath; // musicNumber7
     
     std::filesystem::path noJapaneseFontsPath;
     std::filesystem::path dotGothicFontsPath;
@@ -92,6 +93,7 @@ int main(int argc, char* argv[]) {
             BVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "tutututuruturuturu.wav";
             // CVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "";
             sexyMoriPath = basePath / "compiler" / "run" / "data" / "music" / "Breath_of_nature.wav";
+            kazanPath = basePath / "compiler" / "run" / "data" / "music" / "kakkazann.wav";
             noJapaneseFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
@@ -139,6 +141,7 @@ int main(int argc, char* argv[]) {
     if (!sexyMori) {
         std::cerr << "Mix_LoadMUS failed: " << Mix_GetError() << "\n";
     }
+    Mix_Music* kazanMusic = Mix_LoadMUS(kazanPath.string().c_str());
 
     Rectangle WindowSize = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
@@ -379,8 +382,14 @@ int main(int argc, char* argv[]) {
                         std::cout << "Area: 6, room: " << roomNumber << "\n";
                         Mix_PlayMusic(sexyMori, -1);
                     }
-                }
-                else {
+                } else if (playerRect.x >= 500 && playerRect.y >= 500) {
+                    if (musicNumber != 7) {
+                        Mix_HaltMusic();
+                        musicNumber = 7;
+                        std::cout << "Area: 7, room: " << roomNumber << "\n";
+                        Mix_PlayMusic(kazanMusic, -1);
+                    }
+                } else {
                     if (musicNumber != 5) {
                         Mix_HaltMusic();
                         musicNumber = 5;
