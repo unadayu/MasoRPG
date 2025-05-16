@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path AVillPath; // musicNumber4
     std::filesystem::path BVillPath; // musicNumber5
     std::filesystem::path CVillPath;
+    std::filesystem::path sexyMoriPath; // musicNumber6
     
     std::filesystem::path noJapaneseFontsPath;
     std::filesystem::path dotGothicFontsPath;
@@ -90,6 +91,7 @@ int main(int argc, char* argv[]) {
             AVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "popopopoppopo.wav";
             BVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "tutututuruturuturu.wav";
             // CVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "";
+            sexyMoriPath = basePath / "compiler" / "run" / "data" / "music" / "Breath_of_nature.wav";
             noJapaneseFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
@@ -133,6 +135,10 @@ int main(int argc, char* argv[]) {
     Mix_Music* AVillMusic = Mix_LoadMUS(AVillPath.string().c_str());
     Mix_Music* BVillMusic = Mix_LoadMUS(BVillPath.string().c_str());
     // Mix_Music* CVillMusic = Mix_LoadMUS(ikisugiMusicPath.string().c_str());
+    Mix_Music* sexyMori = Mix_LoadMUS(sexyMoriPath.string().c_str());
+    if (!sexyMori) {
+        std::cerr << "Mix_LoadMUS failed: " << Mix_GetError() << "\n";
+    }
 
     Rectangle WindowSize = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
@@ -358,29 +364,28 @@ int main(int argc, char* argv[]) {
         {
             if (roomNumber == 1)
             {
-                if (musicNumber == 4)
-                {}
-                else
-                {
-                    if (playerRect.x >= 330 && playerRect.y >= 172)//      330 は左,y172は上
-                    {
+                if (playerRect.x <= 500 && playerRect.y <= 500) {
+                    if (musicNumber != 4) {
                         Mix_HaltMusic();
                         musicNumber = 4;
-                        std::cout << roomNumber << "\n";
-                        if (!Mix_PlayingMusic()) Mix_PlayMusic(AVillMusic, -1);
+                        std::cout << "Area: 4, room: " << roomNumber << "\n";
+                        Mix_PlayMusic(AVillMusic, -1);
                     }
                 }
-
-                if (musicNumber == 5)
-                {}
-                else
-                {
-                    if (playerRect.x <= 410 && playerRect.y <= 172) //    x410 は右,y172は上              豆知識 : y252は下
-                    {
+                else if (playerRect.x <= 500 && playerRect.y >= 500) {
+                    if (musicNumber != 6) {
+                        Mix_HaltMusic();
+                        musicNumber = 6;
+                        std::cout << "Area: 6, room: " << roomNumber << "\n";
+                        Mix_PlayMusic(sexyMori, -1);
+                    }
+                }
+                else {
+                    if (musicNumber != 5) {
                         Mix_HaltMusic();
                         musicNumber = 5;
-                        std::cout << roomNumber << "\n";
-                        if (!Mix_PlayingMusic()) Mix_PlayMusic(BVillMusic, -1);
+                        std::cout << "Area: 5 (default), room: " << roomNumber << "\n";
+                        // Mix_PlayMusic(defaultMusic, -1); // ←必要ならデフォルトの曲
                     }
                 }
             }
