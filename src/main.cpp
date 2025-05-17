@@ -70,6 +70,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path CVillPath;
     std::filesystem::path sexyMoriPath; // musicNumber6
     std::filesystem::path kazanPath; // musicNumber7
+    std::filesystem::path umiTikakuPath; // musicNumber8
     
     std::filesystem::path noJapaneseFontsPath;
     std::filesystem::path dotGothicFontsPath;
@@ -94,6 +95,7 @@ int main(int argc, char* argv[]) {
             // CVillPath = basePath / "compiler" / "run" / "data" / "music" / "vill" / "";
             sexyMoriPath = basePath / "compiler" / "run" / "data" / "music" / "Breath_of_nature.wav";
             kazanPath = basePath / "compiler" / "run" / "data" / "music" / "kakkazann.wav";
+            umiTikakuPath = basePath / "compiler" / "run" / "data" / "music" / "umiTikaku.wav";
             noJapaneseFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "8-bit-no-ja" / "8bitOperatorPlus8-Bold.ttf";
             dotGothicFontsPath = basePath / "compiler"  / "run" / "data" / "fonts" / "ja-16-bit" / "DotGothic16-Regular.ttf";
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
@@ -142,6 +144,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Mix_LoadMUS failed: " << Mix_GetError() << "\n";
     }
     Mix_Music* kazanMusic = Mix_LoadMUS(kazanPath.string().c_str());
+    Mix_Music* umiTikakuMusic = Mix_LoadMUS(umiTikakuPath.string().c_str());
 
     Rectangle WindowSize = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
@@ -389,13 +392,20 @@ int main(int argc, char* argv[]) {
                         std::cout << "Area: 7, room: " << roomNumber << "\n";
                         Mix_PlayMusic(kazanMusic, -1);
                     }
-                } else {
-                    if (musicNumber != 5) {
+                } else if (playerRect.x >= 500 && playerRect.y <= 500) {
+                    if (musicNumber != 8) {
                         Mix_HaltMusic();
-                        musicNumber = 5;
-                        std::cout << "Area: 5 (default), room: " << roomNumber << "\n";
-                        // Mix_PlayMusic(defaultMusic, -1); // ←必要ならデフォルトの曲
+                        musicNumber = 8;
+                        std::cout << "Area: 8, room: " << roomNumber << "\n";
+                        Mix_PlayMusic(umiTikakuMusic, -1);
                     }
+                } else {
+                    // if (musicNumber != 5) {
+                    //     Mix_HaltMusic();
+                    //     musicNumber = 5;
+                    //     std::cout << "Area: 5 (default), room: " << roomNumber << "\n";
+                    //     // Mix_PlayMusic(defaultMusic, -1); // ←必要ならデフォルトの曲
+                    // }
                 }
             }
             else if (roomNumber == 5)
