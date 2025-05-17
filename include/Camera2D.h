@@ -24,6 +24,8 @@ public:
     // カメラのビューポート（表示領域）を取得
     SDL_Rect getView() const;
 
+    void clampPosition();
+
 private:
     int screenWidth;   // 画面幅
     int screenHeight;  // 画面高さ
@@ -34,8 +36,6 @@ private:
     int viewX;         // 未使用（将来拡張用）
     int viewY;         // 未使用（将来拡張用）
 
-    // マップ範囲外へカメラが出ないように位置を制限
-    void clampPosition();
 };
 
 #endif // CAMERA2D_H

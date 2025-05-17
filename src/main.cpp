@@ -78,6 +78,7 @@ int main(int argc, char* argv[]) {
     std::filesystem::path woodLightImagePath;
     std::filesystem::path waruImagePath;
     std::filesystem::path bossImagePath;
+    std::filesystem::path waterImagePath;
 
     std::filesystem::path oneSavePath;
     std::filesystem::path twoSavePath;
@@ -101,6 +102,7 @@ int main(int argc, char* argv[]) {
             woodLightImagePath = basePath / "compiler"  / "run" / "data" / "image" / "woodLight.png";
             waruImagePath = basePath / "compiler"  / "run" / "data" / "image" / "Isee!It'sallmyfault!Imadeasmallmistakeandit'sallmyfault!.png";
             bossImagePath = basePath / "compiler"  / "run" / "data" / "image" / "boss.png";
+            waterImagePath = basePath / "compiler"  / "run" / "data" / "image" / "maptileWater.png";
             oneSavePath = basePath / "compiler" / "run" / "etc" / "save" / "one.txt";
             twoSavePath = basePath / "compiler" / "run" / "etc" / "save" / "two.txt";
             threeSavePath = basePath / "compiler" / "run" / "etc" / "save" / "three.txt";
@@ -148,7 +150,7 @@ int main(int argc, char* argv[]) {
 
     Rectangle WindowSize = { 0, 0, 800, 500 };
     Rectangle titleCursor = { 3, 250, 10, 10};
-    Rectangle InGamePlayerRect = {30, 405, 50, 50};
+    Rectangle InGamePlayerRect = {30, 405, 1, 1};
 
     SDL_Window* window = SDL_CreateWindow(
         "SDL Window",
@@ -214,6 +216,7 @@ int main(int argc, char* argv[]) {
     SDL_Surface* waruImage = IMG_Load(waruImagePath.string().c_str());
     if (!waruImage)std::cout << "そっか！全部俺のせいなんだ！！ちょこっっとミスしただけで全部俺が悪いんだ！！勝手に練習辞めて俺のせいにして俺なんか先生首になって死んじゃえばいいんだ！！そう言いたいんだ！！あぁー「敵」！！「敵」「敵」「敵」お前「敵」！！" << std::endl;
     SDL_Surface* bossImage = IMG_Load(bossImagePath.string().c_str());
+    SDL_Surface* waterImage = IMG_Load(waterImagePath.string().c_str());
 
     SDL_Texture* woodLightTexture = SDL_CreateTextureFromSurface(renderer, woodLightImage);
     SDL_FreeSurface(woodLightImage);
@@ -223,6 +226,9 @@ int main(int argc, char* argv[]) {
     
     SDL_Texture* bossTexture = SDL_CreateTextureFromSurface(renderer, bossImage);
     SDL_FreeSurface(bossImage);
+
+    SDL_Texture* waterTexture = SDL_CreateTextureFromSurface(renderer, waterImage);
+    SDL_FreeSurface(waterImage);
 
     Camera2D camera(WindowSize.Width, WindowSize.Height, 1000, 1000);
 
@@ -481,25 +487,33 @@ int main(int argc, char* argv[]) {
                 }
                 else if (!playStop)
                 {
-                    camera.follow(playerRect);
-                    // camera.setPosition(playerRect.x, playerRect.y);
-                    // camera.clampPosition();
-                    
-                    SDL_Rect screenRect = camera.worldToScreen(playerRect);
+                    if (isKeyDown(event, SDLK_UP)) playerRect.y -= 1;
+                    if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 1;
+                    if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 1;
+                    if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 1;
 
                     if (playerRect.x <= 0) playerRect.x = 0;
                     if (playerRect.y <= 0) playerRect.y = 0;
                     if (playerRect.x >= 1000) playerRect.x = 1000;
                     if (playerRect.y >= 1000) playerRect.y = 1000;
 
-                    if (isKeyDown(event, SDLK_UP)) playerRect.y -= 5;
-                    if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 5;
-                    if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 5;
-                    if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 5;
+                    camera.follow(playerRect);
+                    // camera.setPosition(playerRect.x, playerRect.y);
+                    // camera.clampPosition();
+
+                    SDL_Rect waterRect = {500, 0, 500, 500};
+                    SDL_Rect waterScreenRect = camera.worldToScreen(waterRect);
+                    SDL_RenderCopy(renderer, waterTexture, nullptr, &waterScreenRect);
+
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "X: ", 10, 100);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "Y: ", 10, 130);
                     drawNumber(renderer, 0.0f, 0.0f, 0.0f, dotGothicFontsPath, 24, playerRect.x, 40.0f, 100.0f);
                     drawNumber(renderer, 0.0f, 0.0f, 0.0f, dotGothicFontsPath, 24, playerRect.y, 40.0f, 130.0f);
+
+                    SDL_Log("Camera: (%d, %d)", camera.getView().x, camera.getView().y);
+                    SDL_Log("Player: (%d, %d)", playerRect.x, playerRect.y);
+
+                    SDL_Rect screenRect = camera.worldToScreen(playerRect);
                     SDL_RenderCopy(renderer, woodLightTexture, nullptr, &screenRect);
                 }
             }
@@ -630,6 +644,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(woodLightTexture);
     SDL_DestroyTexture(waruiTexture);
     SDL_DestroyTexture(bossTexture);
+    SDL_DestroyTexture(waterTexture);
     Mix_FreeMusic(ikisugi);
     Mix_FreeMusic(lethal_chinpo);
     Mix_FreeMusic(lethal_deal);
