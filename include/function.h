@@ -25,6 +25,13 @@ struct PlayerData {
     int attackthree;
 };
 
+struct InGamePlayerData {
+    int x;
+    int y;
+    int hp;
+    int sexy;
+};
+
 struct enemy {
     std::string name;
     int hp;
