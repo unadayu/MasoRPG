@@ -239,6 +239,7 @@ int main(int argc, char* argv[]) {
     SDL_Event event;
 
     while (running) {
+        SDL_RenderClear(renderer);
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = false;
@@ -362,7 +363,6 @@ int main(int argc, char* argv[]) {
             }
         }
 
-
         if (title == 1)
         {
             if (musicNumber == 2)
@@ -431,10 +431,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-
         if (title == 1) {
             SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
-            SDL_RenderClear(renderer);
             // SDL_Rect warauXYWH = {0, 0, 791, 421};
             // SDL_RenderCopy(renderer, waruiTexture, nullptr, &warauXYWH);
 
@@ -446,14 +444,9 @@ int main(int argc, char* argv[]) {
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "設定", 20, 280);
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "おわり", 20, 310);
             drawText(renderer, 255, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
-
-            SDL_RenderPresent(renderer);
         }
         else if (title == 2)
         {
-            SDL_RenderClear(renderer);
-            // SDL_RenderClear(gRenderer);
-
             if (roomNumber == 1)
             {
                 if (playStop)
@@ -476,6 +469,7 @@ int main(int argc, char* argv[]) {
                     
                     if (titleCursor.y < 50) titleCursor.y = 50;
                     if (titleCursor.y > 250) titleCursor.y = 250;
+
                     DrawRectangle(20, 400, playerRect.x + 30, playerRect.y + 30, SDL_Color{ 0, 211, 200, 0 }, renderer);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "セーブ", 20, 50);
                     drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "ステータス", 20, 100);
@@ -501,8 +495,6 @@ int main(int argc, char* argv[]) {
                     if (playerRect.y >= 1000) playerRect.y = 1000;
 
                     camera.follow(playerRect);
-                    // camera.setPosition(playerRect.x, playerRect.y);
-                    // camera.clampPosition();
 
                     SDL_Rect waterRect = {500, 0, 500, 500};
                     SDL_Rect waterScreenRect = camera.worldToScreen(waterRect);
@@ -522,63 +514,35 @@ int main(int argc, char* argv[]) {
             }
             else if (roomNumber == 5)
             {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-                SDL_RenderClear(renderer);
-                if (enemyRoomNumber == 1)
-                {
-                    fightui.runGameGame(renderer);
-                }
-                SDL_RenderPresent(renderer);
-                // SDL_RenderPresent(gRenderer);
+                SDL_SetRenderDrawColor(renderer, 0, 164, 255, 255);
+                if (enemyRoomNumber == 1) fightui.runGameGame(renderer);
             }
-            else if (roomNumber == 6)
-            {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-                SDL_RenderClear(renderer);
-                SDL_RenderPresent(renderer);
-            }
-            else
-            {}
-            SDL_RenderPresent(renderer);
         }
         else if (title == 3)
         {
             SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-            SDL_RenderClear(renderer);
-
             if (titleCursor.y < 250) titleCursor.y = 250;
             if (titleCursor.y > 310) titleCursor.y = 310;
-
             // drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, "", 20, 250);
             // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "何もないよ", 20, 250.0f);
             // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "設定", 20, 280.0f);
             // drawText(renderer, 0.0f, 0.0f, 0.0f, japaneseFont, "おわり", 20, 310.0f);
             // drawText(renderer, 255.0f, 0.0f, 0.0f, japaneseFont, ">", titleCursor.x, titleCursor.y);
-
-            SDL_RenderPresent(renderer);
         }
         else if (title == 4)
         {
             SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
-            SDL_RenderClear(renderer);
-
             if (titleCursor.y < 100) titleCursor.y = 100;
             if (titleCursor.y > 200) titleCursor.y = 200;
-
             drawText(renderer, 0, 0, 0, noJapaneseFontsPath, 50, "World", WindowSize.Width / 2 - 80, 20);
-
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 1", WindowSize.Width / 2 - 40, 100);
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 2", WindowSize.Width / 2 - 40, 150);
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 50, "World 3", WindowSize.Width / 2 - 40, 200);
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 24, ">", titleCursor.x, titleCursor.y);
-
-            SDL_RenderPresent(renderer);
         }
         else if (title == 5)
         {
             SDL_SetRenderDrawColor(renderer, 0, 184, 255, 255);
-            SDL_RenderClear(renderer);
-
             if (titleCursor.y < 100) titleCursor.y = 100;
             if (titleCursor.y > 200) titleCursor.y = 200;
             drawCredits(renderer, dotGothicFontsPath, WindowSize.Width, WindowSize.Height);
@@ -587,8 +551,8 @@ int main(int argc, char* argv[]) {
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 15, "カルパスコンブ", WindowSize.Width / 2, 60.0f);
             drawText(renderer, 0, 0, 0, dotGothicFontsPath, 15, "© 2025 ~ ", WindowSize.Width / 2 - 120, 60.0f);
             
-            SDL_RenderPresent(renderer);
         }
+        SDL_RenderPresent(renderer);
         SDL_Delay(2);
     }
 

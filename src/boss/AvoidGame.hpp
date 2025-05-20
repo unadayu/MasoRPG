@@ -292,7 +292,7 @@ private:
         // オフスクリーン描画
         SDL_SetRenderTarget(renderer, sceneTex);
         SDL_SetRenderDrawColor(renderer, 30,30,30,255);
-        SDL_RenderClear(renderer);
+        
 
         // 弾幕
         SDL_SetRenderDrawColor(renderer, 200,0,0,255);
@@ -361,7 +361,7 @@ private:
             }
         }
 
-        SDL_RenderPresent(renderer);
+        
     }
 };
 
