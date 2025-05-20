@@ -15,8 +15,11 @@
 
 class fightUI {
 public:
-  void runChinpo() {}
+  void runChinpo() {
+    PlayerFlame();
+  }
 private:
+  InGamePlayerData playerRect = {0, 0, 9315, 9315};
   void flame(SDL_Renderer* renderer) {
     // ステーたす
     DrawRectangleLines(30, 30, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
@@ -44,5 +47,24 @@ private:
     SDL_FreeSurface(backImage);
     SDL_Rect backRect = { 0, 0, WindowSize.Width, WindowSize.Height };
     SDL_RenderCopy(renderer, backTexture, nullptr, &backRect);
+  }
+
+  void playerMove(const SDL_Event& event) {
+    if (isKeyTapped(event, SDLK_UP)) playerRect.y -= 30;
+    if (isKeyTapped(event, SDLK_DOWN)) playerRect.y += 30;
+    if (isKeyTapped(event, SDLK_LEFT)) playerRect.x -= 30;
+    if (isKeyTapped(event, SDLK_RIGHT)) playerRect.y += 30;
+  }
+  void PlayerFlame() {
+    // TDN枠
+    DrawRectangleLines(425, 310, 120, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
+    
+    // 縦線
+    DrawRectangleLines(455, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
+    DrawRectangleLines(505, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
+
+    // ━線
+    DrawRectangleLines(425, 340, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
+    DrawRectangleLines(425, 370, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
   }
 }
