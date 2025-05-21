@@ -10,16 +10,6 @@
 
 namespace fs = std::filesystem;
 
-struct buttonHayashi
-{
-    float x;
-    float y;
-    float width;
-    float height;
-    bool color;
-    bool summon;
-}
-
 int main(int argc, char* argv[])
 {
     std::filesystem::path basePath = std::filesystem::current_path();
@@ -59,55 +49,55 @@ int main(int argc, char* argv[])
             }
             else
             {
-                buildcolor = true;
+                buildR.color = true;
             }
         }
-        else buildcolor = false;
+        else buildR.color = false;
 
         if (CheckCollisionPointRec(mousePoint, runR))
         {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                runcolor = false;
-                runsummon = true;
+                runR.color = false;
+                runR.tool = true;
             }
             else
             {
-                runcolor = true;
+                runR.color = true;
             }
         }
-        else runcolor = false;
+        else runR.color = false;
 
         if (CheckCollisionPointRec(mousePoint, bootstrapR))
         {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                bootstrapcolor = false;
-                bootstrapsummon = true;
+                bootstrapR.color = false;
+                bootstrapR.tool = true;
             }
             else
             {
-                bootstrapcolor = true;
+                bootstrapR.color = true;
             }
         }
-        else bootstrapcolor = false;
+        else bootstrapR.color = false;
         
-        if (buildtools)
+        if (buildR.tool)
         {
             system("./yajuiku fentanyLbuild");
-            buildtools = false;
+            buildR.tool = false;
         }
 
-        if (runsummon)
+        if (runR.tool)
         {
             system("./yajuiku fentanyLrun");
-            runsummon = false;
+            runR.summon = false;
         }
 
-        if (bootstrapsummon)
+        if (bootstrapR.tool)
         {
             system("./yajuiku bootstrap");
-            bootstrapsummon = false;
+            bootstrapR.tool = false;
         }
         
 
