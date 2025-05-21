@@ -43,12 +43,9 @@ private:
     DrawRectangleLines(260, 510, 60, 30, SDL_Color{ 255, 255, 255, 255}, renderer);
   }
 
-  void background(std::filesystem::path back, SDL_Renderer* renderer, Rectangle WindowSize) {
-    SDL_Surface* backImage = IMG_Load(back.string().c_str());
-    SDL_Texture* backTexture = SDL_CreateTextureFromSurface(renderer, backImage);
-    SDL_FreeSurface(backImage);
+  void background(SDL_Texture* back, SDL_Renderer* renderer, Rectangle WindowSize) {
     SDL_Rect backRect = { 0, 0, WindowSize.Width, WindowSize.Height };
-    SDL_RenderCopy(renderer, backTexture, nullptr, &backRect);
+    SDL_RenderCopy(renderer, back, nullptr, &backRect);
   }
 
   void playerMove(const SDL_Event& event) {
