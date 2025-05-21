@@ -195,16 +195,32 @@ bool isKeyDown(SDL_Event& event, SDL_Keycode key) {
 
 // raylib ライクな一行描画関数
 inline void DrawRectangle(int x, int y, int w, int h, SDL_Color c, SDL_Renderer* renderer) {
+    // 現在の描画色を保存
+    Uint8 oldR, oldG, oldB, oldA;
+    SDL_GetRenderDrawColor(renderer, &oldR, &oldG, &oldB, &oldA);
+
+    // 描画色を変更して矩形を塗り潰す
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
     SDL_Rect r{ x, y, w, h };
     SDL_RenderFillRect(renderer, &r);
+
+    // 元の描画色に戻す
+    SDL_SetRenderDrawColor(renderer, oldR, oldG, oldB, oldA);
 }
 
 // 同じく枠線だけ
 inline void DrawRectangleLines(int x, int y, int w, int h, SDL_Color c, SDL_Renderer* renderer) {
+    // 現在の描画色を保存
+    Uint8 oldR, oldG, oldB, oldA;
+    SDL_GetRenderDrawColor(renderer, &oldR, &oldG, &oldB, &oldA);
+
+    // 描画色を設定して矩形枠を描く
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
     SDL_Rect r{ x, y, w, h };
     SDL_RenderDrawRect(renderer, &r);
+
+    // 元の描画色に戻す
+    SDL_SetRenderDrawColor(renderer, oldR, oldG, oldB, oldA);
 }
 
 #endif // FUNCTION_H
