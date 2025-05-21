@@ -167,7 +167,7 @@ void reset()
 
 void fentanyL()
 {
-    std::string commandi = "g++ FENTANYL/main.cpp -o fentanyL -lraylib -lGL -lm -lpthread -ldl -lrt -lX11";
+    std::string commandi = "g++ FENTANYL/main.cpp -o -Iinclude include/function.h fentanyL -lraylib -lGL -lm -lpthread -ldl -lrt -lX11";
     system(commandi.c_str());
 }
 
