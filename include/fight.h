@@ -71,7 +71,7 @@ private:
 
 // とりあいず昔書いたコード
 // ありえんほど汚い
-
+//
 //                      if (phase = 1)
 //                     {
 //                         if (RPGCommandnumber == 1)
