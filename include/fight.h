@@ -81,11 +81,11 @@ private:
 //                             if (attackOne == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 230, 200);
 //                             else if (attackOne == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 230, 200);
 //                             else if (attackOne == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 230, 200);
-
+//
 //                             if (attackTwo == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 330, 200);
 //                             else if (attackTwo == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 330, 200);
 //                             else if (attackTwo == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 330, 200);
-
+//
 //                             if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 430, 200);
 //                             else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 430, 200);
 //                             else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 430, 200);
@@ -99,7 +99,7 @@ private:
 //                         SDL_Rect bossRect = { 300, 10, 200, 200 };
 //                         SDL_RenderCopy(renderer, bossTexture, nullptr, &bossRect);
 //                         DrawRectangleLines(200, 200, 380, 180, SDL_Color{ 255, 255, 255, 255}, renderer);
-
+//
 //                         // 白
 //                         DrawRectangle(20, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
 //                         DrawRectangle(210, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
@@ -110,14 +110,15 @@ private:
 //                         DrawRectangle(215, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
 //                         DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
 //                         DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
-
+//
 //                         std::cout << InGamePlayerRect.x << std::endl;
 //                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "しね", 90, 410);
 //                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "煽る", 280, 410);
 //                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "食事", 470, 410);
 //                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "逃げる", 660, 410);
-
+//
 //                         // ここにプレいやー
 //                         SDL_Rect InGamePlayerRectSDL = {InGamePlayerRect.x, InGamePlayerRect.y, InGamePlayerRect.Width, InGamePlayerRect.Height};
 //                         SDL_RenderCopy(renderer, woodLightTexture, nullptr, &InGamePlayerRectSDL);
 //                     }
+//
