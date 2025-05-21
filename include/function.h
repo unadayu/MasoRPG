@@ -45,6 +45,16 @@ struct Line {
     int fontSize;    // 役割は大きく(40)、名前は小さく(25)
 };
 
+struct buttonHayashi
+{
+    float x;
+    float y;
+    float width;
+    float height;
+    bool color;
+    bool summon;
+}
+
 // テキスト描画関数
 void drawText(SDL_Renderer* renderer, float R, float G, float B, const std::filesystem::path& fontPath, int fontSize, const char* Text, float x, float y)
 {
