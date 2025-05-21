@@ -21,6 +21,7 @@ public:
 
 private:
   InGamePlayerData playerRect = {0, 0, 9315, 9315};
+
   void flame(SDL_Renderer* renderer) {
     // ステーたす
     DrawRectangleLines(30, 30, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
@@ -56,6 +57,7 @@ private:
     if (isKeyTapped(event, SDLK_LEFT)) playerRect.x -= 30;
     if (isKeyTapped(event, SDLK_RIGHT)) playerRect.y += 30;
   }
+
   void PlayerFlame(SDL_Renderer* renderer) {
     // TDN枠
     DrawRectangleLines(425, 310, 120, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
@@ -69,7 +71,6 @@ private:
     DrawRectangleLines(425, 370, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
   }
 };
-
 
 // とりあいず昔書いたコード
 // ありえんほど汚い
