@@ -34,32 +34,6 @@
 
 // enemy boss = {"tung tung tung sahal", 10, 3, 1};
 
-// static SDL_Renderer* gRenderer = nullptr;
-
-// 初期化時に一度だけ呼ぶ
-// inline bool InitSDL(const char* title, int w, int h) {
-//     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-//         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-//         return false;
-//     }
-//     SDL_Window* win = SDL_CreateWindow(title,
-//                                        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-//                                        w, h,
-//                                        SDL_WINDOW_SHOWN);
-//     if (!win) {
-//         std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-//         return false;
-//     }
-//     gRenderer = SDL_CreateRenderer(win, -1,
-//                                    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-//     if (!gRenderer) {
-//         std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
-//         SDL_DestroyWindow(win);
-//         return false;
-//     }
-//     return true;
-// }
-
 int main(int argc, char* argv[]) {
     std::filesystem::path basePath = std::filesystem::current_path();
     
