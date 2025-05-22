@@ -15,32 +15,32 @@
 
 class fightUI {
 public:
-  void runGameGame(SDL_Renderer* renderer) {
-    PlayerFlame(renderer);
+  void runGameGame(SDL_Renderer* renderer, Rectangle WindowSize) {
+    PlayerFlame(renderer, WindowSize, true, false);
   }
 
 private:
   InGamePlayerData playerRect = {0, 0, 9315, 9315};
 
-  void flame(SDL_Renderer* renderer) {
+  void flame(SDL_Renderer* renderer, Rectangle WindowSize) {
     // ステーたす
-    DrawRectangleLines(30, 30, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
+    // DrawRectangleLines(30, 30, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
     
     // 背景
-    DrawRectangleLines(260, 30, 450, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
+    // DrawRectangleLines(260, 30, 450, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
     
     // 偽証
-    DrawRectangleLines(30, 310, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
+    // DrawRectangleLines(30, 310, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
     
     // コマンドの枠
     // バトル
-    DrawRectangleLines(260, 320, 60, 30, SDL_Color{ 255, 255, 255, 255}, renderer);
+    DrawRectangleLines(30, 50, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
     // スキル
-    DrawRectangleLines(260, 390, 60, 30, SDL_Color{ 255, 255, 255, 255}, renderer);
+    DrawRectangleLines(30, 140, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
     // チャージ
-    DrawRectangleLines(260, 450, 60, 30, SDL_Color{ 255, 255, 255, 255}, renderer);
+    DrawRectangleLines(30, 230, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
     // 逃げる
-    DrawRectangleLines(260, 510, 60, 30, SDL_Color{ 255, 255, 255, 255}, renderer);
+    DrawRectangleLines(30, 320, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
   }
 
   void background(SDL_Texture* back, SDL_Renderer* renderer, Rectangle WindowSize) {
@@ -55,17 +55,27 @@ private:
     if (isKeyTapped(event, SDLK_RIGHT)) playerRect.y += 30;
   }
 
-  void PlayerFlame(SDL_Renderer* renderer) {
-    // TDN枠
-    DrawRectangleLines(425, 310, 120, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
-    
-    // 縦線
-    DrawRectangleLines(455, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
-    DrawRectangleLines(505, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
+  void PlayerFlame(SDL_Renderer* renderer, Rectangle WindowSize, bool playerTurn, bool flameRect) {
+    if (playerTurn) {
 
-    // ━線
-    DrawRectangleLines(425, 340, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
-    DrawRectangleLines(425, 370, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
+      // TDN枠
+      if (flameRect) {
+        DrawRectangleLines(WindowSize.Width / 2 - 110, WindowSize.Height - 230, 200, 200, SDL_Color{255, 255, 255, 255}, renderer);
+      } else if (!flameRect) {
+        DrawRectangleLines(WindowSize.Width / 2 - 380, WindowSize.Height - 230, WindowSize.Width - 50, 200, SDL_Color{255, 255, 255, 255}, renderer);
+      }
+      
+      // 縦線
+      // DrawRectangleLines(455, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
+      // DrawRectangleLines(505, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
+
+      // ━線
+      // DrawRectangleLines(425, 340, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
+      // DrawRectangleLines(425, 370, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
+    } else if (!playerTurn) {
+      DrawRectangleLines(WindowSize.Width / 2 - 110, WindowSize.Height - 230, 200, 200, SDL_Color{255, 255, 255, 255}, renderer);
+      flame(renderer, WindowSize);
+    }
   }
 };
 
