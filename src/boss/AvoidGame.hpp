@@ -137,7 +137,7 @@ public:
 
             if (isKeyTapped(e, SDLK_c)) healthReborn(1);
             now = SDL_GetTicks();
-            if (now - gameStartTime > 16800 && now - gameStartTime < 200500) {
+            if (now - gameStartTime > 4518 && now - gameStartTime < 60000) {
                 // スポーン制御
                 if (now - lastObs > 50) {
                     spawnObstacle();
@@ -155,7 +155,7 @@ public:
                     lastGlitch   = now + (std::rand()%2000 + 2000);
                 }
             }
-            else if (now - gameStartTime > 200500)
+            else if (now - gameStartTime > 60000)
             {
                 Mix_HaltMusic();
                 spawnWarningLine();
@@ -233,7 +233,7 @@ private:
     Uint32 gameStartTime = 0;
     Uint32 now;
 
-    int healthRebornMAX = 2;
+    int healthRebornMAX = 3;
 
     void spawnObstacle() {
         int w  = 10 + std::rand()%60;
@@ -282,7 +282,7 @@ private:
     void healthReborn(int remove) {
         if (healthRebornMAX != 0) {
             healthRebornMAX -= remove;
-            health = 2000;
+            health += 400;
         }
     }
 
@@ -292,7 +292,7 @@ private:
         // オフスクリーン描画
         SDL_SetRenderTarget(renderer, sceneTex);
         SDL_SetRenderDrawColor(renderer, 30,30,30,255);
-        
+        SDL_RenderClear(renderer);        
 
         // 弾幕
         SDL_SetRenderDrawColor(renderer, 200,0,0,255);
@@ -360,8 +360,7 @@ private:
                 SDL_RenderFillRect(renderer, &n);
             }
         }
-
-        
+        SDL_RenderPresent(renderer);
     }
 };
 
