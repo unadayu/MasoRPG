@@ -282,7 +282,8 @@ private:
     void healthReborn(int remove) {
         if (healthRebornMAX != 0) {
             healthRebornMAX -= remove;
-            health = 400;
+            health += 200;
+            if (health >= 400) health = 400;
         }
     }
 
