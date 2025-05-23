@@ -1,134 +1,55 @@
 #include <SDL2/SDL.h>
-#include <SDL_ttf.h>
-#include <iostream>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
 #include <filesystem>
-#include <cstdlib>
-#include <string>
 #include <vector>
-#include <fstream>
-#include <chrono>
-#include <thread>
-#include <memory>
-#include "function.h"
+#include "function.h" // drawText や DrawRectangleLines を含む
 
 class fightUI {
 public:
-  void runGameGame(SDL_Renderer* renderer, Rectangle WindowSize) {
-    PlayerFlame(renderer, WindowSize, true, false);
-  }
+    void runGameGame(SDL_Renderer* renderer, Rectangle WindowSize, const std::filesystem::path& fontPath) {
+        this->fontPath = fontPath;
+        PlayerFlame(renderer, WindowSize, true, true);
+    }
 
 private:
-  InGamePlayerData playerRect = {0, 0, 9315, 9315};
+    InGamePlayerData playerRect = {0, 0, 9315, 9315};
+    std::filesystem::path fontPath;
 
-  void flame(SDL_Renderer* renderer, Rectangle WindowSize) {
-    // ステーたす
-    // DrawRectangleLines(30, 30, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
-    
-    // 背景
-    // DrawRectangleLines(260, 30, 450, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
-    
-    // 偽証
-    // DrawRectangleLines(30, 310, 100, 250, SDL_Color{ 255, 255, 255, 255}, renderer);
-    
-    // コマンドの枠
-    // バトル
-    DrawRectangleLines(30, 50, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
-    // スキル
-    DrawRectangleLines(30, 140, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
-    // チャージ
-    DrawRectangleLines(30, 230, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
-    // 逃げる
-    DrawRectangleLines(30, 320, 150, 60, SDL_Color{ 255, 255, 255, 255}, renderer);
-  }
+    void flame(SDL_Renderer* renderer, Rectangle WindowSize) {
+        const int boxX = 30;
+        const int boxWidth = 150;
+        const int boxHeight = 60;
+        const int fontSize = 24;
+        SDL_Color borderColor = {255, 255, 255, 255};
 
-  void background(SDL_Texture* back, SDL_Renderer* renderer, Rectangle WindowSize) {
-    SDL_Rect backRect = { 0, 0, WindowSize.Width, WindowSize.Height };
-    SDL_RenderCopy(renderer, back, nullptr, &backRect);
-  }
+        struct Command {
+            const char* label;
+            int y;
+        };
 
-  void playerMove(const SDL_Event& event) {
-    if (isKeyTapped(event, SDLK_UP)) playerRect.y -= 30;
-    if (isKeyTapped(event, SDLK_DOWN)) playerRect.y += 30;
-    if (isKeyTapped(event, SDLK_LEFT)) playerRect.x -= 30;
-    if (isKeyTapped(event, SDLK_RIGHT)) playerRect.y += 30;
-  }
+        std::vector<Command> commands = {
+            {"バトル", 50},
+            {"スキル", 140},
+            {"チャージ", 230},
+            {"逃げる", 320}
+        };
 
-  void PlayerFlame(SDL_Renderer* renderer, Rectangle WindowSize, bool playerTurn, bool flameRect) {
-    if (playerTurn) {
-
-      // TDN枠
-      if (flameRect) {
-        DrawRectangleLines(WindowSize.Width / 2 - 110, WindowSize.Height - 230, 200, 200, SDL_Color{255, 255, 255, 255}, renderer);
-      } else if (!flameRect) {
-        DrawRectangleLines(WindowSize.Width / 2 - 380, WindowSize.Height - 230, WindowSize.Width - 50, 200, SDL_Color{255, 255, 255, 255}, renderer);
-      }
-      
-      // 縦線
-      // DrawRectangleLines(455, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
-      // DrawRectangleLines(505, 310, 120, 1, SDL_Color{ 255, 255, 255, 255}, renderer);
-
-      // ━線
-      // DrawRectangleLines(425, 340, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
-      // DrawRectangleLines(425, 370, 1, 120, SDL_Color{ 255, 255, 255, 255}, renderer);
-    } else if (!playerTurn) {
-      DrawRectangleLines(WindowSize.Width / 2 - 110, WindowSize.Height - 230, 200, 200, SDL_Color{255, 255, 255, 255}, renderer);
-      flame(renderer, WindowSize);
+        for (const auto& cmd : commands) {
+            DrawRectangleLines(boxX, cmd.y, boxWidth, boxHeight, borderColor, renderer);
+            drawText(renderer, 255, 255, 255, fontPath, fontSize, cmd.label, boxX + 10, cmd.y + 15);
+        }
     }
-  }
-};
 
-// とりあいず昔書いたコード
-// ありえんほど汚い
-//
-//                      if (phase = 1)
-//                     {
-//                         if (RPGCommandnumber == 1)
-//                         {
-//                             if (InGamePlayerRect.x <= 190) InGamePlayerRect.x = 190;
-//                             if (InGamePlayerRect.x >= 390) InGamePlayerRect.x = 390;
-//                             if (attackOne == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 230, 200);
-//                             else if (attackOne == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 230, 200);
-//                             else if (attackOne == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 230, 200);
-//
-//                             if (attackTwo == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 330, 200);
-//                             else if (attackTwo == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 330, 200);
-//                             else if (attackTwo == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 330, 200);
-//
-//                             if (attackThree == 1) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "殴る", 430, 200);
-//                             else if (attackThree == 2) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "蹴る", 430, 200);
-//                             else if (attackThree == 3) drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "ちんこ", 430, 200);
-//                         }
-//                         else
-//                         {
-//                             if (InGamePlayerRect.x <= 30) InGamePlayerRect.x = 30;
-//                             if (InGamePlayerRect.x >= 600) InGamePlayerRect.x = 600;
-//                         }
-//                         //ここに敵表示
-//                         SDL_Rect bossRect = { 300, 10, 200, 200 };
-//                         SDL_RenderCopy(renderer, bossTexture, nullptr, &bossRect);
-//                         DrawRectangleLines(200, 200, 380, 180, SDL_Color{ 255, 255, 255, 255}, renderer);
-//
-//                         // 白
-//                         DrawRectangle(20, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
-//                         DrawRectangle(210, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
-//                         DrawRectangle(400, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
-//                         DrawRectangle(590, 400, 180, 60, SDL_Color{ 255, 255, 255, 255 }, renderer);
-//                         // 黒
-//                         DrawRectangle(25, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
-//                         DrawRectangle(215, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
-//                         DrawRectangle(405, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
-//                         DrawRectangle(595, 405, 170, 50, SDL_Color{ 0, 0, 0, 0 }, renderer);
-//
-//                         std::cout << InGamePlayerRect.x << std::endl;
-//                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "しね", 90, 410);
-//                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "煽る", 280, 410);
-//                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "食事", 470, 410);
-//                         drawText(renderer, 255, 255, 255, dotGothicFontsPath, 24, "逃げる", 660, 410);
-//
-//                         // ここにプレいやー
-//                         SDL_Rect InGamePlayerRectSDL = {InGamePlayerRect.x, InGamePlayerRect.y, InGamePlayerRect.Width, InGamePlayerRect.Height};
-//                         SDL_RenderCopy(renderer, woodLightTexture, nullptr, &InGamePlayerRectSDL);
-//                     }
-//
+    void PlayerFlame(SDL_Renderer* renderer, Rectangle WindowSize, bool playerTurn, bool flameRect) {
+        SDL_Color borderColor = {255, 255, 255, 255};
+        if (playerTurn) {
+            if (flameRect) {
+                DrawRectangleLines(WindowSize.Width / 2 - 110, WindowSize.Height - 230, 200, 200, borderColor, renderer);
+            } else {
+                DrawRectangleLines(WindowSize.Width / 2 - 380, WindowSize.Height - 230, WindowSize.Width - 50, 200, borderColor, renderer);
+            }
+        } else {
+            DrawRectangleLines(WindowSize.Width / 2 - 200, WindowSize.Height - 210, WindowSize.Width - 300, 200, borderColor, renderer);
+            flame(renderer, WindowSize);
+        }
+    }
+};

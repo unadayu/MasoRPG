@@ -489,7 +489,7 @@ int main(int argc, char* argv[]) {
             else if (roomNumber == 5)
             {
                 SDL_SetRenderDrawColor(renderer, 0, 164, 255, 255);
-                if (enemyRoomNumber == 1) fightui.runGameGame(renderer, WindowSize);
+                if (enemyRoomNumber == 1) fightui.runGameGame(renderer, WindowSize, dotGothicFontsPath);
             }
         }
         else if (title == 3)
