@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <filesystem>
 #include <vector>
+#include <cmath>
+#include <algorithm>
 #include "function.h"
 
 class fightUI {

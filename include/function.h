@@ -28,12 +28,29 @@ struct PlayerData {
     int attackthree;
 };
 
+struct Bullet {
+    float x, y;      // 座標
+    float velX, velY; // 速度
+    int width;       // <--- これがあることを確認！
+    int height;      // <--- これがあることを確認！
+    SDL_Texture* texture; // <--- これがあることを確認！
+    // SDL_Color color;   // もし以前の色で描画していた名残があれば削除
+    float rotation;
+    float speed;
+    int damage;
+    // ...その他、弾に必要な情報（もしあれば）
+};
+
+// function.h の抜粋 (InGamePlayerData 構造体)
 struct InGamePlayerData {
     int x;
     int y;
+    int width;   // <--- これがあることを確認！
+    int height;  // <--- これがあることを確認！
     int hp;
     int sexy;
 };
+
 
 struct enemy {
     std::string name;
@@ -221,6 +238,14 @@ bool isKeyTapped(SDL_Keycode key) {
 
 bool isKeyDown(SDL_Event& event, SDL_Keycode key) {
     return (event.type == SDL_KEYDOWN && event.key.keysym.sym == key);
+}
+
+bool CheckCollisionRecs(Rectangle rec1, Rectangle rec2) {
+    // 矩形同士の衝突判定 (AABB衝突判定)
+    return rec1.x < rec2.x + rec2.Width &&
+           rec1.x + rec1.Width > rec2.x &&
+           rec1.y < rec2.y + rec2.Height &&
+           rec1.y + rec1.Height > rec2.y;
 }
 
 // raylib ライクな一行描画関数
