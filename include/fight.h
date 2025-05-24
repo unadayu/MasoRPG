@@ -34,17 +34,38 @@ private:
     Uint32 now = 0;
     bool isTungFirstTurnActive = false;
 
-    Bullet slashAttackRect = {800/2 - 110, 500 - 230, 3, 3, 8, 200, nullptr, 0, 3, 5};
-    Bullet gyakuSlashAttackRect = {800/2 - 110 + 200, 500 - 230, 3, 3, 8, 200, nullptr, 0, 3, 5};
+    Bullet turnOneAttackRectOne = {800/2 - 110, 500 - 230, 3, 3, 8, 100, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectTwo = {800/2 - 110, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectThree = {800/2 - 110 + 200, 500 - 230, 3, 3, 8, 100, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectFour = {800/2 - 110 + 200, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectFive  = {800/2 - 110, 500 - 80, 3, 3, 20, 50, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectSix  = {800/2 + 90 - 20, 500 - 80, 3, 3, 20, 50, nullptr, 0, 17, 5};
 
-    void slashAttack(SDL_Renderer* renderer) {
-        DrawRectangle(slashAttackRect.x, slashAttackRect.y, slashAttackRect.width, slashAttackRect.height, (SDL_Color){255, 0, 0, 0}, renderer);
-        slashAttackRect.x += slashAttackRect.speed;
+    void turnOneAttackOne(SDL_Renderer * renderer) {
+        // 縦攻撃
+        DrawRectangle(turnOneAttackRectOne.x, turnOneAttackRectOne.y, turnOneAttackRectOne.width, turnOneAttackRectOne.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        DrawRectangle(turnOneAttackRectTwo.x, turnOneAttackRectTwo.y, turnOneAttackRectTwo.width, turnOneAttackRectTwo.height, (SDL_Color){255, 0, 0, 0}, renderer);
+
+        // 逆スラッシュ
+        DrawRectangle(turnOneAttackRectThree.x, turnOneAttackRectThree.y, turnOneAttackRectThree.width, turnOneAttackRectThree.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        DrawRectangle(turnOneAttackRectFour.x, turnOneAttackRectFour.y, turnOneAttackRectFour.width, turnOneAttackRectFour.height, (SDL_Color){255, 0, 0, 0}, renderer);
+
+        turnOneAttackRectOne.x += turnOneAttackRectOne.speed;
+        turnOneAttackRectTwo.x += turnOneAttackRectTwo.speed;
+        turnOneAttackRectThree.x -= turnOneAttackRectThree.speed;
+        turnOneAttackRectFour.x -= turnOneAttackRectFour.speed;
     }
 
-    void gyakuSlashAttack(SDL_Renderer* renderer) {
-        DrawRectangle(gyakuSlashAttackRect.x, gyakuSlashAttackRect.y, gyakuSlashAttackRect.width, gyakuSlashAttackRect.height, (SDL_Color){255, 0, 0, 0}, renderer);
-        gyakuSlashAttackRect.x -= gyakuSlashAttackRect.speed;
+    void turnOneAttackTwo(SDL_Renderer * renderer) {
+        DrawRectangle(turnOneAttackRectFive.x, turnOneAttackRectFive.y, turnOneAttackRectFive.width, turnOneAttackRectFive.height, (SDL_Color){255, 0, 0, 0}, renderer);
+
+        turnOneAttackRectFive.x += turnOneAttackRectFive.speed;
+    }
+
+    void turnOneAttackThree(SDL_Renderer * renderer) {
+        DrawRectangle(turnOneAttackRectSix.x, turnOneAttackRectSix.y, turnOneAttackRectSix.width, turnOneAttackRectSix.height, (SDL_Color){255, 0, 0, 0}, renderer);
+
+        turnOneAttackRectSix.x -= turnOneAttackRectSix.speed;
     }
 
     void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer) {
@@ -101,8 +122,12 @@ private:
                 if (playerRect.x + 30 > boxX + W) playerRect.x = boxX + W - 30;
                 if (playerRect.y < boxY) playerRect.y = boxY;
                 if (playerRect.y + 30 > boxY + H) playerRect.y = boxY + H - 30;
-                slashAttack(renderer);
-                gyakuSlashAttack(renderer);
+                turnOneAttackOne(renderer);
+                if (elapsed > 500) {
+                    turnOneAttackTwo(renderer);
+                } if (elapsed > 1000) {
+                    turnOneAttackThree(renderer);
+                }
             } else {
                 playerData.playerTurn = true;
                 playerData.turn ++;
