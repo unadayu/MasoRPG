@@ -7,6 +7,8 @@
 #include <SDL_ttf.h>
 #include <fstream>
 #include <vector>
+#include <SDL_image.h>
+#include "Camera2D.h"
 
 struct Rectangle {
     int x;
@@ -52,6 +54,12 @@ struct buttonHayashi {
     float height;
     bool color;
     bool summon;
+};
+
+struct InGameTurnSettings {
+    int playerTurnNumber;
+    int turn;
+    bool playerTurn;
 };
 
 // テキスト描画関数
@@ -147,6 +155,12 @@ void drawCredits(SDL_Renderer* renderer, const std::string& fontPath, int screen
         // フォントサイズに応じて描画
         drawText(renderer, 0, 0, 0, fontPath, lines[i].fontSize, lines[i].text.c_str(), 10, y);
     }
+}
+
+void drawImage(int x, int y, int width, int height, SDL_Texture* texture, SDL_Renderer* renderer, Camera2D camera) {
+    SDL_Rect rect = {x, y, width, height};
+    SDL_Rect rectCamera = camera.worldToScreen(rect);
+    SDL_RenderCopy(renderer, texture, nullptr, &rectCamera);
 }
 
 PlayerData loadGame(const std::string& filename) {

@@ -32,7 +32,7 @@
 // enemy enemyFive = {"five", 10, 3, 1};
 // enemy enemyFour = {"four", 10, 3, 1};
 
-// enemy boss = {"tung tung tung sahal", 10, 3, 1};
+enemy boss = {"tung", 10, 3, 1};
 
 int main(int argc, char* argv[]) {
     std::filesystem::path basePath = std::filesystem::current_path();
@@ -488,8 +488,8 @@ int main(int argc, char* argv[]) {
             }
             else if (roomNumber == 5)
             {
-                SDL_SetRenderDrawColor(renderer, 0, 164, 255, 255);
-                if (enemyRoomNumber == 1) fightui.runGameGame(renderer, WindowSize, dotGothicFontsPath);
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+                if (enemyRoomNumber == 1) fightui.lastboss(renderer, WindowSize, dotGothicFontsPath, woodLightTexture, camera, event, woodLightTexture, boss);
             }
         }
         else if (title == 3)
