@@ -40,6 +40,9 @@ private:
     Bullet turnOneAttackRectFour = {800/2 - 110 + 200, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 8, 5};
     Bullet turnOneAttackRectFive  = {800/2 - 110, 500 - 80, 3, 3, 20, 50, nullptr, 0, 8, 5};
     Bullet turnOneAttackRectSix  = {800/2 + 90 - 20, 500 - 80, 3, 3, 20, 50, nullptr, 0, 17, 5};
+    Bullet turnOneAttackRectSeven  = {800/2 + 60, 500 - 400, 3, 3, 20, 7, nullptr, 0, 17, 5};
+    Bullet turnOneAttackRectEight  = {800/2 + 60 - 80, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
+    Bullet turnOneAttackRectNine  = {800/2 + 60 - 160, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
 
     void turnOneAttackOne(SDL_Renderer * renderer) {
         // 縦攻撃
@@ -66,6 +69,16 @@ private:
         DrawRectangle(turnOneAttackRectSix.x, turnOneAttackRectSix.y, turnOneAttackRectSix.width, turnOneAttackRectSix.height, (SDL_Color){255, 0, 0, 0}, renderer);
 
         turnOneAttackRectSix.x -= turnOneAttackRectSix.speed;
+    }
+
+    void turnOneAttackFour(SDL_Renderer * renderer) {
+        DrawRectangle(turnOneAttackRectSeven.x, turnOneAttackRectSeven.y, turnOneAttackRectSeven.width, turnOneAttackRectSeven.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        DrawRectangle(turnOneAttackRectEight.x, turnOneAttackRectEight.y, turnOneAttackRectEight.width, turnOneAttackRectEight.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        DrawRectangle(turnOneAttackRectNine.x, turnOneAttackRectNine.y, turnOneAttackRectNine.width, turnOneAttackRectNine.height, (SDL_Color){255, 0, 0, 0}, renderer);
+
+        turnOneAttackRectSeven.y += turnOneAttackRectSeven.speed;
+        turnOneAttackRectEight.y += turnOneAttackRectEight.speed;
+        turnOneAttackRectNine.y += turnOneAttackRectNine.speed;
     }
 
     void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer) {
@@ -127,6 +140,8 @@ private:
                     turnOneAttackTwo(renderer);
                 } if (elapsed > 1000) {
                     turnOneAttackThree(renderer);
+                } if (elapsed > 1500) {
+                    turnOneAttackFour(renderer);
                 }
             } else {
                 playerData.playerTurn = true;
