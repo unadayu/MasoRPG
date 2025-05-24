@@ -16,7 +16,7 @@ public:
     void lastboss(SDL_Renderer* renderer, Rectangle WindowSize, std::filesystem::path& fontPath, SDL_Texture* bossTexture, Camera2D camera, SDL_Event& event, SDL_Texture* playerTexture, enemy& enemyData)
     {
         this->fontPath = fontPath;
-        update(event, WindowSize, enemyData);
+        update(event, WindowSize, enemyData, renderer);
         render(renderer, WindowSize, bossTexture, camera, playerTexture);
     }
 
@@ -34,11 +34,24 @@ private:
     Uint32 now = 0;
     bool isTungFirstTurnActive = false;
 
-    void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData) {
+    Bullet slashAttackRect = {800/2 - 110, 500 - 230, 3, 3, 8, 200, nullptr, 0, 3, 5};
+    Bullet gyakuSlashAttackRect = {800/2 - 110 + 200, 500 - 230, 3, 3, 8, 200, nullptr, 0, 3, 5};
+
+    void slashAttack(SDL_Renderer* renderer) {
+        DrawRectangle(slashAttackRect.x, slashAttackRect.y, slashAttackRect.width, slashAttackRect.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        slashAttackRect.x += slashAttackRect.speed;
+    }
+
+    void gyakuSlashAttack(SDL_Renderer* renderer) {
+        DrawRectangle(gyakuSlashAttackRect.x, gyakuSlashAttackRect.y, gyakuSlashAttackRect.width, gyakuSlashAttackRect.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        gyakuSlashAttackRect.x -= gyakuSlashAttackRect.speed;
+    }
+
+    void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer) {
         if (playerData.playerTurn) {
             processPlayerInput();
         } else {
-            processEnemyTurn(WindowSize, enemyData);
+            processEnemyTurn(WindowSize, enemyData, renderer);
         }
     }
 
@@ -59,7 +72,7 @@ private:
         }
     }
 
-    void processEnemyTurn(Rectangle WindowSize, enemy& enemyData) {
+    void processEnemyTurn(Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer) {
         // "tung" の最初のターンなら 3 秒間プレイヤーを中央四角内に制限
         if (enemyData.name == "tung" && playerData.turn == 1) {
             if (!isTungFirstTurnActive) {
@@ -88,6 +101,8 @@ private:
                 if (playerRect.x + 30 > boxX + W) playerRect.x = boxX + W - 30;
                 if (playerRect.y < boxY) playerRect.y = boxY;
                 if (playerRect.y + 30 > boxY + H) playerRect.y = boxY + H - 30;
+                slashAttack(renderer);
+                gyakuSlashAttack(renderer);
             } else {
                 playerData.playerTurn = true;
                 playerData.turn ++;
