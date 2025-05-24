@@ -10,14 +10,7 @@
 class fightUI {
 public:
     // main.cpp からはこのシグネチャで呼び出す
-    void lastboss(SDL_Renderer* renderer,
-                  Rectangle WindowSize,
-                  const std::filesystem::path& fontPath,
-                  SDL_Texture* bossTexture,
-                  Camera2D camera,
-                  const SDL_Event& event,
-                  SDL_Texture* playerTexture,
-                  const enemy& enemyData)
+    void lastboss(SDL_Renderer* renderer, Rectangle WindowSize, std::filesystem::path& fontPath, SDL_Texture* bossTexture, Camera2D camera, SDL_Event& event, SDL_Texture* playerTexture, enemy& enemyData)
     {
         this->fontPath = fontPath;
         update(event, WindowSize, enemyData);
@@ -35,7 +28,7 @@ private:
     std::filesystem::path      fontPath;
     Uint32                     turnStartTime = 0;
 
-    void update(const SDL_Event& event, Rectangle WindowSize, const enemy& enemyData) {
+    void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData) {
         if (playerData.playerTurn) {
             processPlayerInput(event);
         } else {
@@ -43,54 +36,36 @@ private:
         }
     }
 
-    void processPlayerInput(const SDL_Event& event) {
-        if (isKeyTapped(event, SDLK_UP)) {
-            selectedIndex = (selectedIndex > 0 ? selectedIndex - 1 : 0);
-        }
-        if (isKeyTapped(event, SDLK_DOWN)) {
-            selectedIndex = (selectedIndex < (int)commands.size() - 1 ? selectedIndex + 1 : (int)commands.size() - 1);
-        }
-        if (isKeyTapped(event, SDLK_ESCAPE)) {
-            switch (selectedIndex) {
-                case 0: // バトル
-                    playerData.playerTurn = false;
-                    turnStartTime = SDL_GetTicks();
-                    break;
-                case 1: // スキル
-                    // TODO
-                    break;
-                case 2: // チャージ
-                    // TODO
-                    break;
-                case 3: // 逃げる
-                    // TODO
-                    break;
-            }
-        }
+    void processPlayerInput(SDL_Event& event) {
+        playerRect.x = 25;
+        if (playerRect.y <= 83) playerRect.y = 83;
+        // if (isKeyTapped(event, SDLK_UP)) playerRect.y -= 90;
+        if (isKeyTapped(SDLK_DOWN)) playerRect.y += 90;
+        // if (isKeyTapped(event, SDLK_ESCAPE)) playerRect.y = 
     }
 
-    void processEnemyTurn(const SDL_Event& event, Rectangle WindowSize, const enemy& enemyData) {
+    void processEnemyTurn(SDL_Event& event, Rectangle WindowSize, enemy& enemyData) {
         // "tung" の最初のターンなら 3 秒間プレイヤーを中央四角内に制限
         if (enemyData.name == "tung" && playerData.turn == 1) {
             Uint32 now     = SDL_GetTicks();
             Uint32 elapsed = now - turnStartTime;
             if (elapsed < 3000) {
                 // 入力でプレイヤー移動
-                if (isKeyTapped(event, SDLK_LEFT))  playerRect.x -= 5;
-                if (isKeyTapped(event, SDLK_RIGHT)) playerRect.x += 5;
-                if (isKeyTapped(event, SDLK_UP))    playerRect.y -= 5;
-                if (isKeyTapped(event, SDLK_DOWN))  playerRect.y += 5;
+                // if (isKeyTapped(event, SDLK_LEFT))  playerRect.x -= 5;
+                // if (isKeyTapped(event, SDLK_RIGHT)) playerRect.x += 5;
+                // if (isKeyTapped(event, SDLK_UP))    playerRect.y -= 5;
+                // if (isKeyTapped(event, SDLK_DOWN))  playerRect.y += 5;
 
-                // 中央四角領域のサイズ（例として幅400×高さ400）
-                const int W = 400, H = 400;
-                int boxX = WindowSize.Width/2 - W/2;
-                int boxY = WindowSize.Height/2 - H/2;
+                // // 中央四角領域のサイズ（例として幅400×高さ400）
+                // const int W = 400, H = 400;
+                // int boxX = WindowSize.Width/2 - W/2;
+                // int boxY = WindowSize.Height/2 - H/2;
 
-                // 手動クランプ
-                if (playerRect.x < boxX)                                        playerRect.x = boxX;
-                if (playerRect.x + playerRect.Width > boxX + W)                 playerRect.x = boxX + W - playerRect.Width;
-                if (playerRect.y < boxY)                                        playerRect.y = boxY;
-                if (playerRect.y + playerRect.Height > boxY + H)               playerRect.y = boxY + H - playerRect.Height;
+                // // 手動クランプ
+                // if (playerRect.x < boxX) playerRect.x = boxX;
+                // if (playerRect.x + 30 > boxX + W) playerRect.x = boxX + W - 30;
+                // if (playerRect.y < boxY) playerRect.y = boxY;
+                // if (playerRect.y + 30 > boxY + H) playerRect.y = boxY + H - 30;
                 return;
             }
         }
@@ -118,15 +93,10 @@ private:
             drawCommandMenu(renderer, WindowSize);
 
             // カーソル
-            int cursorX = 30;
-            int cursorY = 80 + selectedIndex * 90;
-            drawImage(cursorX, cursorY,
-                      playerRect.Width, playerRect.Height,
-                      playerTexture, renderer, camera);
+            drawImage(playerRect.x, playerRect.y, 50, 50, playerTexture, renderer, camera);
         } else {
             // 敵ターン枠
-            DrawRectangleLines(WindowSize.Width/2 - 110, WindowSize.Height - 230,
-                               200, 200, borderColor, renderer);
+            DrawRectangleLines(WindowSize.Width/2 - 110, WindowSize.Height - 230, 200, 200, borderColor, renderer);
         }
     }
 

@@ -222,14 +222,14 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_KEYDOWN) {
                 if (title == 1) {
                     titleCursor.x = 3;
-                    if (isKeyTapped(event, SDLK_DOWN)) {
+                    if (isKeyTapped(SDLK_DOWN)) {
                         titleCursor.y += 30.0f;
                     }
-                    if (isKeyTapped(event, SDLK_UP)) {
+                    if (isKeyTapped(SDLK_UP)) {
                         titleCursor.y -= 30.0f;
                     }
                     
-                    if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 250)
+                    if (isKeyTapped(SDLK_RETURN) && titleCursor.y == 250)
                     {
                         // std::this_thread::sleep_for(std::chrono::seconds(1));
                         PlayerData playerSaveData = loadGame(oneSavePath);
@@ -264,12 +264,12 @@ int main(int argc, char* argv[]) {
                         titleCursor.y = 100;
                         titleCursor.x = WindowSize.Width / 2 - 60;
                     }
-                    else if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 280) title = 5;
-                    else if (isKeyTapped(event, SDLK_RETURN) && titleCursor.y == 310) running = false;
+                    else if (isKeyTapped(SDLK_RETURN) && titleCursor.y == 280) title = 5;
+                    else if (isKeyTapped(SDLK_RETURN) && titleCursor.y == 310) running = false;
                 }
                 if (title == 2)
                 {
-                    if (isKeyTapped(event, SDLK_ESCAPE))
+                    if (isKeyTapped(SDLK_ESCAPE))
                     {
                         if (!playStop) playStop = true;
                         else if (playStop) playStop = false;
@@ -280,7 +280,7 @@ int main(int argc, char* argv[]) {
                 }
                 if (title == 3)
                 {
-                    if (isKeyTapped(event, SDLK_ESCAPE)) title = 1;
+                    if (isKeyTapped(SDLK_ESCAPE)) title = 1;
                 }
                 // if (title == 4)
                 // {
@@ -426,13 +426,13 @@ int main(int argc, char* argv[]) {
                 if (playStop)
                 {
                     titleCursor.x = 3;
-                    if (isKeyTapped(event, SDLK_DOWN)) {
+                    if (isKeyTapped(SDLK_DOWN)) {
                         titleCursor.y += 50.0f;
                     }
-                    if (isKeyTapped(event, SDLK_UP)) {
+                    if (isKeyTapped(SDLK_UP)) {
                         titleCursor.y -= 50.0f;
                     }
-                    if (isKeyTapped(event, SDLK_RETURN)) {
+                    if (isKeyTapped(SDLK_RETURN)) {
                         if (titleCursor.y == 50) {
                             PlayerData outSavePlayerData = {playerRect.x, playerRect.y, roomNumber, playerHPFull, attackOne, attackTwo, attackThree};
                             saveGame(outSavePlayerData, oneSavePath);
