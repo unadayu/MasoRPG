@@ -8,6 +8,7 @@
 #include <fstream>
 #include <vector>
 #include <SDL_image.h>
+#include <unordered_map>
 #include "Camera2D.h"
 
 struct Rectangle {
@@ -206,10 +207,16 @@ void saveGame(const PlayerData& data, const std::filesystem::path& filepath) {
 }
 
 // 長押しによるリピートを無視し、純粋に“キーを押した瞬間だけ”を検知する関数
-bool isKeyTapped(const SDL_Event& event, SDL_Keycode key) {
-    return event.type == SDL_KEYDOWN
-        && event.key.keysym.sym == key
-        && event.key.repeat == 0;  // repeat==0: 長押しの二回目以降を除外
+bool isKeyTapped(SDL_Keycode key) {
+    const Uint8* keystate = SDL_GetKeyboardState(NULL);
+    static std::unordered_map<SDL_Keycode, bool> prevState;
+
+    bool now = keystate[SDL_GetScancodeFromKey(key)];
+    bool prev = prevState[key];
+
+    prevState[key] = now;
+
+    return now && !prev;  // 前回押されてなかった、今回押されてる → タップ
 }
 
 bool isKeyDown(SDL_Event& event, SDL_Keycode key) {

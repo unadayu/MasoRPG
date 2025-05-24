@@ -2,10 +2,11 @@
 #ifndef FIGHT_H
 #define FIGHT_H
 
+#include <iostream>
 #include <SDL2/SDL.h>
 #include <filesystem>
 #include <vector>
-#include "function.h"   // ここに enemy, InGameTurnSettings, InGamePlayerData, isKeyTapped, drawImage などが定義されている前提
+#include "function.h"
 
 class fightUI {
 public:
@@ -21,57 +22,75 @@ private:
     struct Command { const char* label; };
 
     // function.h 側の定義を使う
-    InGameTurnSettings         playerData;    // = {0,1,true} は main で初期化してもOK
-    InGamePlayerData           playerRect;    // = {初期x, 初期y, width, height}
-    std::vector<Command>       commands = { {"バトル"}, {"スキル"}, {"チャージ"}, {"逃げる"} };
-    int                        selectedIndex = 0;
-    std::filesystem::path      fontPath;
-    Uint32                     turnStartTime = 0;
+    InGameTurnSettings playerData = {0,0,true};    // = {0,1,true} は main で初期化してもOK
+    InGamePlayerData playerRect;    // = {初期x, 初期y, width, height}
+    std::vector<Command> commands = { {"バトル"}, {"スキル"}, {"チャージ"}, {"逃げる"} };
+    int selectedIndex = 0;
+    std::filesystem::path fontPath;
+    Uint32 turnStartTime = 0;
+    Uint32 elapsed = 0;
+    Uint32 now = 0;
+    bool isTungFirstTurnActive = false;
 
     void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData) {
         if (playerData.playerTurn) {
-            processPlayerInput(event);
+            processPlayerInput();
         } else {
-            processEnemyTurn(event, WindowSize, enemyData);
+            processEnemyTurn(WindowSize, enemyData);
         }
     }
 
-    void processPlayerInput(SDL_Event& event) {
+    void processPlayerInput() {
+        if (isKeyTapped(SDLK_UP)) playerRect.y -= 90;
+        if (isKeyTapped(SDLK_DOWN)) playerRect.y += 90;
         playerRect.x = 25;
         if (playerRect.y <= 83) playerRect.y = 83;
-        // if (isKeyTapped(event, SDLK_UP)) playerRect.y -= 90;
-        if (isKeyTapped(SDLK_DOWN)) playerRect.y += 90;
-        // if (isKeyTapped(event, SDLK_ESCAPE)) playerRect.y = 
-    }
+        if (playerRect.y >= 353) playerRect.y = 353;
 
-    void processEnemyTurn(SDL_Event& event, Rectangle WindowSize, enemy& enemyData) {
-        // "tung" の最初のターンなら 3 秒間プレイヤーを中央四角内に制限
-        if (enemyData.name == "tung" && playerData.turn == 1) {
-            Uint32 now     = SDL_GetTicks();
-            Uint32 elapsed = now - turnStartTime;
-            if (elapsed < 3000) {
-                // 入力でプレイヤー移動
-                // if (isKeyTapped(event, SDLK_LEFT))  playerRect.x -= 5;
-                // if (isKeyTapped(event, SDLK_RIGHT)) playerRect.x += 5;
-                // if (isKeyTapped(event, SDLK_UP))    playerRect.y -= 5;
-                // if (isKeyTapped(event, SDLK_DOWN))  playerRect.y += 5;
+        std::cout << playerData.turn << std::endl;
 
-                // // 中央四角領域のサイズ（例として幅400×高さ400）
-                // const int W = 400, H = 400;
-                // int boxX = WindowSize.Width/2 - W/2;
-                // int boxY = WindowSize.Height/2 - H/2;
-
-                // // 手動クランプ
-                // if (playerRect.x < boxX) playerRect.x = boxX;
-                // if (playerRect.x + 30 > boxX + W) playerRect.x = boxX + W - 30;
-                // if (playerRect.y < boxY) playerRect.y = boxY;
-                // if (playerRect.y + 30 > boxY + H) playerRect.y = boxY + H - 30;
-                return;
+        if (playerRect.y >= 83){
+            if (isKeyTapped(SDLK_RETURN)) {
+                playerData.playerTurn = false;
+                playerData.turn += 1;
             }
         }
-        // 3秒経過後 or その他の敵ターン
-        playerData.playerTurn = true;
-        playerData.turn += 1;
+    }
+
+    void processEnemyTurn(Rectangle WindowSize, enemy& enemyData) {
+        // "tung" の最初のターンなら 3 秒間プレイヤーを中央四角内に制限
+        if (enemyData.name == "tung" && playerData.turn == 1) {
+            if (!isTungFirstTurnActive) {
+                turnStartTime = SDL_GetTicks();
+                isTungFirstTurnActive = true;
+            }
+
+            now = SDL_GetTicks();
+            elapsed = now - turnStartTime;
+            std::cout << elapsed << std::endl;
+            if (elapsed < 3000) {
+                // WindowSize.Width/2 - 110, WindowSize.Height - 230, 200, 200
+                // 入力でプレイヤー移動
+                if (isKeyTapped(SDLK_LEFT))  playerRect.x -= 5;
+                if (isKeyTapped(SDLK_RIGHT)) playerRect.x += 5;
+                if (isKeyTapped(SDLK_UP))    playerRect.y -= 5;
+                if (isKeyTapped(SDLK_DOWN))  playerRect.y += 5;
+
+                // 中央四角領域のサイズ（例として幅400×高さ400）
+                const int W = 400, H = 400;
+                int boxX = WindowSize.Width/2 - 110;
+                int boxY = WindowSize.Height - 230;
+
+                // 手動クランプ
+                if (playerRect.x < boxX) playerRect.x = boxX;
+                if (playerRect.x + 30 > boxX + W) playerRect.x = boxX + W - 30;
+                if (playerRect.y < boxY) playerRect.y = boxY;
+                if (playerRect.y + 30 > boxY + H) playerRect.y = boxY + H - 30;
+            } else {
+                playerData.playerTurn = true;
+                playerData.turn ++;
+            }
+        }
     }
 
     void render(SDL_Renderer* renderer,
