@@ -283,6 +283,7 @@ private:
         if (healthRebornMAX != 0) {
             healthRebornMAX -= remove;
             health += 200;
+            lastDamage = SDL_GetTicks();
             if (health >= 400) health = 400;
         }
     }
