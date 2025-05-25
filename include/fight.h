@@ -44,10 +44,10 @@ private:
     Bullet turnOneAttackRectEight  = {800/2 + 60 - 80, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
     Bullet turnOneAttackRectNine  = {800/2 + 60 - 160, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
 
-    Bullet turnOneAttackRectTen = {800/2 - 300, 500 - 120, 3, 3, 8, 90, nullptr, 0, 15, 5};
-    Bullet turnOneAttackRectEleven = {800/2 - 150, 500 - 100, 3, 3, 8, 70, nullptr, 0, 15, 5};
-    Bullet turnOneAttackRectTwelv = {800/2 + 150, 500 - 100, 3, 3, 8, 70, nullptr, 0, 15, 5};
-    Bullet turnOneAttackRectThreteen = {800/2 + 300, 500 - 120, 3, 3, 8, 90, nullptr, 0, 15, 5};
+    Bullet turnOneAttackRectTen = {800/2 - 250, 500 - 120, 3, 3, 8, 90, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectEleven = {800/2 - 150, 500 - 100, 3, 3, 8, 70, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectTwelv = {800/2 + 150, 500 - 100, 3, 3, 8, 70, nullptr, 0, 8, 5};
+    Bullet turnOneAttackRectThreteen = {800/2 + 250, 500 - 120, 3, 3, 8, 90, nullptr, 0, 8, 5};
 
     void turnOneAttackOne(SDL_Renderer * renderer) {
         // 縦攻撃
@@ -135,7 +135,7 @@ private:
             now = SDL_GetTicks();
             elapsed = now - turnStartTime;
             std::cout << elapsed << std::endl;
-            if (elapsed < 300000) {
+            if (elapsed < 3000) {
                 // 入力でプレイヤー移動
                 if (isKeyDown(SDL_SCANCODE_LEFT)) playerRect.x -= 8;
                 if (isKeyDown(SDL_SCANCODE_RIGHT)) playerRect.x += 8;
