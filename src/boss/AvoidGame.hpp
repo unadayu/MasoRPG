@@ -135,7 +135,7 @@ public:
                 playerRect.y + playerRect.h < height)
                 playerRect.y += 5;
 
-            if (isKeyTapped(e, SDLK_c)) healthReborn(1);
+            if (isKeyTapped(SDLK_c)) healthReborn(1);
             now = SDL_GetTicks();
             if (now - gameStartTime > 4518 && now - gameStartTime < 60000) {
                 // スポーン制御

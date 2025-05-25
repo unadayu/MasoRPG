@@ -70,7 +70,7 @@ void build(std::filesystem::path compilerPath, bool chinkasu)
       else if (boss == "Y" | boss == "y")
       {
           std::string command = "g++ -std=c++17 -o " + binPath.string() +
-          " -Iinclude src/boss/main.cpp src/boss/AvoidGame.hpp include/function.h  $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
+          " -Iinclude src/boss/main.cpp src/Camera2D.cpp src/boss/AvoidGame.hpp include/function.h  $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
           system(command.c_str());
       }
       else
@@ -167,7 +167,7 @@ void reset()
 
 void fentanyL()
 {
-    std::string commandi = "g++ FENTANYL/main.cpp -o -Iinclude include/function.h fentanyL -lraylib -lGL -lm -lpthread -ldl -lrt -lX11";
+    std::string commandi = "g++ FENTANYL/main.cpp -o main -Iinclude include/function.h fentanyL -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 $(pkg-config --cflags --libs sdl2 SDL2_image SDL2_ttf SDL2_mixer)";
     system(commandi.c_str());
 }
 
