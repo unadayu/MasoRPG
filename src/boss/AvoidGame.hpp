@@ -233,7 +233,7 @@ private:
     Uint32 gameStartTime = 0;
     Uint32 now;
 
-    int healthRebornMAX = 3;
+    int healthRebornMAX = 4;
 
     void spawnObstacle() {
         int w  = 10 + std::rand()%60;
@@ -282,7 +282,7 @@ private:
     void healthReborn(int remove) {
         if (healthRebornMAX != 0) {
             healthRebornMAX -= remove;
-            health += 200;
+            health += 250;
             lastDamage = SDL_GetTicks();
             if (health >= 400) health = 400;
         }
