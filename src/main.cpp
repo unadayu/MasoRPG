@@ -458,10 +458,10 @@ int main(int argc, char* argv[]) {
                 }
                 else if (!playStop)
                 {
-                    if (isKeyDown(event, SDLK_UP)) playerRect.y -= 1;
-                    if (isKeyDown(event, SDLK_DOWN)) playerRect.y += 1;
-                    if (isKeyDown(event, SDLK_LEFT)) playerRect.x -= 1;
-                    if (isKeyDown(event, SDLK_RIGHT)) playerRect.x += 1;
+                    if (isKeyDown(SDL_SCANCODE_UP)) playerRect.y -= 1;
+                    if (isKeyDown(SDL_SCANCODE_DOWN)) playerRect.y += 1;
+                    if (isKeyDown(SDL_SCANCODE_LEFT)) playerRect.x -= 1;
+                    if (isKeyDown(SDL_SCANCODE_RIGHT)) playerRect.x += 1;
 
                     if (playerRect.x <= 0) playerRect.x = 0;
                     if (playerRect.y <= 0) playerRect.y = 0;

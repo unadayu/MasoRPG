@@ -236,8 +236,9 @@ bool isKeyTapped(SDL_Keycode key) {
     return now && !prev;  // 前回押されてなかった、今回押されてる → タップ
 }
 
-bool isKeyDown(SDL_Event& event, SDL_Keycode key) {
-    return (event.type == SDL_KEYDOWN && event.key.keysym.sym == key);
+bool isKeyDown(SDL_Scancode scancode) {
+    const Uint8* keyState = SDL_GetKeyboardState(NULL);
+    return keyState[scancode];
 }
 
 bool CheckCollisionRecs(Rectangle rec1, Rectangle rec2) {

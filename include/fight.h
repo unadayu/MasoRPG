@@ -34,12 +34,12 @@ private:
     Uint32 now = 0;
     bool isTungFirstTurnActive = false;
 
-    Bullet turnOneAttackRectOne = {800/2 - 110, 500 - 230, 3, 3, 8, 100, nullptr, 0, 8, 5};
-    Bullet turnOneAttackRectTwo = {800/2 - 110, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 8, 5};
-    Bullet turnOneAttackRectThree = {800/2 - 110 + 200, 500 - 230, 3, 3, 8, 100, nullptr, 0, 8, 5};
-    Bullet turnOneAttackRectFour = {800/2 - 110 + 200, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 8, 5};
-    Bullet turnOneAttackRectFive  = {800/2 - 110, 500 - 80, 3, 3, 20, 50, nullptr, 0, 8, 5};
-    Bullet turnOneAttackRectSix  = {800/2 + 90 - 20, 500 - 80, 3, 3, 20, 50, nullptr, 0, 17, 5};
+    Bullet turnOneAttackRectOne = {800/2 - 110, 500 - 230, 3, 3, 8, 100, nullptr, 0, 5, 5};
+    Bullet turnOneAttackRectTwo = {800/2 - 110, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 5, 5};
+    Bullet turnOneAttackRectThree = {800/2 - 110 + 200, 500 - 230, 3, 3, 8, 100, nullptr, 0, 5, 5};
+    Bullet turnOneAttackRectFour = {800/2 - 110 + 200, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 5, 5};
+    Bullet turnOneAttackRectFive  = {800/2 - 110, 500 - 80, 3, 3, 20, 50, nullptr, 0, 5, 5};
+    Bullet turnOneAttackRectSix  = {800/2 + 90 - 20, 500 - 80, 3, 3, 20, 50, nullptr, 0, 8, 5};
     Bullet turnOneAttackRectSeven  = {800/2 + 60, 500 - 400, 3, 3, 20, 7, nullptr, 0, 17, 5};
     Bullet turnOneAttackRectEight  = {800/2 + 60 - 80, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
     Bullet turnOneAttackRectNine  = {800/2 + 60 - 160, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
@@ -83,13 +83,13 @@ private:
 
     void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer) {
         if (playerData.playerTurn) {
-            processPlayerInput();
+            processPlayerInput(WindowSize);
         } else {
-            processEnemyTurn(WindowSize, enemyData, renderer);
+            processEnemyTurn(WindowSize, enemyData, renderer, event);
         }
     }
 
-    void processPlayerInput() {
+    void processPlayerInput(Rectangle WindowSize) {
         if (isKeyTapped(SDLK_UP)) playerRect.y -= 90;
         if (isKeyTapped(SDLK_DOWN)) playerRect.y += 90;
         playerRect.x = 25;
@@ -101,12 +101,13 @@ private:
         if (playerRect.y >= 83){
             if (isKeyTapped(SDLK_RETURN)) {
                 playerData.playerTurn = false;
+                playerRect.x = WindowSize.Width/2 - 125 + 80;
                 playerData.turn += 1;
             }
         }
     }
 
-    void processEnemyTurn(Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer) {
+    void processEnemyTurn(Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer, SDL_Event& event) {
         // "tung" の最初のターンなら 3 秒間プレイヤーを中央四角内に制限
         if (enemyData.name == "tung" && playerData.turn == 1) {
             if (!isTungFirstTurnActive) {
@@ -118,31 +119,30 @@ private:
             elapsed = now - turnStartTime;
             std::cout << elapsed << std::endl;
             if (elapsed < 3000) {
-                // WindowSize.Width/2 - 110, WindowSize.Height - 230, 200, 200
                 // 入力でプレイヤー移動
-                if (isKeyTapped(SDLK_LEFT))  playerRect.x -= 5;
-                if (isKeyTapped(SDLK_RIGHT)) playerRect.x += 5;
-                if (isKeyTapped(SDLK_UP))    playerRect.y -= 5;
-                if (isKeyTapped(SDLK_DOWN))  playerRect.y += 5;
+                if (isKeyDown(SDL_SCANCODE_LEFT)) playerRect.x -= 8;
+                if (isKeyDown(SDL_SCANCODE_RIGHT)) playerRect.x += 8;
+                if (isKeyDown(SDL_SCANCODE_UP)) playerRect.y -= 12;
+                // if (isKeyDown(SDL_SCANCODE_DOWN)) playerRect.y += 5;
 
-                // 中央四角領域のサイズ（例として幅400×高さ400）
-                const int W = 400, H = 400;
-                int boxX = WindowSize.Width/2 - 110;
-                int boxY = WindowSize.Height - 230;
+                playerRect.y += 5;
 
-                // 手動クランプ
-                if (playerRect.x < boxX) playerRect.x = boxX;
-                if (playerRect.x + 30 > boxX + W) playerRect.x = boxX + W - 30;
-                if (playerRect.y < boxY) playerRect.y = boxY;
-                if (playerRect.y + 30 > boxY + H) playerRect.y = boxY + H - 30;
-                turnOneAttackOne(renderer);
+                if (playerRect.x <= WindowSize.Width/2 - 125) playerRect.x = WindowSize.Width/2 - 125;
+                if (playerRect.y <= WindowSize.Height - 235) playerRect.y = WindowSize.Height - 235;
+                if (playerRect.x >= WindowSize.Width/2 - 125 + 190) playerRect.x = WindowSize.Width/2 - 125 + 190;
+                if (playerRect.y >= WindowSize.Height - 235 + 170) playerRect.y = WindowSize.Height - 235 + 170;
+
                 if (elapsed > 500) {
+                    turnOneAttackOne(renderer);
+                }
+                if (elapsed > 1000) {
                     turnOneAttackTwo(renderer);
-                } if (elapsed > 1000) {
-                    turnOneAttackThree(renderer);
                 } if (elapsed > 1500) {
+                    turnOneAttackThree(renderer);
+                } if (elapsed > 2000) {
                     turnOneAttackFour(renderer);
                 }
+
             } else {
                 playerData.playerTurn = true;
                 playerData.turn ++;
@@ -173,6 +173,7 @@ private:
         } else {
             // 敵ターン枠
             DrawRectangleLines(WindowSize.Width/2 - 110, WindowSize.Height - 230, 200, 200, borderColor, renderer);
+            drawImage(playerRect.x, playerRect.y, 40, 40, playerTexture, renderer, camera);
         }
     }
 
