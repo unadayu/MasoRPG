@@ -34,9 +34,9 @@ private:
     Uint32 now = 0;
     bool isTungFirstTurnActive = false;
 
-    Bullet turnOneAttackRectOne = {800/2 - 110, 500 - 230, 3, 3, 8, 100, nullptr, 0, 5, 5};
+    Bullet turnOneAttackRectOne = {800/2 - 110, 500 - 230, 3, 3, 8, 90, nullptr, 0, 5, 5};
     Bullet turnOneAttackRectTwo = {800/2 - 110, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 5, 5};
-    Bullet turnOneAttackRectThree = {800/2 - 110 + 200, 500 - 230, 3, 3, 8, 100, nullptr, 0, 5, 5};
+    Bullet turnOneAttackRectThree = {800/2 - 110 + 200, 500 - 230, 3, 3, 8, 90, nullptr, 0, 5, 5};
     Bullet turnOneAttackRectFour = {800/2 - 110 + 200, 500 - 230 + 130, 3, 3, 8, 70, nullptr, 0, 5, 5};
     Bullet turnOneAttackRectFive  = {800/2 - 110, 500 - 80, 3, 3, 20, 50, nullptr, 0, 5, 5};
     Bullet turnOneAttackRectSix  = {800/2 + 90 - 20, 500 - 80, 3, 3, 20, 50, nullptr, 0, 8, 5};
@@ -154,7 +154,7 @@ private:
                 } if (elapsed > 1000) {
                     turnOneAttackTwo(renderer);
                 } if (elapsed > 1500) {
-                    turnOneAttackFive(renderer);
+                    // turnOneAttackFive(renderer);
                     turnOneAttackThree(renderer);
                 } if (elapsed > 2000) {
                     turnOneAttackFour(renderer);
