@@ -44,6 +44,11 @@ private:
     Bullet turnOneAttackRectEight  = {800/2 + 60 - 80, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
     Bullet turnOneAttackRectNine  = {800/2 + 60 - 160, 500 - 400, 3, 3, 20, 10, nullptr, 0, 17, 5};
 
+    Bullet turnOneAttackRectTen = {800/2 - 300, 500 - 120, 3, 3, 8, 90, nullptr, 0, 15, 5};
+    Bullet turnOneAttackRectEleven = {800/2 - 150, 500 - 100, 3, 3, 8, 70, nullptr, 0, 15, 5};
+    Bullet turnOneAttackRectTwelv = {800/2 + 150, 500 - 100, 3, 3, 8, 70, nullptr, 0, 15, 5};
+    Bullet turnOneAttackRectThreteen = {800/2 + 300, 500 - 120, 3, 3, 8, 90, nullptr, 0, 15, 5};
+
     void turnOneAttackOne(SDL_Renderer * renderer) {
         // 縦攻撃
         DrawRectangle(turnOneAttackRectOne.x, turnOneAttackRectOne.y, turnOneAttackRectOne.width, turnOneAttackRectOne.height, (SDL_Color){255, 0, 0, 0}, renderer);
@@ -79,6 +84,18 @@ private:
         turnOneAttackRectSeven.y += turnOneAttackRectSeven.speed;
         turnOneAttackRectEight.y += turnOneAttackRectEight.speed;
         turnOneAttackRectNine.y += turnOneAttackRectNine.speed;
+    }
+
+    void turnOneAttackFive(SDL_Renderer * renderer) {
+        DrawRectangle(turnOneAttackRectTen.x, turnOneAttackRectTen.y, turnOneAttackRectTen.width, turnOneAttackRectTen.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        DrawRectangle(turnOneAttackRectEleven.x, turnOneAttackRectEleven.y, turnOneAttackRectEleven.width, turnOneAttackRectEleven.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        DrawRectangle(turnOneAttackRectTwelv.x, turnOneAttackRectTwelv.y, turnOneAttackRectTwelv.width, turnOneAttackRectTwelv.height, (SDL_Color){255, 0, 0, 0}, renderer);
+        DrawRectangle(turnOneAttackRectThreteen.x, turnOneAttackRectThreteen.y, turnOneAttackRectThreteen.width, turnOneAttackRectThreteen.height, (SDL_Color){255, 0, 0, 0}, renderer);
+
+        turnOneAttackRectTen.x += turnOneAttackRectTen.speed;
+        turnOneAttackRectEleven.x += turnOneAttackRectEleven.speed;
+        turnOneAttackRectTwelv.x -= turnOneAttackRectTwelv.speed;
+        turnOneAttackRectThreteen.x -= turnOneAttackRectThreteen.speed;
     }
 
     void update(SDL_Event& event, Rectangle WindowSize, enemy& enemyData, SDL_Renderer* renderer) {
@@ -118,7 +135,7 @@ private:
             now = SDL_GetTicks();
             elapsed = now - turnStartTime;
             std::cout << elapsed << std::endl;
-            if (elapsed < 3000) {
+            if (elapsed < 300000) {
                 // 入力でプレイヤー移動
                 if (isKeyDown(SDL_SCANCODE_LEFT)) playerRect.x -= 8;
                 if (isKeyDown(SDL_SCANCODE_RIGHT)) playerRect.x += 8;
@@ -134,10 +151,10 @@ private:
 
                 if (elapsed > 500) {
                     turnOneAttackOne(renderer);
-                }
-                if (elapsed > 1000) {
+                } if (elapsed > 1000) {
                     turnOneAttackTwo(renderer);
                 } if (elapsed > 1500) {
+                    turnOneAttackFive(renderer);
                     turnOneAttackThree(renderer);
                 } if (elapsed > 2000) {
                     turnOneAttackFour(renderer);
